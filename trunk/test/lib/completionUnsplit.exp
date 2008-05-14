@@ -1,0 +1,4 @@
+source "lib/lib.inc.exp"
+
+    # Start bash running with completion loaded
+comp_start

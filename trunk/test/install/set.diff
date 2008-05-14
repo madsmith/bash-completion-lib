@@ -1,0 +1,5 @@
+COMP_DIR=PATH
+COMP_LIB=PATH
+COMP_RESTRICT_BY_EXTENSION=0
+declare -f comp_dir2args
+declare -f comp_load

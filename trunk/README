@@ -1,0 +1,95 @@
+All completions run through a central function `comp_load'.  The first time
+completion is invoked for a specific command, `comp_load' will load the
+specific command completion function, run it and install it for subsequent
+invocations.  For example:
+
+   $> complete -p alias
+   complete -F comp_load alias   # First completion uses `comp_load'
+   $> alias <TAB>
+   ..=       l=      ls=     lt=
+   $> alias ^C
+   $> complete -p alias
+   complete -F _alias alias      # Subsequent completions use `_alias'
+
+To prevent name collisions, all completion install functions are prefixed with
+`comp_'.
+
+The function `have' which checked if a given command is present on the system,
+has been removed: the run-time loading of completion now prevents bulky
+functions in memory if we don't need them.
+
+The minimum requirements for the completion package is bash-3.  No efforts has
+been made to keep the completions compatible with bash-2.
+
+A start has been made with unit tests using the DejaGnu test suite.  Run the
+command `./test/runCompletion' to run the tests.  Current tests include the
+commands: alias, cd, scp and set.
+
+An environment setting `COMP_RESTRICT_BY_EXTENSION' lets you decide whether
+restricted completion is enabled, e.g. whether "acroread TAB" will only show
+files with extension `.pdf'.  Default is false (0).
+
+
+QUESTIONS
+
+- Is it possible to define a `catch-all' completion?  This would remove the
+  burden of `bash_completion_lib' to attach `comp_load' to each and every
+  completion that might be triggered.
+
+- Doesn't `bash_completion_lib' make completion too complicated?  For
+  instance the fact that the completion definition changes after an initial
+  complete, can be surprising when debugging.
+
+- Prefix all completion methods with `_comp_' instead of `_', e.g.
+  `_comp_expand' instead of `expand'?  This way the completion methods would be
+  less prone to name collisions with user bash scripts.  See comp_install() in
+  file bash_completion_lib.
+
+- The bash-completion meta-options cannot be accessed by a completion function.
+  It concerns the `-o COMP-OPTION' options:
+    - bashdefault
+    - default
+    - dirnames
+    - filenames
+    - nospace
+  Because these options cannot be modified from within a completion
+  function, it is impossible to create a generic run-time completion
+  installer. 
+
+  As a workaround - to be able to install a large group of completions at once
+  - `bash_completion_lib' groups completions into directories named after
+  their meta-options:
+    - complete -o default
+    - complete -o default -o filenames
+    - complete -o default -o nospace
+    - complete -o dirnames
+    - complete -o filenames
+    - complete -o filenames -o nospace
+    - complete -o nospace
+
+  The other directories:
+    - complete-cd
+    - complete-linux
+    - complete-nohostcomplete
+    - complete-restrict-by-extension
+    - complete-tar
+  contain a completion initialization file `.complete' which sets meta-options at run-time depending on the user configuration.
+
+  A solution would be to propagate these options into bash constants or a new builtin
+  which can then be used by a completion function. (1)
+
+  See also:
+  
+:[http://groups.google.nl/group/gnu.bash.bug/browse_thread/thread/281698132559a422/272f82f6f2f8b0fd?hl=nl&lnk=raot#272f82f6f2f8b0fd Temporarily change completion options]
+;There are thoughts about a new builtin that would accept the same set of -o options as complete/compgen.
+
+  
+
+
+
+(1) See sources bash-3.2:
+    - pcomplete.c, programmable_completions()
+      The variable `foundp' returns the cs->options as they were set during
+      completion install
+
+TODO

@@ -1,0 +1,1 @@
+comp_load_and_install "-f -X '!*.@(@(?(e)ps|?(E)PS|pdf|PDF)?(.gz|.GZ|.bz2|.BZ2|.Z))'"

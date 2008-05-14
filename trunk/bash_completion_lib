@@ -1,0 +1,111 @@
+#-- bash_completion_lib -----------------------------------------------
+# Programmable completion functions for bash 3.x.
+#
+# Copyright (C) Freddy Vulto <fvulto@gmail.com>
+#
+# Versions
+# - 2008: This release.  Completions are split into separate files
+# - 2006: Unsplit version written by Ian Macdonald <ian@caliban.org>
+#         See: http://caliban.org/bash/
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software 
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, 
+# MA  02110-1301, USA
+#
+# The latest version of this software can be obtained here:
+# http://fvue.nl/wiki/Bash_completion_split
+
+
+    # Extended globbing and programmable completion have to 
+    # set in order for completion to work
+shopt -s extglob progcomp
+compPwd="$PWD"
+    # Store current directory of this script
+COMP_DIR=$(cd "$(dirname "$(which "${BASH_SOURCE-$0}")")" && /bin/pwd)
+COMP_LIB="$COMP_DIR/completions"
+COMP_RESTRICT_BY_EXTENSION=0  # True (1) if restricted completion is enabled, False (0) if not
+
+
+# Load completion commands.
+# The appropriate script from the `completions' directory will be loaded.
+function comp_load() {
+        # Always load `comploadrc'
+    . $COMP_DIR/comploadrc
+        # Load `completionrc' once
+    declare -F _filedir &> /dev/null || . $COMP_DIR/completionrc
+        # Find completion script
+        # NOTE: A search is performed for both `command' and `*.command'.
+        #       Syntax `*.command' is a sort of symlink notation.  E.g.
+        #       `make.gnumake' lets `make' handle the completion of `gnumake'.
+        #       Symlinks are not used, because they're not available on every system.
+        #       Variables: script = path/comp, comp = target | target.link
+        # NOTE: Use 'tail -1' to get the last match in case 'find' returns more than one match
+    script="$(find "$COMP_LIB"/*/"${COMP_WORDS[0]}" "$COMP_LIB"/*/*."${COMP_WORDS[0]}" 2> /dev/null | tail -1)"
+    comp=${script##*/}  # Remove path
+    comp=${comp%%\.*}   # Remove possible .link
+    path=${script%/*}   # Remove comp
+        # Source completion of command to complete
+        # {%%.*} means: remove text from rightmost dot (.)
+    [ -r "$path/$comp" ] && . "$path/$comp"
+} # comp_load()
+
+
+# Convert directory to completion arguments.  If a directory starts with
+# 'complete-', the file .complete will be included.  This file is supposed
+# to set the global variable 'COMP_ARGS'.
+# @param $1  Directory.  Must include at least one slash and start with "complete", e.g.:
+#            ./complete -o nospace
+#            /home/joe/completions/complete -o filenames
+# @result exit  True (0) if completion must be installed, False (> 0) if
+#     not.  Global 'COMP_ARGS' contains the arguments to pass to 'complete'
+#     NOTE: Global 'COMP_ARGS' is used instead of echo-ing the string
+#           to stdout, because this saves us invoking a subshell, thus
+#           gains speed.
+function comp_dir2args() {
+    COMP_ARGS=
+    case "${1##*/}" in  # `${1##*/}' means: strip up to including last slash
+        complete-*)
+            [ -r "$1/.complete" ] && . "$1/.complete"
+            ;;
+        complete*)
+            COMP_ARGS="${1##*/complete}"
+            ;;
+    esac
+} # comp_dir2args()
+
+
+    # Install completion for all files in `./completions/*'
+if cd "$COMP_LIB"; then
+    compEnvShoptOptions=$(shopt -p dotglob failglob nullglob)
+    shopt -s nullglob
+    shopt -u dotglob failglob
+    . $COMP_DIR/comploadrc
+    # use GNU sed if we have it, since its extensions are still used in our code
+    [ $UNAME != Linux ] && which gsed > /dev/null && alias sed=gsed
+    for i in complete*; do
+            # Don't install completion if 'comp_dir2args()' returns false
+        if comp_dir2args "./$i"; then
+            cd "$i" && {
+                for comp in *; do
+                    complete -F comp_load $COMP_ARGS ${comp##*.}
+                done
+                cd ..
+            }
+        fi
+    done
+    cd ..
+    eval "$compEnvShoptOptions" 2> /dev/null  # Restore `shopt' options
+fi
+cd $compPwd
+unset -v args bashdefault comp COMP_ARGS compEnvShoptOptions compPwd default dirnames filenames i j nospace plusdirs UNAME

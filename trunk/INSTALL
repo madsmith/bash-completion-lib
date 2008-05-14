@@ -1,0 +1,4 @@
+- Unpack the file in your home directory: tar -xvzf filename
+- Add to your .bashrc:
+
+     source bash_completion_lib-0.5/bash_completion_lib

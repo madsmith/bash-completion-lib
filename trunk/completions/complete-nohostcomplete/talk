@@ -1,0 +1,18 @@
+# This function provides simple user@host completion
+#
+_user_at_host() {
+    local cur
+
+    COMPREPLY=()
+    cur=${COMP_WORDS[COMP_CWORD]}
+
+    if [[ $cur == *@* ]]; then
+        _known_hosts
+    else
+        COMPREPLY=( $( compgen -u -- "$cur" ) )
+    fi
+
+    return 0
+}
+_user_at_host
+
