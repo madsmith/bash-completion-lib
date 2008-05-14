@@ -1,0 +1,4 @@
+expect_after {
+    eof { fail "$test at eof" }
+    timeout { fail "$test at timeout" }
+}; # expect_after()

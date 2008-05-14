@@ -1,0 +1,13 @@
+_umount()
+{
+    local cur
+
+    COMPREPLY=()
+    cur=${COMP_WORDS[COMP_CWORD]}
+
+    COMPREPLY=( $( compgen -W '$( mount | cut -d" " -f 3 )' -- $cur ) )
+
+    return 0
+}
+
+_umount
