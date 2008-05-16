@@ -1,0 +1,1 @@
+[ -n "${COMP_TAR_INTERNAL_PATHS:-}" ] && COMP_ARGS="$dirnames" || COMP_ARGS="$filenames"

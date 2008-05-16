@@ -1,0 +1,39 @@
+proc setup {} {
+}; # setup()
+
+
+proc teardown {} {
+}; # teardown()
+
+
+setup
+
+
+set test "Tab should complete scp"
+
+    # Retrieving pwd from ssh-host `bash_completion_split' yields error? 
+    # NOTE: The host should be set in e.g. .ssh/config or /etc/ssh_config
+if { [catch {
+    exec -- ssh -o "Batchmode yes" bash_completion_split pwd 2>> /dev/null
+} host_pwd] } {
+    # Yes, retrieving pwd from ssh yields error; reset `host_pwd'
+    set host_pwd ""
+}
+
+    # Try completion
+set cmd "scp bash_completion_split:"
+send "$cmd\t"
+expect {
+    -re "^$cmd$host_pwd.*$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+# Interrupt command by sending ^C
+
+sleep 0.4; 
+send \003;  # Control-c
+expect -ex /@
+
+
+teardown

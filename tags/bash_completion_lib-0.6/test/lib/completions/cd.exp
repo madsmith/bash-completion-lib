@@ -1,0 +1,28 @@
+proc setup {} {
+}; # setup()
+
+
+proc teardown {} {
+}; # teardown()
+
+
+setup
+
+
+set test "Tab should complete"
+    # Try completion
+set cmd "cd fixture1/"
+send "$cmd\t"
+expect {
+    -re "^$cmd\r\nbar bar.d/ +foo.d/ +(\.svn/ +|)\r\n/@$cmd$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+# Interrupt command by sending ^C
+
+sleep 0.1; 
+send \003;  # Control-c
+expect -ex /@
+
+
+teardown

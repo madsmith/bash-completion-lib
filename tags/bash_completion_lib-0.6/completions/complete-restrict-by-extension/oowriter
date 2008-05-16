@@ -1,0 +1,1 @@
+comp_load_and_install "-f -X '!*.@(sxw|stw|sxg|sgl|doc|dot|rtf|txt|htm|html|odt|ott|odm)'"

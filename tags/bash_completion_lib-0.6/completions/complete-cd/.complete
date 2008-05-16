@@ -1,0 +1,1 @@
+shopt -q cdable_vars && COMP_ARGS="-v $nospace $filenames" || COMP_ARGS="$nospace $filenames"

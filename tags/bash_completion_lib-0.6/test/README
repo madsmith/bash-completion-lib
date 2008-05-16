@@ -1,0 +1,4 @@
+Tests:
+- completionUnsplit:  plain complete
+- completionSplit:  load, complete, install, complete
+- install:  main install

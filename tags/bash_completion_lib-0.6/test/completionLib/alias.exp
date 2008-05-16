@@ -1,0 +1,26 @@
+set test "Alias completion via comp_load() should be installed"
+set cmd "complete -p alias"
+send "$cmd\r"
+expect -ex "$cmd\r\n"
+set expected "^complete -F comp_load alias\r\n/@$"
+expect {
+    -re $expected  { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/alias.exp"
+
+
+set test "Alias completion via _alias() should be installed"
+set cmd "complete -p alias"
+send "$cmd\r"
+
+set expected "^$cmd\r\ncomplete -F _alias alias\r\n/@$"
+expect {
+    -re $expected  { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/alias.exp"
