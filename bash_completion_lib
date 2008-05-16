@@ -51,13 +51,15 @@ function comp_load() {
         #       Symlinks are not used, because they're not available on every system.
         #       Variables: script = path/comp, comp = target | target.link
         # NOTE: Use 'tail -1' to get the last match in case 'find' returns more than one match
-    script="$(find "$COMP_LIB"/*/"${COMP_WORDS[0]}" "$COMP_LIB"/*/*."${COMP_WORDS[0]}" 2> /dev/null | tail -1)"
-    comp=${script##*/}  # Remove path
-    comp=${comp%%\.*}   # Remove possible .link
-    path=${script%/*}   # Remove comp
+    local script="$(find "$COMP_LIB"/*/"${COMP_WORDS[0]}" "$COMP_LIB"/*/*."${COMP_WORDS[0]}" 2> /dev/null | tail -1)"
+    local comp=${script##*/}  # Remove path
+          comp=${comp%%\.*}   # Remove possible .link
+    local path=${script%/*}   # Remove comp
         # Source completion of command to complete
         # {%%.*} means: remove text from rightmost dot (.)
     [ -r "$path/$comp" ] && . "$path/$comp"
+        # Unset `comploadrc' variables
+    unset -v bashdefault default dirnames filenames nospace plusdirs UNAME
 } # comp_load()
 
 

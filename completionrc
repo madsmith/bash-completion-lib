@@ -20,7 +20,7 @@ function comp_filedir_xspec() {
     _expand || return 0
 
     COMPREPLY=( 
-        $( eval compgen -f -X "$1" -- \"${cur#[\`\"\']}\" 2>/dev/null ) \
+        $( eval compgen -f -X "$1" -- "\"${cur#[\`\"\']}\"" 2>/dev/null ) \
         $( compgen -d -- $cur ) 
     )
 } # comp_filedir_xspec()
@@ -52,6 +52,7 @@ function comp_install() {
     else
         complete -r $command
     fi
+    unset -v COMP_ARGS
 } # comp_install()
 
 
