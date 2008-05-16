@@ -106,6 +106,8 @@ if cd "$COMP_LIB"; then
     done
     cd ..
     eval "$compEnvShoptOptions" 2> /dev/null  # Restore `shopt' options
+        # Unset `comploadrc' variables
+    unset -v bashdefault default dirnames filenames nospace plusdirs UNAME
 fi
 cd $compPwd
-unset -v args bashdefault comp COMP_ARGS compEnvShoptOptions compPwd default dirnames filenames i j nospace plusdirs UNAME
+unset -v args comp COMP_ARGS compEnvShoptOptions compPwd i j

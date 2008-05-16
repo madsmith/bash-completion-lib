@@ -12,3 +12,6 @@ s/^> //
 s/COMP_LIB=.*/COMP_LIB=PATH/
 s/COMP_DIR=.*/COMP_DIR=PATH/
 s/UNAME=.*/UNAME=NAME/
+s/bash205=.*/bash205=VERSION/
+s/bash205b=.*/bash205b=VERSION/
+s/bash3=.*/bash3=VERSION/
