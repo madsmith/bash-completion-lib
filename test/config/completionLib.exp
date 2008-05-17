@@ -10,6 +10,11 @@ proc completionLib_init { whole_name } {
         # Start bash
     exp_spawn bash --rcfile config/bashrc
     expect -ex "/@"
+        # Do restrict by extension
+    set cmd "COMP_RESTRICT_BY_EXTENSION=1"
+    send "$cmd\r"
+    expect -ex "$cmd\r\n"
+    expect -ex "/@"
         # Load completions
     set cmd "source ../bash_completion_lib"
     send "$cmd\r"

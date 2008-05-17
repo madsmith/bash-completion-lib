@@ -1,0 +1,37 @@
+proc setup {} {
+    set cmd "touch fixture1/t.pdf";  # Create temporary file t.pdf
+    send "$cmd\r"
+    expect -ex "$cmd\r\n/@"
+}; # setup()
+
+
+proc teardown {} {
+    set cmd "rm fixture1/t.pdf";  # Remove temporary file t.pdf
+    send "$cmd\r"
+    expect -ex "$cmd\r\n/@"
+}; # teardown()
+
+
+setup
+
+
+set test "Tab should complete acroread"
+    # Try completion
+set cmd "acroread fixture1/"
+send "$cmd\t"
+set expected "^${cmd}t.pdf $"
+expect {
+    -re $expected  { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+    default { fail "$test" }
+}; # expect
+
+
+# Interrupt command by sending ^C
+
+sleep 0.1; 
+send \003;  # Control-c
+expect -ex /@
+
+
+teardown

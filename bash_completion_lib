@@ -27,14 +27,14 @@
 # http://fvue.nl/wiki/Bash_completion_split
 
 
-    # Extended globbing and programmable completion have to 
+    # Extended globbing and programmable completion have to be
     # set in order for completion to work
 shopt -s extglob progcomp
 compPwd="$PWD"
     # Store current directory of this script
 COMP_DIR=$(cd "$(dirname "$(which "${BASH_SOURCE-$0}")")" && /bin/pwd)
 COMP_LIB="$COMP_DIR/completions"
-COMP_RESTRICT_BY_EXTENSION=0  # True (1) if restricted completion is enabled, False (0) if not
+COMP_RESTRICT_BY_EXTENSION=${COMP_RESTRICT_BY_EXTENSION:-0}  # True (1) if restricted completion is enabled, False (0, default) if not
 
 
 # Load completion commands.
