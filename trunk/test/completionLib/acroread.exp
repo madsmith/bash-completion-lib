@@ -1,0 +1,26 @@
+set test "Alias completion via comp_load() should be installed"
+set cmd "complete -p acroread"
+send "$cmd\r"
+expect -ex "$cmd\r\n"
+set expected "^complete -o filenames -F comp_load acroread\r\n/@$"
+expect {
+    -re $expected  { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/acroread.exp"
+
+
+set test "Alias completion via _file_ext() should be installed"
+set cmd "complete -p acroread"
+send "$cmd\r"
+
+set expected "^$cmd\r\ncomplete -o filenames -f -X .* acroread\r\n/@$"
+expect {
+    -re $expected  { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/acroread.exp"
