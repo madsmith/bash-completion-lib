@@ -1,0 +1,19 @@
+_alias()
+{
+    local cur
+
+    COMPREPLY=()
+    cur=${COMP_WORDS[$COMP_CWORD]}
+
+    case "$COMP_LINE" in
+    *[^=])
+        COMPREPLY=( $( compgen -A alias -S '=' -- $cur ) )
+        ;;
+    *=)
+        COMPREPLY=( "$( alias ${cur%=} 2>/dev/null | \
+                 sed -e 's|^alias '$cur'\(.*\)$|\1|' )" )
+        ;;
+    esac
+}
+_alias
+comp_install  # Make this completion persistent

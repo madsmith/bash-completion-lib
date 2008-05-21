@@ -1,0 +1,10 @@
+    # Use bash strict mode
+set -o posix
+	# Set prompt to ignore current working directory; display path starting from here
+	# E.g. prompt: //fixture1/1-1@
+mwd=$(pwd)
+PS1='$(cwd=$(pwd); echo ${cwd#$mwd}/)@'
+	# Configure readline
+INPUTRC=$(pwd)/config/inputrc
+	# Ensure enough columns so expect doesn't have to care about line breaks
+stty columns 150

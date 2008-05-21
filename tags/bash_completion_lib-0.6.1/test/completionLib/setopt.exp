@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p setopt"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load setopt\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/setopt.exp"
+
+
+set test "Completion via -A setopt should be installed"
+set cmd "complete -p setopt"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -A setopt setopt\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/setopt.exp"

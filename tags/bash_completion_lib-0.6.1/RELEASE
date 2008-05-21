@@ -1,0 +1,35 @@
+bash_completion_lib-0.6.1, 21-May-2008
+
+- Cleaned up bash environment after completion
+- Fixed COMP_RESTRICT_BY_EXTENSION
+
+Tests
+- Added test install/load.exp to test for clean bash environment after
+  completion
+- Added test for: acroread (COMP_RESTRICT_BY_EXTENSION)
+
+
+
+
+bash_completion_lib-0.6, 14-May-2008
+
+- Additional file `comploadrc' contains setting of helper functions
+  and variables during loading of completion
+- Renamed project to bash_completion_lib (was bash_completion_split)
+- All parameters to `comp_install' are now passed to `complete'
+- Improved install for `command' completions: time, sudo, etc.
+
+Tests
+- Added test for clean install with no leftover bash variables or functions
+- Changed test prompt from `$>' to `@' to contain less regexp characters
+- Added tests for: readonly, setopt, time, unset
+- Removed .svn dependency in testing `cd'
+- Split tests so that core can be run against original bash_completion package
+  as well
+
+
+
+
+bash_completion_split-0.5, 10-Apr-2008
+
+- First release

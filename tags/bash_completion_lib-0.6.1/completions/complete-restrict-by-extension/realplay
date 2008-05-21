@@ -1,0 +1,1 @@
+comp_load_and_install "-f -X '!*.@(rm?(j)|ra?(m)|smi?(l))'"
