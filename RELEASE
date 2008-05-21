@@ -1,4 +1,4 @@
-$VERSION
+bash_completion_lib-0.6.1, 21-May-2008
 
 - Cleaned up bash environment after completion
 - Fixed COMP_RESTRICT_BY_EXTENSION
