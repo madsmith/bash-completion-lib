@@ -20,4 +20,4 @@
 #       isn't initialized at that point (i.e. output of `expect' is shown on
 #       stdout - `open_logs' hasn't run yet?).  And running code from a library
 #       file isn't probably a good idea either.
-runtest --outdir=log --host=completionLib --target=completionLib --tool=completionLib $* 
+runtest --outdir=log --tool=completionLib $* 
