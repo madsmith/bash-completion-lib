@@ -15,7 +15,7 @@ _rl_enabled()
 # Generate completions for file-exclude specifications.  Directories must be allowed.
 # @param string $1  Exclude pattern for complete/compgen
 function comp_filedir_xspec() {
-    local cur=${COMP_WORDS[COMP_CWORD]}
+    local cur=${COMP_WORDS[COMP_CWORD]} IFS=$'\t\n'
 
     _expand || return 0
 

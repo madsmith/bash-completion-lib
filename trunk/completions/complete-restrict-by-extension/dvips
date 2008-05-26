@@ -1,1 +1,1 @@
-comp_load_and_install "-f -X '!*.@(dvi|DVI)'"
+comp_filedir_xspec "'!*.@(dvi|DVI)'"

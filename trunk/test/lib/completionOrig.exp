@@ -1,0 +1,21 @@
+proc completionOrig_exit {} {
+        # Exit bash
+    send "\rexit\r"
+}; # comp_exit()
+
+
+proc completionOrig_start {} {
+    global spawn_id
+    send_user "completionOrig_start\n"
+        # Start bash
+    exp_spawn bash --rcfile config/bashrc
+    expect -ex "/@"
+        # Load completions
+    set cmd "source ../bash_completion-20060301/bash_completion"
+    send "$cmd\r"
+    expect -ex "$cmd\r\n"
+    expect -ex "/@"
+}; # completionOrig_start()
+
+
+proc completionOrig_version {} {}

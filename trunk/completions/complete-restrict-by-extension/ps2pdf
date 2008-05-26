@@ -1,1 +1,1 @@
-comp_load_and_install "-f -X '!*.@(?(e)ps|?(E)PS)'"
+comp_filedir_xspec "'!*.@(?(e)ps|?(E)PS)'"
