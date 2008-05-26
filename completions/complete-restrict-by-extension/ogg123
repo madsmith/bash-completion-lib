@@ -1,1 +1,1 @@
-comp_load_and_install "-f -X '!*.@(ogg|OGG|m3u|flac|spx)'"
+comp_filedir_xspec "'!*.@(ogg|OGG|m3u|flac|spx)'"

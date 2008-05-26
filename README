@@ -7,7 +7,7 @@ invocations.  For example:
    complete -F comp_load alias   # First completion uses `comp_load'
    $> alias <TAB>
    ..=       l=      ls=     lt=
-   $> alias ^C
+   $> alias ^C                   # Press CTRL-C to cancel `alias'
    $> complete -p alias
    complete -F _alias alias      # Subsequent completions use `_alias'
 

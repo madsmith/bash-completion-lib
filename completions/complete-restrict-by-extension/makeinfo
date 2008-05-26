@@ -1,1 +1,1 @@
-comp_load_and_install "-f -X '!*.texi*'"
+comp_filedir_xspec "'!*.texi*'"

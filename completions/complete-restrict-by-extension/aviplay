@@ -1,1 +1,1 @@
-comp_load_and_install "-f -X '!*.@(avi|asf|wmv)'"
+comp_filedir_xspec "'!*.@(avi|asf|wmv)'"

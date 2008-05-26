@@ -12,7 +12,7 @@ expect {
 source "lib/completions/acroread.exp"
 
 
-set test "Alias completion via _file_ext() should be installed"
+set test "Alias completion via filename extension should be installed"
 set cmd "complete -p acroread"
 send "$cmd\r"
 
