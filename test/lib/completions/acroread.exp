@@ -19,9 +19,8 @@ set test "Tab should complete acroread"
     # Try completion
 set cmd "acroread fixture1/"
 send "$cmd\t"
-set expected "^${cmd}t.pdf $"
 expect {
-    -re $expected  { pass "$test" }
+    -re "^${cmd}\r\nbar bar.d/ +foo.d/ +(\.svn/ +|)t.pdf +\r\n/@$cmd$"  { pass "$test" }
     -re /@ { fail "$test at prompt" }
     default { fail "$test" }
 }; # expect
