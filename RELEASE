@@ -1,5 +1,6 @@
 $VERSION
 
+- Removed erroneous completion for the `file' command
 - Test: Bash_completion_lib is now only sourced once at the beginning of the
   test tool "completionLib".  Removed host and target definitions.  (Issue 4)
 
