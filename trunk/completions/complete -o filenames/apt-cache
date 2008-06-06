@@ -5,7 +5,7 @@ _apt_cache()
     local cur prev special i
 
     COMPREPLY=()
-    cur=${COMP_WORDS[COMP_CWORD]}
+    cur=`_get_cword`
     prev=${COMP_WORDS[COMP_CWORD-1]}
 
     

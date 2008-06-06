@@ -2,7 +2,7 @@ _mount()
 {       local cur i sm host
 
     COMPREPLY=()
-    cur=${COMP_WORDS[COMP_CWORD]}
+    cur=`_get_cword`
     [[ "$cur" == \\ ]] && cur="/"
 
     for i in {,/usr}/{,s}bin/showmount; do [ -x $i ] && sm=$i && break; done

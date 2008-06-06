@@ -14,8 +14,8 @@ _rl_enabled()
 
 # Generate completions for file-exclude specifications.  Directories must be allowed.
 # @param string $1  Exclude pattern for complete/compgen
-function comp_filedir_xspec() {
-    local cur=${COMP_WORDS[COMP_CWORD]} IFS=$'\t\n'
+comp_filedir_xspec() {
+    local cur=`_get_cword` IFS=$'\t\n'
 
     _expand || return 0
 
@@ -30,7 +30,7 @@ function comp_filedir_xspec() {
 # The subroutine is assumed to reside in a file named after the subroutine,
 # located in $COMP_DIR/include.  E.g. cd() should reside in file $COMP_DIR/include/cd.
 # @param $* string  Subroutine(s) to include
-function comp_include() {
+comp_include() {
     for s; do
         declare -F "$s" &> /dev/null || { [ -r "$COMP_DIR/include/$s" ] && . "$COMP_DIR/include/$s"; }
     done
@@ -42,7 +42,7 @@ function comp_include() {
 #       A less collision-prone default might be "_comp_$command", e.g.
 #       `_comp_ssh' instead of `_ssh' -- FVu, Sat Apr  5 09:21:21 CEST 2008
 # @param $* string  (optional) Arguments to use for completion.  Default is "-F _${BASH_ARGV[0]}"
-function comp_install() {
+comp_install() {
     local comp=${BASH_ARGV[0]##*/}  # ${..##*/}: strip up to and including last slash
     local dir="${BASH_ARGV[0]%/$comp}"  # Extract dir from completion
 
@@ -60,7 +60,7 @@ function comp_install() {
 # Completions are generated via compgen to satisfy the first run.  Completion
 # is installed for subsequent completion invocations.
 # @param string $1  Complete/compgen arguments
-function comp_load_and_install() {
+comp_load_and_install() {
         # Provide completions for the first time completion is invoked
     COMPREPLY=(
         $(eval compgen -f $1 -- "${COMP_WORDS[COMP_CWORD]}")
@@ -94,6 +94,45 @@ _filedir()
 		    $( compgen -d -- "$cur" ) )
 	#eval "$glob"    # restore glob setting.
 }
+
+
+# Get the word to complete
+# This is nicer than ${COMP_WORDS[$COMP_CWORD]}, since it handles cases
+# where the user is completing in the middle of a word.
+# (For example, if the line is "ls foobar",
+# and the cursor is here -------->   ^
+# it will complete just "foo", not "foobar", which is what the user wants.)
+#
+# Accepts an optional parameter indicating which characters out of
+# $COMP_WORDBREAKS should NOT be considered word breaks. This is useful
+# for things like scp where we want to return host:path and not only path.
+_get_cword()
+{
+	local i
+	local WORDBREAKS=${COMP_WORDBREAKS}
+	if [ -n $1 ]; then
+		for (( i=0; i<${#1}; ++i )); do
+			local char=${1:$i:1}
+			WORDBREAKS=${WORDBREAKS//$char/}
+		done
+	fi
+	local cur=${COMP_LINE:0:$COMP_POINT}
+	local tmp="${cur}"
+	local word_start=`expr "$tmp" : '.*['"${WORDBREAKS}"']'`
+	while [ "$word_start" -ge 2 ]; do
+        	local char=${cur:$(( $word_start - 2 )):1}
+		if [ "$char" != "\\" ]; then
+			break
+		fi
+		tmp=${COMP_LINE:0:$(( $word_start - 2 ))}
+		word_start=`expr "$tmp" : '.*['"${WORDBREAKS}"']'`
+	done
+
+
+	cur=${cur:$word_start}
+	echo $cur
+}
+
 
 # This function completes on signal names
 #

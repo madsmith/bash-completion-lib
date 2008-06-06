@@ -1,5 +1,7 @@
 $VERSION
 
+- Added testsuite for Debian package bash-completion_20060301-4
+- Make completion working in the middle of a word (Adam Simpkins). (Ubuntu LP: #139666))
 - Removed erroneous completion for the `file' command
 - Test: Bash_completion_lib is now only sourced once at the beginning of the
   test tool "completionLib".  Removed host and target definitions.  (Issue 4)
@@ -45,4 +47,6 @@ bash_completion_split-0.5, 10-Apr-2008
 
 
 
-For issues, see: http://code.google.com/p/bash-completion-lib/issues/detail?id=
+1)  For issues, see: http://code.google.com/p/bash-completion-lib/issues/detail?id=
+
+2)  Ubuntu LP = Ubuntu Launchpad, see: https://bugs.launchpad.net/ubuntu

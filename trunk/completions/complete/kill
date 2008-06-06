@@ -5,7 +5,7 @@ _kill()
     local cur
 
     COMPREPLY=()
-    cur=${COMP_WORDS[COMP_CWORD]}
+    cur=`_get_cword`
 
     if [ $COMP_CWORD -eq 1 ] && [[ "$cur" == -* ]]; then
         # return list of available signals

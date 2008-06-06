@@ -25,7 +25,7 @@ set cmd "scp bash_completion_split:"
 send "$cmd\t"
 expect {
     -re "^$cmd$host_pwd.*$" { pass "$test" }
-    -re /@ { fail "$test at prompt" }
+    -re /@ { unresolved "$test at prompt" }
 }; # expect
 
 

@@ -11,11 +11,13 @@ proc completionOrig_start {} {
     exp_spawn bash --rcfile config/bashrc
     expect -ex "/@"
         # Load completions
-    set cmd "source ../bash_completion-20060301/bash_completion"
+    set cmd "source ../bash_completion-20060301.orig/bash_completion"
     send "$cmd\r"
     expect -ex "$cmd\r\n"
     expect -ex "/@"
 }; # completionOrig_start()
 
 
-proc completionOrig_version {} {}
+proc completionOrig_version {} {
+    puts "bash_completion-20060301.orig"
+}; # completionOrig_version()

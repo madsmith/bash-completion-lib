@@ -28,8 +28,28 @@ send "$cmd\t"
 set expected "^$cmd\r\nbar= +foo= +\r\n/@$cmd$"
 expect {
     -re $expected  { pass "$test" }
-    -re /@ { fail "$test at prompt" }
-    default { fail "$test" }
+    -re /@ { unresolved "$test at prompt" }
+    default { unresolved "$test" }
+}; # expect
+
+
+# Interrupt command by sending ^C
+
+sleep 0.1 
+send \003;  # Control-c
+expect -ex /@
+
+
+set test "Tab should complete alias at cursor position"
+    # Try completion
+set cmd "alias foo"
+append cmd \002\002\002; # \002 = ^B = Move cursor left in bash emacs mode
+send "$cmd\t"
+expect {
+    -re "^alias foo\b\b\b\r\nbar= +foo= +\r\n/@alias foo\b\b\b$" { pass "$test" }
+    -re "^alias foo\b\b\bfoo=foo\b\b\b$" { fail "$test: Wrong cursor position" }
+    -re /@ { unresolved "$test" }
+    default { unresolved "$test" }
 }; # expect
 
 
@@ -37,7 +57,7 @@ expect {
 
 sleep 0.1; 
 send \003;  # Control-c
-expect -ex /@
+expect -ex /@ 
 
 
 teardown
