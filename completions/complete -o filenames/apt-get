@@ -5,7 +5,7 @@ _apt_get()
     local cur prev special i
 
     COMPREPLY=()
-    cur=${COMP_WORDS[COMP_CWORD]}
+    cur=`_get_cword`
     prev=${COMP_WORDS[COMP_CWORD-1]}
 
     for (( i=0; i < ${#COMP_WORDS[@]}-1; i++ )); do

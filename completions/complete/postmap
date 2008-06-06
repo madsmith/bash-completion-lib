@@ -4,7 +4,7 @@ _postmap()
 {
     local cur prev len idx
 
-    cur=${COMP_WORDS[COMP_CWORD]}
+    cur=`_get_cword`
     prev=${COMP_WORDS[COMP_CWORD-1]}
 
     if [[ $cur == '-' ]]; then

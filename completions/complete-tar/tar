@@ -5,7 +5,7 @@ _tar()
     local cur ext regex tar untar
 
     COMPREPLY=()
-    cur=${COMP_WORDS[COMP_CWORD]}
+    cur=`_get_cword`
 
     if [ $COMP_CWORD -eq 1 ]; then
         COMPREPLY=( $( compgen -W 'c t x u r d A' -- $cur ) )

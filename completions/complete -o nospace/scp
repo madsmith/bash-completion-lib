@@ -8,7 +8,7 @@ _scp()
 
     local IFS=$'\t\n'
     COMPREPLY=()
-    cur=${COMP_WORDS[COMP_CWORD]}
+    cur=`_get_cword ":"`
 
     _expand || return 0
 

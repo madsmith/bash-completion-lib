@@ -7,7 +7,7 @@ _insmod()
     local cur prev modpath
 
     COMPREPLY=()
-    cur=${COMP_WORDS[COMP_CWORD]}
+    cur=`_get_cword`
     prev=${COMP_WORDS[COMP_CWORD-1]}
 
     # behave like lsmod for modprobe -r

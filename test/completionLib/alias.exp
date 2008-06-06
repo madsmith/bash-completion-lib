@@ -12,15 +12,15 @@ expect {
 source "lib/completions/alias.exp"
 
 
-set test "Alias completion via _alias() should be installed"
-set cmd "complete -p alias"
-send "$cmd\r"
-
-set expected "^$cmd\r\ncomplete -F _alias alias\r\n/@$"
-expect {
-    -re $expected  { pass "$test" }
-    -re /@ { fail "$test at prompt" }
-}; # expect
-
-
-source "lib/completions/alias.exp"
+#set test "Alias completion via _alias() should be installed"
+#set cmd "complete -p alias"
+#send "$cmd\r"
+#
+#set expected "^$cmd\r\ncomplete -F _alias alias\r\n/@$"
+#expect {
+#    -re $expected  { pass "$test" }
+#    -re /@ { fail "$test at prompt" }
+#}; # expect
+#
+#
+#source "lib/completions/alias.exp"

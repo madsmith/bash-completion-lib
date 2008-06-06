@@ -1,7 +1,7 @@
 _chown()
 {
     local cur
-    cur=${COMP_WORDS[COMP_CWORD]}
+    cur=`_get_cword`
 
     # options completion
     if [[ "$cur" == -* ]]; then

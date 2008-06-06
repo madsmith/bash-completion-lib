@@ -3,7 +3,7 @@
 #
 _cd()
 {
-    local IFS=$'\t\n' cur=${COMP_WORDS[COMP_CWORD]} i j k
+    local IFS=$'\t\n' cur=`_get_cword` i j k
 
     # try to allow variable completion
     if [[ "$cur" == ?(\\)\$* ]]; then

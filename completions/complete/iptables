@@ -3,7 +3,7 @@ _iptables()
     local cur prev table chain
 
     COMPREPLY=()
-    cur=${COMP_WORDS[COMP_CWORD]} 
+    cur=`_get_cword`
     prev=${COMP_WORDS[COMP_CWORD-1]}
     chain='s/^Chain \([^ ]\+\).*$/\1/p'
 

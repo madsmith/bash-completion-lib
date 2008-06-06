@@ -7,7 +7,7 @@ _known_hosts()
        local -a kh khd config
 
     COMPREPLY=()
-    cur=${COMP_WORDS[COMP_CWORD]}
+    cur=`_get_cword`
     ocur=$cur
 
     [ "$1" = -a ] || [ "$2" = -a ] && aliases='yes'

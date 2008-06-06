@@ -46,7 +46,7 @@ _rpm()
     local cur prev ver nodig nosig
 
     COMPREPLY=()
-    cur=${COMP_WORDS[COMP_CWORD]}
+    cur=`_get_cword`
     prev=${COMP_WORDS[COMP_CWORD-1]}
     nodig=""
     nosig=""

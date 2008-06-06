@@ -6,7 +6,7 @@ _pgrep()
     local cur
 
     COMPREPLY=()
-    cur=${COMP_WORDS[COMP_CWORD]}
+    cur=`_get_cword`
 
     COMPREPLY=( $( compgen -W '$( command ps axo command | \
               sed -ne "1d; s/^\[\?\([^-][^] ]*\).*$/\1/p" | \

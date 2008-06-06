@@ -28,7 +28,7 @@ _cvs()
     local -a flags miss files entries changed newremoved
 
     COMPREPLY=()
-    cur=${COMP_WORDS[COMP_CWORD]}
+    cur=`_get_cword`
 
     count=0
     for i in ${COMP_WORDS[@]}; do

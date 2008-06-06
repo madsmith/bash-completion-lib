@@ -21,8 +21,8 @@ set cmd "acroread fixture1/"
 send "$cmd\t"
 expect {
     -re "^${cmd}\r\nbar bar.d/ +foo.d/ +(\.svn/ +|)t.pdf +\r\n/@$cmd$"  { pass "$test" }
-    -re /@ { fail "$test at prompt" }
-    default { fail "$test" }
+    -re /@ { unresolved "$test at prompt" }
+    default { unresolved "$test" }
 }; # expect
 
 

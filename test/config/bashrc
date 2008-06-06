@@ -1,3 +1,5 @@
+    # Use emacs key bindings
+set -o emacs
     # Use bash strict mode
 set -o posix
 	# Set prompt to ignore current working directory; display path starting from here

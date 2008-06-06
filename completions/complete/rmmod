@@ -5,7 +5,7 @@ _rmmod()
     local cur
 
     COMPREPLY=()
-    cur=${COMP_WORDS[COMP_CWORD]}
+    cur=`_get_cword`
 
     COMPREPLY=( $( /sbin/lsmod | \
           awk '{if (NR != 1 && $1 ~ /^'$cur'/) print $1}' 2>/dev/null ))
