@@ -39,7 +39,7 @@ COMP_RESTRICT_BY_EXTENSION=${COMP_RESTRICT_BY_EXTENSION:-0}  # True (1) if restr
 
 # Load completion commands.
 # The appropriate script from the `completions' directory will be loaded.
-function comp_load() {
+comp_load() {
         # Always load `comploadrc'
     . $COMP_DIR/comploadrc
         # Load `completionrc' once
@@ -74,7 +74,7 @@ function comp_load() {
 #     NOTE: Global 'COMP_ARGS' is used instead of echo-ing the string
 #           to stdout, because this saves us invoking a subshell, thus
 #           gains speed.
-function comp_dir2args() {
+comp_dir2args() {
     COMP_ARGS=
     case "${1##*/}" in  # `${1##*/}' means: strip up to including last slash
         complete-*)
@@ -85,6 +85,16 @@ function comp_dir2args() {
             ;;
     esac
 } # comp_dir2args()
+
+
+# This function checks whether we have a given program on the system.
+# No need for bulky functions in memory if we don't.
+#
+have() {
+    unset -v have
+    PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin type $1 &>/dev/null &&
+        have="yes"
+} # have()
 
 
     # Install completion for all files in `./completions/*'

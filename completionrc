@@ -26,49 +26,6 @@ comp_filedir_xspec() {
 } # comp_filedir_xspec()
 
 
-# Include completion subroutine - if not already loaded.
-# The subroutine is assumed to reside in a file named after the subroutine,
-# located in $COMP_DIR/include.  E.g. cd() should reside in file $COMP_DIR/include/cd.
-# @param $* string  Subroutine(s) to include
-comp_include() {
-    for s; do
-        declare -F "$s" &> /dev/null || { [ -r "$COMP_DIR/include/$s" ] && . "$COMP_DIR/include/$s"; }
-    done
-} # comp_include()
-
-
-# Install real completion
-# NOTE: The default function of the original bash_completion is "_$command".
-#       A less collision-prone default might be "_comp_$command", e.g.
-#       `_comp_ssh' instead of `_ssh' -- FVu, Sat Apr  5 09:21:21 CEST 2008
-# @param $* string  (optional) Arguments to use for completion.  Default is "-F _${BASH_ARGV[0]}"
-comp_install() {
-    local comp=${BASH_ARGV[0]##*/}  # ${..##*/}: strip up to and including last slash
-    local dir="${BASH_ARGV[0]%/$comp}"  # Extract dir from completion
-
-        # Don't install completion if 'comp_dir2args()' returns false
-    if comp_dir2args "$dir"; then
-        eval complete ${*:--F _$comp} $COMP_ARGS ${COMP_WORDS[0]}
-    else
-        complete -r $command
-    fi
-    unset -v COMP_ARGS
-} # comp_install()
-
-
-# Load and install completion.
-# Completions are generated via compgen to satisfy the first run.  Completion
-# is installed for subsequent completion invocations.
-# @param string $1  Complete/compgen arguments
-comp_load_and_install() {
-        # Provide completions for the first time completion is invoked
-    COMPREPLY=(
-        $(eval compgen -f $1 -- "${COMP_WORDS[COMP_CWORD]}")
-    )
-    comp_install "$1"  # Make completion persistent for subsequent invocations
-} # comp_load_and_install()
-
-
 # This function performs file and directory completion. It's better than
 # simply using 'compgen -f', because it honours spaces in filenames.
 # If passed -d, it completes only on directories. If passed anything else,
@@ -322,3 +279,46 @@ _count_args()
 		fi
 	done
 }
+
+
+# Include completion subroutine - if not already loaded.
+# The subroutine is assumed to reside in a file named after the subroutine,
+# located in $COMP_DIR/include.  E.g. cd() should reside in file $COMP_DIR/include/cd.
+# @param $* string  Subroutine(s) to include
+comp_include() {
+    for s; do
+        declare -F "$s" &> /dev/null || { [ -r "$COMP_DIR/include/$s" ] && . "$COMP_DIR/include/$s"; }
+    done
+} # comp_include()
+
+
+# Install real completion
+# NOTE: The default function of the original bash_completion is "_$command".
+#       A less collision-prone default might be "_comp_$command", e.g.
+#       `_comp_ssh' instead of `_ssh' -- FVu, Sat Apr  5 09:21:21 CEST 2008
+# @param $* string  (optional) Arguments to use for completion.  Default is "-F _${BASH_ARGV[0]}"
+comp_install() {
+    local comp=${BASH_ARGV[0]##*/}  # ${..##*/}: strip up to and including last slash
+    local dir="${BASH_ARGV[0]%/$comp}"  # Extract dir from completion
+
+        # Don't install completion if 'comp_dir2args()' returns false
+    if comp_dir2args "$dir"; then
+        eval complete ${*:--F _$comp} $COMP_ARGS ${COMP_WORDS[0]}
+    else
+        complete -r $command
+    fi
+    unset -v COMP_ARGS
+} # comp_install()
+
+
+# Load and install completion.
+# Completions are generated via compgen to satisfy the first run.  Completion
+# is installed for subsequent completion invocations.
+# @param string $1  Complete/compgen arguments
+comp_load_and_install() {
+        # Provide completions for the first time completion is invoked
+    COMPREPLY=(
+        $(eval compgen -f $1 -- "${COMP_WORDS[COMP_CWORD]}")
+    )
+    comp_install "$1"  # Make completion persistent for subsequent invocations
+} # comp_load_and_install()
