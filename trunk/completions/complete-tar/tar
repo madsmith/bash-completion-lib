@@ -55,4 +55,5 @@ _tar()
 
     return 0
 }
+comp_install  # Make completion persistent
 _tar
