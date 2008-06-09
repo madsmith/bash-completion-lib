@@ -1,0 +1,14 @@
+Tests:
+
+* completionLib:
+  Tests load, complete, install, complete of bash_completion_lib.
+
+* install:
+  Tests main install of bash_completion_lib.
+
+* completionOrig:  
+  Tests completion of bash_completion-20060301.
+
+
+In order for bash_completion_lib to be released, the tests `completionLib' and
+`install' should run successful.

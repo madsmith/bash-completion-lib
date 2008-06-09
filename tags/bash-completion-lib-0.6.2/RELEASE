@@ -1,0 +1,55 @@
+bash_completion_lib-0.6.2, 9-Jun-2008
+
+- Added completions: mysqladmin, gzip, bzip2 and openssl (Issue 14, 15)
+- Fixed installing tar completion after first completion (Issue 16)
+- Added completion for `ant' (Issue 12)
+- Added testsuite for Debian package bash-completion_20060301-4
+- Make completion working in the middle of a word (Adam Simpkins). (Ubuntu LP: #139666))
+- Removed erroneous completion for the `file' command
+- Test: Bash_completion_lib is now only sourced once at the beginning of the
+  test tool "completionLib".  Removed host and target definitions.  (Issue 4)
+
+
+
+
+bash_completion_lib-0.6.1, 21-May-2008
+
+- Cleaned up bash environment after completion
+- Fixed COMP_RESTRICT_BY_EXTENSION
+- Test: Added test install/load.exp to test for clean bash environment after
+  completion
+- Test: Added test for: acroread (COMP_RESTRICT_BY_EXTENSION)
+
+
+
+
+bash_completion_lib-0.6, 14-May-2008
+
+- Additional file `comploadrc' contains setting of helper functions
+  and variables during loading of completion
+- Renamed project to bash_completion_lib (was bash_completion_split)
+- All parameters to `comp_install' are now passed to `complete'
+- Improved install for `command' completions: time, sudo, etc.
+- Test: Added test for clean install with no leftover bash variables or
+  functions
+- Test: Changed test prompt from `$>' to `@' to contain less regexp characters
+- Test: Added tests for: readonly, setopt, time, unset
+- Test: Removed .svn dependency in testing `cd'
+- Test: Split tests so that core can be run against original bash_completion
+  package as well
+
+
+
+
+bash_completion_split-0.5, 10-Apr-2008
+
+- First release
+
+
+
+
+
+
+1)  For issues, see: http://code.google.com/p/bash-completion-lib/issues/detail?id=
+
+2)  Ubuntu LP = Ubuntu Launchpad, see: https://bugs.launchpad.net/ubuntu

@@ -1,0 +1,32 @@
+declare -F _known_hosts &> /dev/null || . $COMP_DIR/include/_known_hosts
+
+_ssh()
+{
+    local cur prev
+    local -a config
+
+    COMPREPLY=()
+    cur=`_get_cword`
+    prev=${COMP_WORDS[COMP_CWORD-1]}
+
+    case "$prev" in
+    -*c)
+        COMPREPLY=( $( compgen -W 'blowfish 3des 3des-cbc blowfish-cbc \
+               arcfour cast128-cbc' -- $cur ) )
+        ;;
+    -*i)
+        _filedir
+        ;;
+    -*l)
+        COMPREPLY=( $( compgen -u -- $cur ) )
+        ;;
+    *)
+        _known_hosts -a
+
+        [ $COMP_CWORD -eq 1 ] || \
+        COMPREPLY=( ${COMPREPLY[@]} $( compgen -c -- $cur ) )
+    esac
+
+    return 0
+}
+_ssh
