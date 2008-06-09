@@ -259,4 +259,5 @@ _cvs()
     
     return 0
 }
-_cvs
+comp_install  # Make this completion persistent
+_cvs  # Generate completions first time

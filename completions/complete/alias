@@ -15,5 +15,5 @@ _alias()
         ;;
     esac
 }
-_alias
 comp_install  # Make this completion persistent
+_alias

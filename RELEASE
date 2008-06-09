@@ -1,5 +1,8 @@
-$VERSION
+bash_completion_lib-0.6.2, 9-Jun-2008
 
+- Added completions: mysqladmin, gzip, bzip2 and openssl (Issue 14, 15)
+- Fixed installing tar completion after first completion (Issue 16)
+- Added completion for `ant' (Issue 12)
 - Added testsuite for Debian package bash-completion_20060301-4
 - Make completion working in the middle of a word (Adam Simpkins). (Ubuntu LP: #139666))
 - Removed erroneous completion for the `file' command
