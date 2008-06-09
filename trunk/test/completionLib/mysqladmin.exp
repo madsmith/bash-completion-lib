@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p mysqladmin"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load mysqladmin\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/mysqladmin.exp"
+
+
+set test "Completion via _mysqladmin() should be installed"
+set cmd "complete -p mysqladmin"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _mysqladmin mysqladmin\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/mysqladmin.exp"
