@@ -11,10 +11,10 @@ setup
 
 set test "Tab should complete"
     # Try completion
-set cmd "bzip2 "
+set cmd "createdb "
 send "$cmd\t"
 expect {
-    -re "^bzip2 .*$" { pass "$test" }
+    -re "^createdb .*$" { pass "$test" }
     -re /@ { unresolved "$test at prompt" }
     -re eof { unresolved "eof" }
 }; # expect

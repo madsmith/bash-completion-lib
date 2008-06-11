@@ -1,11 +1,3 @@
-$VERSION
-
-- Added ./script/generate for quickly adding new completion including tests.
-- Added completions: screen (Issue 15)
-
-
-
-
 bash_completion_lib-0.6.2, 9-Jun-2008
 
 - Added completions: mysqladmin, gzip, bzip2 and openssl (Issue 14, 15)

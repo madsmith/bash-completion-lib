@@ -128,7 +128,7 @@ expect {
 
 # Interrupt command by sending ^C
 
-sleep 0.1; 
+sleep 0.3; 
 send \\003;  # Control-c
 expect -ex /@
 
@@ -148,3 +148,4 @@ generate_test_completion_debian "$1" "$2"
 generate_test_completion_lib "$1" "$2"
 generate_test_completion_orig "$1" "$2"
 generate_test_lib_completions "$1" "$2"
+vi "completions/complete $2/$1"
