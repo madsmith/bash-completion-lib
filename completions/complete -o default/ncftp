@@ -1,0 +1,18 @@
+_ncftp()
+{
+    local cur
+
+    COMPREPLY=()
+    cur=`_get_cword`
+
+    if [ $COMP_CWORD -eq 1 ] && [ -f ~/.ncftp/bookmarks ]; then
+        COMPREPLY=( $( compgen -W '$( sed -ne "s/^\([^,]\{1,\}\),.*$/\1/p" \
+               ~/.ncftp/bookmarks )' -- $cur ) )
+    fi
+
+    return 0
+} # _ncftp()
+
+comp_install  # Make completion persistent for subsequent invocations
+
+_ncftp  # Generate completions for first invocation

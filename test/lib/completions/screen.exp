@@ -11,10 +11,10 @@ setup
 
 set test "Tab should complete"
     # Try completion
-set cmd "screen "
+set cmd "screen x"
 send "$cmd\t"
 expect {
-    -re "^screen .*$" { pass "$test" }
+    -re "^screen .*" { pass "$test" }
     -re /@ { unresolved "$test at prompt" }
     -re eof { unresolved "eof" }
 }; # expect

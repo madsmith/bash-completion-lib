@@ -11,10 +11,10 @@ setup
 
 set test "Tab should complete"
     # Try completion
-set cmd "bzip2 "
+set cmd "psql "
 send "$cmd\t"
 expect {
-    -re "^bzip2 .*$" { pass "$test" }
+    -re "^psql .*$" { pass "$test" }
     -re /@ { unresolved "$test at prompt" }
     -re eof { unresolved "eof" }
 }; # expect
