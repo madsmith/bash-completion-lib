@@ -1,0 +1,105 @@
+# available path elements completion
+_java_path()
+{
+    cur=${cur##*:}
+    _filedir '@(jar|zip)'
+}
+
+# exact classpath determination
+_java_find_classpath()
+{
+    local i
+
+    # search first in current options
+    for (( i=1; i < COMP_CWORD; i++ )); do
+        if [[ "${COMP_WORDS[i]}" == -@(cp|classpath) ]]; then
+            classpath=${COMP_WORDS[i+1]}
+            break
+        fi
+    done
+
+    # default to environment
+    [ -z "$classpath" ] && classpath=$CLASSPATH
+
+    # default to current directory
+    [ -z "$classpath" ] && classpath=.
+}
+
+# exact sourcepath determination
+_java_find_sourcepath()
+{
+    local i
+
+    # search first in current options
+    for (( i=1; i < COMP_CWORD; i++ )); do
+        if [[ "${COMP_WORDS[i]}" == -sourcepath ]]; then
+            sourcepath=${COMP_WORDS[i+1]}
+            break
+        fi
+    done
+
+    # default to classpath
+    [ -z "$sourcepath" ] && _java_find_classpath
+    sourcepath=$classpath
+}
+
+# available classes completion
+_java_classes()
+{
+    local classpath i
+
+    # find which classpath to use
+    _java_find_classpath
+
+    # convert package syntax to path syntax
+    cur=${cur//.//}
+    # parse each classpath element for classes
+    for i in ${classpath//:/ }; do
+        if [ -r $i ] && [[ "$i" == *.@(jar|zip) ]]; then
+            if type zipinfo &> /dev/null; then
+                COMPREPLY=( ${COMPREPLY[@]} $( zipinfo -1 \
+                "$i" | grep "^$cur" | grep '\.class$' | \
+                grep -v "\\$" ) )
+            else
+                COMPREPLY=( ${COMPREPLY[@]} $( jar tf "$i" \
+                "$cur" | grep "\.class$" | grep -v "\\$" ) )
+            fi
+
+        elif [ -d $i ]; then
+            i=${i%/}
+            COMPREPLY=( ${COMPREPLY[@]} $( find "$i" -type f \
+            -path "$i/$cur*.class" 2>/dev/null | \
+            grep -v "\\$" | sed -e "s|^$i/||" ) )
+        fi
+    done
+
+    # remove class extension
+    COMPREPLY=( ${COMPREPLY[@]%.class} )
+    # convert path syntax to package syntax
+    COMPREPLY=( ${COMPREPLY[@]//\//.} )
+}
+
+# available packages completion
+_java_packages()
+{
+    local sourcepath i
+
+    # find wich sourcepath to use
+    _java_find_sourcepath
+
+    # convert package syntax to path syntax
+    cur=${cur//.//}
+    # parse each sourcepath element for packages
+    for i in ${sourcepath//:/ }; do
+        if [ -d $i ]; then
+            COMPREPLY=( ${COMPREPLY[@]} $( command ls -F -d \
+                $i/$cur* 2>/dev/null | sed -e 's|^'$i'/||' ) )
+        fi
+    done
+    # keep only packages
+    COMPREPLY=( $( echo ${COMPREPLY[@]} | tr " " "\n" | grep "/$" ) )
+    # remove packages extension
+    COMPREPLY=( ${COMPREPLY[@]%/} )
+    # convert path syntax to package syntax
+    cur=${COMPREPLY[@]//\//.}
+}

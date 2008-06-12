@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p dpkg-deb"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames -F comp_load dpkg-deb\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/dpkg-deb.exp"
+
+
+set test "Completion via _dpkg() should be installed"
+set cmd "complete -p dpkg-deb"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames -F _dpkg dpkg-deb\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/dpkg-deb.exp"
