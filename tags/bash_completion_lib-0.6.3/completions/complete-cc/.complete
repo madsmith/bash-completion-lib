@@ -1,0 +1,2 @@
+[ $UNAME = GNU -o $UNAME = Linux -o $UNAME = Cygwin ] && \
+[ -n "${have:-}" ] && COMP_ARGS="$filenames" || false

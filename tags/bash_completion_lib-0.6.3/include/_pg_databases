@@ -1,0 +1,6 @@
+_pg_databases() 
+{
+    COMPREPLY=( $( psql -l 2>/dev/null | \
+            sed -e '1,/^-/d' -e '/^(/,$d' | \
+            awk '{print $1}' | grep "^$cur" ) )
+}

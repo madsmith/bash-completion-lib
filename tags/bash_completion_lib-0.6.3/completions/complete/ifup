@@ -1,0 +1,17 @@
+# RedHat & Debian GNU/Linux if{up,down} completion
+#
+[ $UNAME = Linux ] && { have ifup || have ifdown; } &&
+_ifupdown()
+{
+    local cur
+
+    COMPREPLY=()
+    cur=`_get_cword`
+
+    if [ $COMP_CWORD -eq 1 ]; then
+        _configured_interfaces
+       fi
+
+       return 0
+}
+_ifup
