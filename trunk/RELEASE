@@ -1,4 +1,4 @@
-bash_completion_lib-0.6.dev
+bash_completion_lib-0.6.3, 13-Jun-2008
 
 - Added completions: gdb, lftp, createdb, ncftp, dropdb, psql,
   a2ps, autoconf, automake, bc, gprof, ld, nm, objcopy,
@@ -12,6 +12,8 @@ bash_completion_lib-0.6.dev
   gcj, gpc, cc, cardctl, dpkg, dpkg-deb, dpkg-reconfigure,
   dpkg-source, dselect, java, javadoc, javac
   (Issue 14, 15)
+- Added helper file `script/generate' for creating new completion
+- Propagated use of `comp_include()' for including lib files
 
 
 
