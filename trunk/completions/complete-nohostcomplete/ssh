@@ -1,4 +1,4 @@
-declare -F _known_hosts &> /dev/null || . $COMP_DIR/include/_known_hosts
+comp_include _known_hosts
 
 _ssh()
 {

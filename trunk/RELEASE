@@ -4,11 +4,14 @@ bash_completion_lib-0.6.dev
   a2ps, autoconf, automake, bc, gprof, ld, nm, objcopy,
   objdump, readelf, strip bison, cpio, diff, patch, enscript,
   cp, df, dir, du, ln, ls, mkfifo, mknod, mv, rm touch, vdir,
-  awk, gperf, grep, grub, indent, less, m4, sed, shar, date
-  tee, who, texindex, cat, csplit, cut, expand, fmt, fold,
-  head md5sum, nl, od, paste, pr, ptx, sha1sum, sort, split,
-  tac, tail, tr, unexpand uniq, wc, ldd, bash, id, irb, mkdir,
-  rmdir, env, netstat, seq, uname, units, wget (Issue 14, 15)
+  awk, gperf, grep, grub, indent, less, m4, sed, shar, date tee,
+  who, texindex, cat, csplit, cut, expand, fmt, fold, head
+  md5sum, nl, od, paste, pr, ptx, sha1sum, sort, split, tac,
+  tail, tr, unexpand uniq, wc, ldd, bash, id, irb, mkdir, rmdir,
+  env, netstat, seq, uname, units, wget, gcc, g++, c++, g77,
+  gcj, gpc, cc, cardctl, dpkg, dpkg-deb, dpkg-reconfigure,
+  dpkg-source, dselect, java, javadoc, javac
+  (Issue 14, 15)
 
 
 

@@ -1,5 +1,4 @@
-declare -F _pg_databases &> /dev/null || . $COMP_DIR/include/_pg_databases
-declare -F _pg_users &> /dev/null || . $COMP_DIR/include/_pg_users
+comp_include _pg_databases _pg_users
 
 _psql()
 {
