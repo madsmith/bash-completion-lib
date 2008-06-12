@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p unexpand"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames -F comp_load unexpand\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/unexpand.exp"
+
+
+set test "Completion via _longopt() should be installed"
+set cmd "complete -p unexpand"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames -F _longopt unexpand\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/unexpand.exp"
