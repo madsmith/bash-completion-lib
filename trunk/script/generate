@@ -2,7 +2,8 @@
 # Generate skeleton files for completion of specified command.
 # Test skeleton files are generated as well.
 # @param $1 string  Command, e.g. 'make'
-# @param $2 string  Completion arguments, e.g. '-o filenames'
+# @param $2 string  Completion function, e.g. _command
+# @param $3 string  Completion arguments, e.g. '-o filenames'
 
 
 set -o errexit  # Exit if simple command fails
@@ -10,20 +11,21 @@ set -o errexit  # Exit if simple command fails
 
 # Generate completion code
 # @param $1 string  Command, e.g. 'make'
-# @param $2 string  Completion arguments, e.g. '-o filenames'
+# @param $2 string  Completion function, e.g. _command
+# @param $3 string  Completion arguments, e.g. '-o filenames'
 generate_completion() {
-	local path="completions/complete $2/$1"
+	local path="completions/complete $3/$1"
 		# Does file already exist?
 	if [ ! -f "$path" ]; then
 		# No, file doesn't exist; generate file
 	cat <<BASH > "$path"
-_$1()
+$2()
 {
-} # _$1()
+} # $2()
 
 comp_install  # Make completion persistent for subsequent invocations
 
-_$1  # Generate completions for first invocation
+$2  # Generate completions for first invocation
 BASH
 fi
 } # generate_completion()
@@ -31,7 +33,8 @@ fi
 
 # Generate test code
 # @param $1 string  Command, e.g. 'make'
-# @param $2 string  Completion arguments, e.g. '-o filenames'
+# @param $2 string  Completion function, e.g. _command
+# @param $3 string  Completion arguments, e.g. '-o filenames'
 generate_test_completion_debian() {
 	local path="test/completionDebian/$1.exp"
 		# Does file already exist?
@@ -46,7 +49,8 @@ fi
 
 # Generate test code
 # @param $1 string  Command, e.g. 'make'
-# @param $2 string  Completion arguments, e.g. '-o filenames'
+# @param $2 string  Completion function, e.g. _command
+# @param $3 string  Completion arguments, e.g. '-o filenames'
 generate_test_completion_lib() {
 	local path="test/completionLib/$1.exp"
 		# Does file already exist?
@@ -57,7 +61,7 @@ set test "Completion via comp_load() should be installed"
 set cmd "complete -p $1"
 send "\$cmd\\r"
 expect {
-    -re "^\$cmd\\r\\ncomplete $2 -F comp_load $1\\r\\n/@\$" { pass "\$test" }
+    -re "^\$cmd\\r\\ncomplete $3 -F comp_load $1\\r\\n/@\$" { pass "\$test" }
     -re /@ { fail "\$test at prompt" }
 }; # expect
 
@@ -65,11 +69,11 @@ expect {
 source "lib/completions/$1.exp"
 
 
-set test "Completion via _$1() should be installed"
+set test "Completion via $2() should be installed"
 set cmd "complete -p $1"
 send "\$cmd\\r"
 expect {
-    -re "^\$cmd\\r\\ncomplete $2 -F _$1 $1\\r\\n/@\$" { pass "\$test" }
+    -re "^\$cmd\\r\\ncomplete $3 -F $2 $1\\r\\n/@\$" { pass "\$test" }
     -re /@ { fail "\$test at prompt" }
 }; # expect
 
@@ -82,7 +86,8 @@ fi
 
 # Generate test code
 # @param $1 string  Command, e.g. 'make'
-# @param $2 string  Completion arguments, e.g. '-o filenames'
+# @param $2 string  Completion function, e.g. _command
+# @param $3 string  Completion arguments, e.g. '-o filenames'
 generate_test_completion_orig() {
 	local path="test/completionOrig/$1.exp"
 		# Does file already exist?
@@ -97,7 +102,8 @@ fi
 
 # Generate test code
 # @param $1 string  Command, e.g. 'make'
-# @param $2 string  Completion arguments, e.g. '-o filenames'
+# @param $2 string  Completion function, e.g. _command
+# @param $3 string  Completion arguments, e.g. '-o filenames'
 generate_test_lib_completions() {
 	local path="test/lib/completions/$1.exp"
 		# Does file already exist?
@@ -140,12 +146,13 @@ fi
 
 
 	# If argument count is wrong, show help
-[ $# -eq 2 ] || { echo "Usage: $0 command complete-options"; exit 1; }
+[ $# -eq 3 ] || { echo "Usage: $0 command function complete-options"; exit 1; }
 
 
-generate_completion "$1" "$2"
-generate_test_completion_debian "$1" "$2"
-generate_test_completion_lib "$1" "$2"
-generate_test_completion_orig "$1" "$2"
-generate_test_lib_completions "$1" "$2"
-vi "completions/complete $2/$1"
+generate_completion "$1" "$2" "$3"
+generate_test_completion_debian "$1" "$2" "$3"
+generate_test_completion_lib "$1" "$2" "$3"
+generate_test_completion_orig "$1" "$2" "$3"
+generate_test_lib_completions "$1" "$2" "$3"
+echo "'completions/complete $3/$1'" 
+#vi "completions/complete $3/$1"
