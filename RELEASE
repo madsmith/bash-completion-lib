@@ -1,3 +1,11 @@
+bash_completion_lib-dev
+
+- Added completions: pine, mutt, muttng, configure, reportbug
+  (Issue 15)
+
+
+
+
 bash_completion_lib-0.6.3, 13-Jun-2008
 
 - Added completions: gdb, lftp, createdb, ncftp, dropdb, psql,
