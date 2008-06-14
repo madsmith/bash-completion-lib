@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p lvmdiskscan"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load lvmdiskscan\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/lvmdiskscan.exp"
+
+
+set test "Completion via _lvmdiskscan() should be installed"
+set cmd "complete -p lvmdiskscan"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _lvmdiskscan lvmdiskscan\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/lvmdiskscan.exp"

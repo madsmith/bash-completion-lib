@@ -19,6 +19,8 @@ generate_completion() {
 	if [ ! -f "$path" ]; then
 		# No, file doesn't exist; generate file
 	cat <<BASH > "$path"
+comp_include _lvm
+
 $2()
 {
 } # $2()
@@ -155,4 +157,4 @@ generate_test_completion_lib "$1" "$2" "$3"
 generate_test_completion_orig "$1" "$2" "$3"
 generate_test_lib_completions "$1" "$2" "$3"
 echo "'completions/complete$3/$1'" 
-vi "completions/complete$3/$1"
+vi -c 'set paste' "completions/complete$3/$1"

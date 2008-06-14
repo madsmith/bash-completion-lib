@@ -1,0 +1,23 @@
+# yum-arch(8) completion
+#
+_yum_arch()
+{
+    local cur
+    COMPREPLY=()
+    cur=`_get_cword`
+
+    case "$cur" in
+    -*)
+        COMPREPLY=( $( compgen -W '-d -v -vv -n -c -z -s -l -q' -- $cur ) )
+        ;;
+    *)
+        _filedir -d
+        ;;
+    esac
+
+    return 0
+} # _yum_arch()
+
+comp_install -F _yum_arch  # Make completion persistent for subsequent invocations
+
+_yum_arch  # Generate completions for first invocation

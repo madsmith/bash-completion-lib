@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p vgcfgrestore"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load vgcfgrestore\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/vgcfgrestore.exp"
+
+
+set test "Completion via _vgcfgrestore() should be installed"
+set cmd "complete -p vgcfgrestore"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _vgcfgrestore vgcfgrestore\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/vgcfgrestore.exp"

@@ -1,6 +1,18 @@
-bash_completion_lib-dev
+bash_completion_lib-0.8.0, 14-Jun-2008
 
-- Added completions: pine, mutt, muttng, configure, reportbug
+- 80% of bash_completion-20060301-4 (Debian) is now added
+- Added completions: pine, mutt, muttng, configure, reportbug,
+  querybts, update-alternatives, python, perl, perldoc, rcs, ci, co, rlog, rcs,
+  rdiff, lilo, links, pkg_delete, pkg_info, pkg_deinstall, kldload, kldunload,
+  portupgrade, portinstall, removepkg, look, ypmatch, ypcat, mplayer,
+  mencoder, gmplayer, kplayer, dcop, wvdial, gpg, iconv, dict, rdict, cdrecord,
+  mkisofs, mc, yum, yum-arch, convert, mogrify, display, animate, identify,
+  montage, composite, dd, cancel, aspell, xmms, info, dhclient,
+  lvmdiskscan, pvscan, pvs, pvdisplay, pvchange, pvcreate, pvmove, pvremove,
+  vgscan, vgs, vgdisplay, vgchange, vgcreate, vgremove, vgrename, vgreduce,
+  vgextend, vgimport, vgexport, vgck, vgconvert, vgcfbackup, vgcfgrestore,
+  vgmerge, vgsplit, vgmknodes, lvscan, lvs, lvdisplay, lvchange, lvcreate,
+  lvremove, lvrename, lvreduce, lvresize, lvextend, lvm
   (Issue 15)
 
 

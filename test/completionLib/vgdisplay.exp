@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p vgdisplay"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load vgdisplay\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/vgdisplay.exp"
+
+
+set test "Completion via _vgdisplay() should be installed"
+set cmd "complete -p vgdisplay"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _vgdisplay vgdisplay\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/vgdisplay.exp"
