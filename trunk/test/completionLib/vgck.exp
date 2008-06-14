@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p vgck"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load vgck\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/vgck.exp"
+
+
+set test "Completion via _vgck() should be installed"
+set cmd "complete -p vgck"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _vgck vgck\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/vgck.exp"

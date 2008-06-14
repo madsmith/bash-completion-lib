@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p vgcreate"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load vgcreate\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/vgcreate.exp"
+
+
+set test "Completion via _vgcreate() should be installed"
+set cmd "complete -p vgcreate"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _vgcreate vgcreate\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/vgcreate.exp"

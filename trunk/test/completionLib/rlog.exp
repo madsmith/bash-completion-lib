@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p rlog"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames -F comp_load rlog\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/rlog.exp"
+
+
+set test "Completion via _rcs() should be installed"
+set cmd "complete -p rlog"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames -F _rcs rlog\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/rlog.exp"
