@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p querybts"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames -F comp_load querybts\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/querybts.exp"
+
+
+set test "Completion via _querybts() should be installed"
+set cmd "complete -p querybts"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames -F _querybts querybts\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/querybts.exp"

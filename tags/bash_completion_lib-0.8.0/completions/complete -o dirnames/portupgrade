@@ -1,0 +1,22 @@
+# FreeBSD portupgrade completion
+#
+_portupgrade()
+{
+    local cur pkgdir prev
+
+    pkgdir=${PKG_DBDIR:-/var/db/pkg}/
+    cur=`_get_cword`
+    prev=${COMP_WORDS[COMP_CWORD-1]}
+
+    [ "$prev" = "-l" -o "$prev" = "-L" -o "$prev" = "-o" ] && return 0
+
+    COMPREPLY=( $( compgen -d $pkgdir$cur ) )
+    COMPREPLY=( ${COMPREPLY[@]#$pkgdir} )
+    COMPREPLY=( ${COMPREPLY[@]%-*} )
+
+    return 0
+} # _portupgrade()
+
+comp_install  # Make completion persistent for subsequent invocations
+
+_portupgrade  # Generate completions for first invocation

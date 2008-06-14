@@ -1,0 +1,1 @@
+comp_filedir_xspec "'!*.@(ogg|OGG|m3u|flac|spx)'"

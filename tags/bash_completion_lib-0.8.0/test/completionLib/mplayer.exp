@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p mplayer"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames -F comp_load mplayer\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/mplayer.exp"
+
+
+set test "Completion via _mplayer() should be installed"
+set cmd "complete -p mplayer"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames -F _mplayer mplayer\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/mplayer.exp"

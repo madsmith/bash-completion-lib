@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p pvdisplay"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load pvdisplay\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/pvdisplay.exp"
+
+
+set test "Completion via _pvdisplay() should be installed"
+set cmd "complete -p pvdisplay"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _pvdisplay pvdisplay\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/pvdisplay.exp"

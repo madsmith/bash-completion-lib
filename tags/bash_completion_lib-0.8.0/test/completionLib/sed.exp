@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p sed"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames -F comp_load sed\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/sed.exp"
+
+
+set test "Completion via _longopt() should be installed"
+set cmd "complete -p sed"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames -F _longopt sed\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/sed.exp"

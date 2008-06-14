@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p netstat"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o default -F comp_load netstat\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/netstat.exp"
+
+
+set test "Completion via _longopt() should be installed"
+set cmd "complete -p netstat"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o default -F _longopt netstat\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/netstat.exp"

@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p dir"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames -F comp_load dir\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/dir.exp"
+
+
+set test "Completion via _longopt() should be installed"
+set cmd "complete -p dir"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames -F _longopt dir\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/dir.exp"

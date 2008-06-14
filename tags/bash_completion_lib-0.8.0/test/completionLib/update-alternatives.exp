@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p update-alternatives"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load update-alternatives\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/update-alternatives.exp"
+
+
+set test "Completion via _update_alternatives() should be installed"
+set cmd "complete -p update-alternatives"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _update_alternatives update-alternatives\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/update-alternatives.exp"
