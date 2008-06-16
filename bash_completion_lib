@@ -49,14 +49,15 @@ comp_load() {
         #       Syntax `*.command' is a sort of symlink notation.  E.g.
         #       `make.gnumake' lets `make' handle the completion of `gnumake'.
         #       Symlinks are not used, because they're not available on every system.
+        #       If a command ends with a dot (.), symlink notation is disabled.
         #       Variables: script = path/comp, comp = target | target.link
         # NOTE: Use 'tail -1' to get the last match in case 'find' returns more than one match
-    local script="$(find "$COMP_LIB"/*/"${COMP_WORDS[0]}" "$COMP_LIB"/*/*."${COMP_WORDS[0]}" 2> /dev/null | tail -1)"
+    local script="$(find "$COMP_LIB"/*/"${COMP_WORDS[0]}" "$COMP_LIB"/*/"${COMP_WORDS[0]}". "$COMP_LIB"/*/*."${COMP_WORDS[0]}" 2> /dev/null | tail -1)"
     local comp=${script##*/}  # Remove path
-          comp=${comp%%\.*}   # Remove possible .link
+        # Remove possible .link only if dot (.) isn't last character
+    [[ ${comp: -1:1} == . ]] || comp=${comp%.*}
     local path=${script%/*}   # Remove comp
         # Source completion of command to complete
-        # {%%.*} means: remove text from rightmost dot (.)
     [ -r "$path/$comp" ] && . "$path/$comp"
         # Unset `comploadrc' variables
     unset -v bashdefault default dirnames filenames nospace plusdirs UNAME
@@ -110,7 +111,9 @@ if cd "$COMP_LIB"; then
         if comp_dir2args "./$i"; then
             cd "$i" && {
                 for comp in *; do
-                    complete -F comp_load $COMP_ARGS ${comp##*.}
+                    # If name ends with dot (.) only strip last dot, otherwise strip till first dot (*.)
+                    [[ ${comp: -1:1} == . ]] && comp=${comp%.} || comp=${comp#*.}
+                    complete -F comp_load $COMP_ARGS $comp
                 done
                 cd ..
             }

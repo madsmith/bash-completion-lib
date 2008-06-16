@@ -14,7 +14,7 @@ set test "Tab should complete"
 set cmd "c++ "
 send "$cmd\t"
 expect {
-    -re "^c++ .*$" { pass "$test" }
+    -re "^c\\+\\+ .*$" { pass "$test" }
     -re /@ { unresolved "$test at prompt" }
     -re eof { unresolved "eof" }
 }; # expect

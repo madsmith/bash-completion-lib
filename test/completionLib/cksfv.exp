@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p cksfv"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load cksfv\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/cksfv.exp"
+
+
+set test "Completion via _cksfv() should be installed"
+set cmd "complete -p cksfv"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _cksfv cksfv\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/cksfv.exp"

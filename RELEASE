@@ -1,3 +1,25 @@
+bash_completion_lib-1.0.0, 15-Jun-2008
+
+- 100% of bash_completion-20060301-4 (Debian) completions are now added
+- Allowed command to contain a dot (.) - to be specified by ending the command
+  with a dot.  Otherwise the dot is used as command.symlink notation.
+- Added completions: mkinitrd, pkg-config, cpio, id, getent, ntpdate, smartctl,
+  vncviewer, sysctl, update-rc.d, invoke-rc.d, minicom, svn, svnadmin, svnlook,
+  bk, btdownloadheadless.py, btdownloadcurses.py, btdownloadgui.py, cksfv,
+  clisp, arpspoof, dnsspoof, dsniff, filesnarf, mailsnarf, msgsnarf, macof,
+  sshmitm, sshow, tcpkill, tcpnice, urlsnarf, webmitm, civserver, civclient, gcl,
+  gkrellm, gnatmake, harbour, gharbour, hbpp, hbrun, hg, isql, larch, lisp,
+  lilypond, ly2dvi, add_members, remove_members, find_member, clone_member,
+  sync_members, list_lists, unshunt, list_admins, list_owners, list_members,
+  change_pw, withlist, newlist, rmlist, config_list, arch, cleanarch, inject,
+  dumpdb, check_db, check_perms, genaliases, mmsitepass, qrunner, mailmanctl,
+  mcrypt, mdecrypt, module, mtx, p4, g4, povray, xpovray, spovray, ri, sbcl,
+  sbcl-mt, sitecopy, snownews, svk, unace, unrar
+  (Issue 15)
+
+
+
+
 bash_completion_lib-0.8.0, 14-Jun-2008
 
 - 80% of bash_completion-20060301-4 (Debian) is now added

@@ -1,0 +1,1 @@
+source "lib/completions/pkg-config.exp"
