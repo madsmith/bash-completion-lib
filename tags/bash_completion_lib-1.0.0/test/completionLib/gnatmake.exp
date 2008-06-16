@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p gnatmake"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames -F comp_load gnatmake\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/gnatmake.exp"
+
+
+set test "Completion via _gnatmake() should be installed"
+set cmd "complete -p gnatmake"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames -F _gnatmake gnatmake\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/gnatmake.exp"

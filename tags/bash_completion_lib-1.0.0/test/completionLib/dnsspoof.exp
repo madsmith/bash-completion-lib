@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p dnsspoof"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load dnsspoof\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/dnsspoof.exp"
+
+
+set test "Completion via _dnsspoof() should be installed"
+set cmd "complete -p dnsspoof"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _dnsspoof dnsspoof\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/dnsspoof.exp"

@@ -1,0 +1,3 @@
+have complete-ant-cmd.pl && \
+    COMP_ARGS="-C complete-ant-cmd.pl $filenames" || \
+    COMP_ARGS="$filenames"

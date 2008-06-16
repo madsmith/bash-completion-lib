@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p webmitm"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load webmitm\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/webmitm.exp"
+
+
+set test "Completion via _webmitm() should be installed"
+set cmd "complete -p webmitm"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _webmitm webmitm\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/webmitm.exp"

@@ -1,0 +1,34 @@
+# Debian querybts(1) completion
+#
+_querybts()
+{
+    local cur prev
+
+    COMPREPLY=()
+    cur=`_get_cword`
+    prev=${COMP_WORDS[COMP_CWORD-1]}
+
+    case "$prev" in
+        -B|--bts)
+        COMPREPLY=( $( compgen -W "debian guug kde mandrake help" -- \
+                   $cur ))
+        return 0
+        ;;
+        -u|--ui|--interface)
+        COMPREPLY=($( compgen -W "newt text gnome" -- $cur ))
+        return 0
+        ;;
+        *)
+        ;;
+    esac
+
+    COMPREPLY=($( compgen -W '-h --help -v --version -A --archive \
+            -B --bts -l --ldap --no-ldap --proxy= --http_proxy= \
+            -s --source -w --web -u --ui --interface \
+            wnpp boot-floppies' -- $cur ) \
+                $( apt-cache pkgnames -- $cur 2> /dev/null ) )
+} # _querybts()
+
+comp_install  # Make completion persistent for subsequent invocations
+
+_querybts  # Generate completions for first invocation

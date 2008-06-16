@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p list_lists"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load list_lists\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/list_lists.exp"
+
+
+set test "Completion via _list_lists() should be installed"
+set cmd "complete -p list_lists"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _list_lists list_lists\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/list_lists.exp"

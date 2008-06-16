@@ -1,0 +1,46 @@
+comp_include _ImageMagick
+
+_mogrify()
+{
+    local cur
+
+    COMPREPLY=()
+    cur=`_get_cword`
+
+    _ImageMagick
+
+    if [[ "$cur" == -* ]]; then
+        COMPREPLY=( $( compgen -W '-affine -antialias -authenticate \
+            -background -black-threshold -blue-primary -blur \
+            -border -bordercolor -channel -charcoal -chop \
+            -colorize -colors -colorspace -comment -compress \
+            -contrast -convolve -crop -cycle -debug -delay \
+            -density -depth -despeckle -display -dispose -dither \
+            -draw -edge -emboss -encoding -endian -enhance \
+            -equalize -extract -fill -filter -flip -flop -font \
+            -format -frame -fuzz -gamma -gaussian -geometry \
+            -green-primary -implode -interlace -help -label -lat \
+            -level -limit -list -log -loop -map -mask -matte \
+            -median -modulate -monochrome -negate -noop \
+            -normalize -opaque -page -paint -fill -ordered-dither \
+            -pointsize -profile -quality -raise -random-threshold \
+            -red-primary -region -resample -resize -roll -rotate \
+            -sample -sampling-factor -scale -scene -seed -segment \
+            -shade -sharpen -shear -size -solarize -spread \
+            -stroke -strokewidth -swirl -texture -threshold \
+            -thumbnail -tile -transform -transparent -treedepth \
+            -trim -type -undercolor -units -unsharp -verbose \
+            -version -view -virtual-pixel -wave -white-point \
+            -white-threshold' -- $cur ) )
+    elif [[ "$cur" == +* ]]; then
+        COMPREPLY=( $( compgen -W '+compress +contrast +debug +dither \
+            +endian +gamma +label +map +mask +matte +negate +page \
+            +raise' -- $cur ) ) 
+    else
+        _filedir
+    fi
+} # _mogrify()
+
+comp_install  # Make completion persistent for subsequent invocations
+
+_mogrify  # Generate completions for first invocation

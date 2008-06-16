@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p dhclient"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load dhclient\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/dhclient.exp"
+
+
+set test "Completion via _dhclient() should be installed"
+set cmd "complete -p dhclient"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _dhclient dhclient\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/dhclient.exp"

@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p gcl"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o default -F comp_load gcl\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/gcl.exp"
+
+
+set test "Completion via _gcl() should be installed"
+set cmd "complete -p gcl"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o default -F _gcl gcl\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/gcl.exp"

@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p pkg-config"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load pkg-config\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/pkg-config.exp"
+
+
+set test "Completion via _pkg_config() should be installed"
+set cmd "complete -p pkg-config"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _pkg_config pkg-config\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/pkg-config.exp"
