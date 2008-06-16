@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p mdecrypt"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames -F comp_load mdecrypt\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/mdecrypt.exp"
+
+
+set test "Completion via _mcrypt() should be installed"
+set cmd "complete -p mdecrypt"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames -F _mcrypt mdecrypt\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/mdecrypt.exp"

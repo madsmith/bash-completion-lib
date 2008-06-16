@@ -1,0 +1,25 @@
+# sshow(8) completion
+#
+_sshow()
+{
+	local cur
+
+	COMPREPLY=()
+	cur=`_get_cword`
+	prev=${COMP_WORDS[COMP_CWORD-1]}
+
+	case "$prev" in
+		-i)
+			_interfaces
+			return 0
+			;;
+	esac
+
+	if [[ "$cur" == -* ]]; then
+		COMPREPLY=( $( compgen -W '-d -i' -- $cur ) )
+	fi
+} # _sshow()
+
+comp_install  # Make completion persistent for subsequent invocations
+
+_sshow  # Generate completions for first invocation

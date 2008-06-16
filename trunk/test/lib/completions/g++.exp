@@ -11,10 +11,9 @@ setup
 
 set test "Tab should complete"
     # Try completion
-set cmd "g++ "
-send "$cmd\t"
+send "g++ \t"
 expect {
-    -re "^g++ .*$" { pass "$test" }
+    -re "^g\\+\\+ .*$" { pass "$test" }
     -re /@ { unresolved "$test at prompt" }
     -re eof { unresolved "eof" }
 }; # expect

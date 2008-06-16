@@ -11,7 +11,7 @@ setup
 
 set test "Tab should complete"
     # Try completion
-set cmd "java "
+set cmd "java -"
 send "$cmd\t"
 expect {
     -re "^java .*$" { pass "$test" }

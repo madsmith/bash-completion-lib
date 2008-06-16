@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p check_db"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load check_db\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/check_db.exp"
+
+
+set test "Completion via _check_db() should be installed"
+set cmd "complete -p check_db"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _check_db check_db\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/check_db.exp"

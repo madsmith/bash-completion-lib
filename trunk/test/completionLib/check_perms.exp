@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p check_perms"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load check_perms\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/check_perms.exp"
+
+
+set test "Completion via _check_perms() should be installed"
+set cmd "complete -p check_perms"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _check_perms check_perms\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/check_perms.exp"

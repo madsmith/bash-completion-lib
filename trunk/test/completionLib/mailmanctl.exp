@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p mailmanctl"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load mailmanctl\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/mailmanctl.exp"
+
+
+set test "Completion via _mailmanctl() should be installed"
+set cmd "complete -p mailmanctl"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _mailmanctl mailmanctl\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/mailmanctl.exp"

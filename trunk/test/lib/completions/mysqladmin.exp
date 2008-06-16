@@ -11,7 +11,7 @@ setup
 
 set test "Tab should complete"
     # Try completion
-set cmd "mysqladmin "
+set cmd "mysqladmin -"
 send "$cmd\t"
 expect {
     -re "^mysqladmin .*$" { pass "$test" }
@@ -22,7 +22,7 @@ expect {
 
 # Interrupt command by sending ^C
 
-sleep 0.1; 
+sleep 0.3; 
 send \003;  # Control-c
 expect -ex /@
 

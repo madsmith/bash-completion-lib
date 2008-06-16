@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p inject"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames -F comp_load inject\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/inject.exp"
+
+
+set test "Completion via _inject() should be installed"
+set cmd "complete -p inject"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames -F _inject inject\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/inject.exp"

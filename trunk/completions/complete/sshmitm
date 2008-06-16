@@ -1,0 +1,19 @@
+# sshmitm(8) completion
+#
+_sshmitm()
+{
+	local cur
+
+	COMPREPLY=()
+	cur=`_get_cword`
+
+	if [[ "$cur" == -* ]]; then
+		COMPREPLY=( $( compgen -W '-d -I -p' -- $cur ) )
+	else
+		_known_hosts
+	fi
+} # _sshmitm()
+
+comp_install  # Make completion persistent for subsequent invocations
+
+_sshmitm  # Generate completions for first invocation

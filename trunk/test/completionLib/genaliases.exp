@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p genaliases"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load genaliases\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/genaliases.exp"
+
+
+set test "Completion via _genaliases() should be installed"
+set cmd "complete -p genaliases"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _genaliases genaliases\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/genaliases.exp"
