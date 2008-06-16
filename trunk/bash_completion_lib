@@ -43,7 +43,7 @@ comp_load() {
         # Always load `comploadrc'
     . $COMP_DIR/comploadrc
         # Load `completionrc' once
-    declare -F _filedir &> /dev/null || . $COMP_DIR/completionrc
+    declare -F comp_install &> /dev/null || . $COMP_DIR/completionrc
         # Find completion script
         # NOTE: A search is performed for both `command' and `*.command'.
         #       Syntax `*.command' is a sort of symlink notation.  E.g.
