@@ -1,3 +1,12 @@
+bash_completion_lib-1.0.1, 16-Jun-2008
+
+- Within comp_load(), looked for `comp_install' instead of `_filedir' as test
+  whether to include `completionrc' in comp_load(), because `_filedir' is
+  already defined by original bash_completion.
+
+
+
+
 bash_completion_lib-1.0.0, 15-Jun-2008
 
 - 100% of bash_completion-20060301-4 (Debian) completions are now added
