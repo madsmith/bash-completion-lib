@@ -1,0 +1,1 @@
+comp_filedir_xspec "'!*.@(sxi|sti|pps|ppt|pot|odp|otp)'"

@@ -1,0 +1,1 @@
+comp_filedir_xspec "'!*.@(sxd|std|sda|sdd|odg|otg)'"

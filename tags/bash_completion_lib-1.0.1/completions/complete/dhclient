@@ -1,0 +1,32 @@
+# dhclient(1) completion
+#
+_dhclient()
+{
+    local cur prev
+
+    COMPREPLY=()
+    cur=`_get_cword`
+    prev=${COMP_WORDS[COMP_CWORD-1]}
+
+    case "$prev" in
+        -@(cf|lf|pf|sf))
+            _filedir
+            return 0
+            ;;
+        -s)
+            _known_hosts
+            return 0
+            ;;
+    esac
+
+    if [[ "$cur" == -* ]]; then
+        COMPREPLY=( $( compgen -W '-p -d -q -1 -r -lf -pf \
+            -cf -sf -s -g -n -nw -w' -- $cur ) )
+    else
+        _available_interfaces
+    fi
+} # _dhclient()
+
+comp_install  # Make completion persistent for subsequent invocations
+
+_dhclient  # Generate completions for first invocation

@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p qrunner"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load qrunner\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/qrunner.exp"
+
+
+set test "Completion via _qrunner() should be installed"
+set cmd "complete -p qrunner"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _qrunner qrunner\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/qrunner.exp"

@@ -1,0 +1,55 @@
+# postsuper(1)
+#
+_postsuper()
+{
+    local cur prev pval len idx
+
+    cur=`_get_cword`
+    prev=${COMP_WORDS[COMP_CWORD-1]}
+
+    if [[ $cur == '-' ]]; then
+        COMPREPLY=(-c -d -h -H -p -r -s -v)
+        return 0
+    fi
+    case $prev in
+    -[dr])
+        len=${#cur}
+        idx=0
+        for pval in $( echo ALL; mailq | \
+            sed -e '1d; $d; /^[^0-9A-Z]\|^$/d; s/[* !].*$//' ); do
+            if [[ "$cur" == "${pval:0:$len}" ]]; then
+                COMPREPLY[$idx]=$pval
+                idx=$(($idx+1))
+            fi
+        done
+        return 0
+        ;;
+    -h)
+        len=${#cur}
+        idx=0
+        for pval in $( echo ALL; mailq | \
+            sed -e '1d; $d; /^[^0-9A-Z]\|^$/d; s/[* ].*$//; /!$/d' ); do
+            if [[ "$cur" == "${pval:0:$len}" ]]; then
+                COMPREPLY[$idx]=$pval
+                idx=$(($idx+1))
+            fi
+        done
+        return 0
+        ;;
+    -H)
+        len=${#cur}
+        idx=0
+        for pval in $( echo ALL; mailq | \
+            sed -e '1d; $d; /^[^0-9A-Z]\|^$/d; /^[0-9A-Z]*[* ]/d; s/!.*$//' ); do
+            if [[ "$cur" == "${pval:0:$len}" ]]; then
+                COMPREPLY[$idx]=$pval
+                idx=$(($idx+1))
+            fi
+        done
+        return 0
+        ;;
+    esac
+    COMPREPLY=( $( compgen -W 'hold incoming active deferred' -- $cur ) )
+    return 0
+}
+_postsuper

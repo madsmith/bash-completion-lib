@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p filesnarf"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load filesnarf\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/filesnarf.exp"
+
+
+set test "Completion via _snarf() should be installed"
+set cmd "complete -p filesnarf"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _snarf filesnarf\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/filesnarf.exp"

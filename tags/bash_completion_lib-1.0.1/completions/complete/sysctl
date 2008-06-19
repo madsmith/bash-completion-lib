@@ -1,0 +1,17 @@
+# sysctl(8) completion
+#
+_sysctl()
+{
+    local cur
+
+    COMPREPLY=()
+    cur=`_get_cword`
+
+    COMPREPLY=( $( compgen -W "$(sysctl -N -a 2>/dev/null)" -- $cur ) )
+
+    return 0
+} # _sysctl()
+
+comp_install  # Make completion persistent for subsequent invocations
+
+_sysctl  # Generate completions for first invocation

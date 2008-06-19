@@ -1,0 +1,29 @@
+# Mailman completion by Guillaume Rousse <rousse@ccr.jussieu.fr>
+#
+
+comp_include _mailman_lists
+
+_find_member()
+{
+	local cur prev
+
+	COMPREPLY=()
+	cur=`_get_cword`
+	prev=${COMP_WORDS[COMP_CWORD-1]}
+
+	case "$prev" in
+		-@(l|x|-listname=|-exclude=))
+			_mailman_lists
+			return 0
+			;;
+	esac
+
+	if [[ "$cur" == -* ]]; then
+		COMPREPLY=( $( compgen -W '-l --listname= -x \
+			--exclude= --owners -w --help -h' -- $cur ) )
+	fi
+} # _find_member()
+
+comp_install  # Make completion persistent for subsequent invocations
+
+_find_member  # Generate completions for first invocation

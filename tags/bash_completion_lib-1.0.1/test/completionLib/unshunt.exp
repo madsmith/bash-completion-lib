@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p unshunt"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load unshunt\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/unshunt.exp"
+
+
+set test "Completion via _unshunt() should be installed"
+set cmd "complete -p unshunt"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _unshunt unshunt\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/unshunt.exp"

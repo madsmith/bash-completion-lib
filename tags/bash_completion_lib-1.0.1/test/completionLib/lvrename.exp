@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p lvrename"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load lvrename\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/lvrename.exp"
+
+
+set test "Completion via _lvrename() should be installed"
+set cmd "complete -p lvrename"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _lvrename lvrename\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/lvrename.exp"

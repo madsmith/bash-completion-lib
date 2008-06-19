@@ -1,0 +1,35 @@
+# dsniff util completion by Guillaume Rousse <rousse@ccr.jussieu.fr>
+#
+# $Id: dsniff,v 1.2 2003/12/31 08:22:37 ianmacd Exp $
+
+# arpspoof(8) completion
+#
+_arpspoof()
+{
+	local cur
+
+	COMPREPLY=()
+	cur=`_get_cword`
+	prev=${COMP_WORDS[COMP_CWORD-1]}
+
+	case "$prev" in
+		-i)
+			_interfaces
+			return 0
+			;;
+		-t)
+			_known_hosts
+			return 0
+			;;
+	esac
+
+	if [[ "$cur" == -* ]]; then
+		COMPREPLY=( $( compgen -W '-i -t' -- $cur ) )
+	else
+		_known_hosts
+	fi
+} # _arpspoof()
+
+comp_install  # Make completion persistent for subsequent invocations
+
+_arpspoof  # Generate completions for first invocation

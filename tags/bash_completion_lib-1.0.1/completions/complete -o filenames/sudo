@@ -1,0 +1,8 @@
+_root_command()
+{
+    OLDPATH=$PATH
+    PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin
+    . command
+    PATH=$OLDPATH
+}
+_root_command

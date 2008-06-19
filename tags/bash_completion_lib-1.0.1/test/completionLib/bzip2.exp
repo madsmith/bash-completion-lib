@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p bzip2"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames -F comp_load bzip2\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/bzip2.exp"
+
+
+set test "Completion via _bzip2() should be installed"
+set cmd "complete -p bzip2"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames -F _bzip2 bzip2\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/bzip2.exp"

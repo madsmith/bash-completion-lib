@@ -1,0 +1,12 @@
+# FreeBSD kernel module commands
+#
+_kldunload()
+{
+    local cur
+    cur=`_get_cword`
+    COMPREPLY=( $(kldstat | sed -ne "s/^.*[ \t]\+\($cur[a-z_]\+\).ko$/\1/p") )
+} # _kldunload()
+
+comp_install  # Make completion persistent for subsequent invocations
+
+_kldunload  # Generate completions for first invocation
