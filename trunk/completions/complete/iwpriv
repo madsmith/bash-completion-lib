@@ -1,6 +1,8 @@
 # Linux iwpriv(8) completion
 #
-[ $UNAME = Linux ] && have iwpriv &&
+
+comp_include _available_interfaces
+
 _iwpriv()
 {
     local cur prev
@@ -30,4 +32,7 @@ _iwpriv()
         COMPREPLY=( $( compgen -W '--all roam port' -- $cur ) ) 
     fi
 }
-_iwpriv
+
+comp_install  # Make completion persistent for subsequent invocations
+
+_add_members  # Generate completions for first invocation

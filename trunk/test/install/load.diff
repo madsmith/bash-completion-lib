@@ -4,6 +4,7 @@ declare -f _configured_interfaces
 declare -f _count_args
 declare -f _expand
 declare -f _filedir
+declare -f _get_cword
 declare -f _gids
 declare -f _modules
 declare -f _pgids

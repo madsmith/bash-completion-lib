@@ -24,13 +24,18 @@
 # MA  02110-1301, USA
 #
 # The latest version of this software can be obtained here:
-# http://fvue.nl/wiki/Bash_completion_split
+# http://fvue.nl/wiki/Bash_completion_lib
 
 
     # Extended globbing and programmable completion have to be
     # set in order for completion to work
 shopt -s extglob progcomp
 compPwd="$PWD"
+
+# If `COMP_CACHE' is defined and points to a writable file, completions will be
+# read from this file.  Completions are stored in this file after the first run
+# of `bash_completion_lib'.
+#COMP_CACHE=$HOME/.bash_completion_lib~
     # Store current directory of this script
 COMP_DIR=$(cd "$(dirname "$(which "${BASH_SOURCE-$0}")")" && /bin/pwd)
 COMP_LIB="$COMP_DIR/completions"
@@ -46,7 +51,7 @@ comp_load() {
     declare -F comp_install &> /dev/null || . $COMP_DIR/completionrc
         # Find completion script
         # NOTE: A search is performed for both `command' and `*.command'.
-        #       Syntax `*.command' is a sort of symlink notation.  E.g.
+        #       Syntax `*.command' is a kind of symlink notation.  E.g.
         #       `make.gnumake' lets `make' handle the completion of `gnumake'.
         #       Symlinks are not used, because they're not available on every system.
         #       If a command ends with a dot (.), symlink notation is disabled.
@@ -88,41 +93,40 @@ comp_dir2args() {
 } # comp_dir2args()
 
 
-# This function checks whether we have a given program on the system.
-# No need for bulky functions in memory if we don't.
-#
-have() {
-    unset -v have
-    PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin type $1 &>/dev/null &&
-        have="yes"
-} # have()
-
-
     # Install completion for all files in `./completions/*'
-if cd "$COMP_LIB"; then
-    compEnvShoptOptions=$(shopt -p dotglob failglob nullglob)
-    shopt -s nullglob
-    shopt -u dotglob failglob
-    . $COMP_DIR/comploadrc
-    # use GNU sed if we have it, since its extensions are still used in our code
-    [ $UNAME != Linux ] && which gsed > /dev/null && alias sed=gsed
-    for i in complete*; do
-            # Don't install completion if 'comp_dir2args()' returns false
-        if comp_dir2args "./$i"; then
-            cd "$i" && {
-                for comp in *; do
-                    # If name ends with dot (.) only strip last dot, otherwise strip till first dot (*.)
-                    [[ ${comp: -1:1} == . ]] && comp=${comp%.} || comp=${comp#*.}
-                    complete -F comp_load $COMP_ARGS $comp
-                done
-                cd ..
-            }
-        fi
-    done
-    cd ..
-    eval "$compEnvShoptOptions" 2> /dev/null  # Restore `shopt' options
-        # Unset `comploadrc' variables
-    unset -v bashdefault default dirnames filenames nospace plusdirs UNAME
-fi
-cd $compPwd
+ 
+	# Use cache if set
+[ "$COMP_CACHE" ] && . "$COMP_CACHE" || {
+    # No, cache isn't set or isn't available; load completions
+	if cd "$COMP_LIB"; then
+		compEnvShoptOptions=$(shopt -p dotglob failglob nullglob)
+		shopt -s nullglob
+		shopt -u dotglob failglob
+		. $COMP_DIR/comploadrc
+		# use GNU sed if we have it, since its extensions are still used in our code
+		[ $UNAME != Linux ] && which gsed > /dev/null && alias sed=gsed
+		for i in complete*; do
+				# Don't install completion if 'comp_dir2args()' returns false
+			if comp_dir2args "./$i"; then
+				cd "$i" && {
+					for comp in *; do
+                            # If name ends with dot (.) only strip last dot,
+                            # otherwise strip till first dot (*.)
+						[[ ${comp: -1:1} == . ]] && comp=${comp%.} || comp=${comp#*.}
+						complete -F comp_load $COMP_ARGS $comp
+					done
+					cd ..
+				}
+			fi
+		done
+		    # If COMP_CACHE is unset, set COMP_CACHE.  
+            # Generate cache file if COMP_CACHE not empty.
+		[ "${COMP_CACHE=$HOME/.bash_completion_lib~}" ] && complete -p > "$COMP_CACHE"
+
+		eval "$compEnvShoptOptions" 2> /dev/null  # Restore `shopt' options
+			# Unset `comploadrc' variables
+		unset -v bashdefault default dirnames filenames nospace plusdirs UNAME
+		cd $compPwd > /dev/null
+	fi
+}
 unset -v args comp COMP_ARGS compEnvShoptOptions compPwd i j

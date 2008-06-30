@@ -30,7 +30,7 @@ _rcs()
 
     # default to files if nothing returned and we're checking in.
     # otherwise, default to directories
-    [ ${#COMPREPLY[@]} -eq 0 -a $1 = ci ] && _filedir || _filedir -d
+    [ ${#COMPREPLY[@]} -eq 0 -a "$1" = ci ] && _filedir || _filedir -d
 } # _rcs()
 
 comp_install  # Make completion persistent for subsequent invocations

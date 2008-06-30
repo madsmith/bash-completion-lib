@@ -1,3 +1,13 @@
+bash_completion_lib-1.1.0, 30-Jun-2008
+
+- Added completion cache, governed by environment variable COMP_CACHE.
+- Fixed completions and removed `have()' dependency: ifup, ifdown, iwconfig,
+  iwpriv, iwspy, cc, ant
+- Fixed error message when completing `rcs': "bash: [: too many arguments"
+
+
+
+
 bash_completion_lib-1.0.1, 16-Jun-2008
 
 - Within comp_load(), looked for `comp_install' instead of `_filedir' as test

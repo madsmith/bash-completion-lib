@@ -1,6 +1,5 @@
 # RedHat & Debian GNU/Linux if{up,down} completion
 #
-[ $UNAME = Linux ] && { have ifup || have ifdown; } &&
 _ifupdown()
 {
     local cur
@@ -14,4 +13,7 @@ _ifupdown()
 
        return 0
 }
-_ifup
+
+comp_install -F _ifupdown  # Make completion persistent for subsequent invocations
+
+_ifupdown  # Generate completions for first invocation

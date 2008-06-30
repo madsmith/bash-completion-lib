@@ -1,3 +1,17 @@
+1.  Introduction
+2.  Adding completions
+3.  Unit testing
+4.  Questions
+5.  Environment variables
+6.  Cache
+    6.1.  Considerations
+
+
+
+
+1.  Introduction
+
+
 All completions run through a central function `comp_load'.  The first time
 completion is invoked for a specific command, `comp_load' will load the
 specific command completion function, run it and install it for subsequent
@@ -19,18 +33,53 @@ has been removed: the run-time loading of completion now prevents bulky
 functions in memory if we don't need them.
 
 The minimum requirements for the completion package is bash-3.  No efforts has
-been made to keep the completions compatible with bash-2.
+been made to keep the completions compatible with bash-2.  Since
+bash_completions_lib aims for speed, the latest features of bash-3 are used.
+If one desires bash-2, the original bash_completion can be used.
 
-A start has been made with unit tests using the DejaGnu test suite.  Run the
-command `./test/runCompletion' to run the tests.  Current tests include the
-commands: alias, cd, scp and set.
+Completions are tested with unit tests using the DejaGnu test suite.  Tests
+can be run by executing `./runCompletion' from the `test' directory.
 
 An environment setting `COMP_RESTRICT_BY_EXTENSION' lets you decide whether
 restricted completion is enabled, e.g. whether "acroread TAB" will only show
 files with extension `.pdf'.  Default is false (0).
 
 
-QUESTIONS
+
+
+2.  Adding completions
+
+
+Use the command `script/generate' to add completions.  For example, say you
+wish to add completion for the `foo' command:
+
+   $ script/generate foo _foo ' -o filenames'
+
+
+
+
+3.  Unit testing
+
+
+The following test suites are available:
+
+
+           command                          test objectives
+   -------------------   ----------------------------------------------
+   runCompletionLib      Tab completions using `bash_completion_lib'
+                              
+   runCompletionOrig     Tab completions using `bash_completion-20060301'
+
+   runCompletionDebian   Tab completions using `bash_completion-20060301-4'
+                         (Debian)
+
+   runInstall            Install `bash_completion_lib'
+   
+
+
+
+4.  Questions
+
 
 - Is it possible to define a `catch-all' completion?  This would remove the
   burden of `bash_completion_lib' to attach `comp_load' to each and every
@@ -73,17 +122,102 @@ QUESTIONS
     - complete-nohostcomplete
     - complete-restrict-by-extension
     - complete-tar
-  contain a completion initialization file `.complete' which sets meta-options at run-time depending on the user configuration.
+  contain a completion initialization file `.complete' which sets meta-options
+  at run-time depending on the user configuration.
 
   A solution would be to propagate these options into bash constants or a new builtin
   which can then be used by a completion function. (1)
 
   See also:
   
-:[http://groups.google.nl/group/gnu.bash.bug/browse_thread/thread/281698132559a422/272f82f6f2f8b0fd?hl=nl&lnk=raot#272f82f6f2f8b0fd Temporarily change completion options]
+:[http://groups.google.nl/group/gnu.bash.bug/browse_thread/thread/281698132559a422/272f82f6f2f8b0fd?hl=nl&lnk=raot#272f82f6f2f8b0fd
+Temporarily change completion options]
 ;There are thoughts about a new builtin that would accept the same set of -o options as complete/compgen.
 
-  
+
+
+
+5.  Environment variables
+
+
+COMP_CACHE
+    If `COMP_CACHE' is defined and points to a writable file, completions will be
+    read from this file.  Completions are stored in this file after the first run
+    of `bash_completion_lib'.  Default is `~/.bash_completion_lib~'.
+
+COMP_DIR
+    Directory of `bash_completion_lib'.  This variable is automatically set.
+
+COMP_LIB
+    Directory containing completions.  Default is "$COMP_DIR/completions".
+
+COMP_RESTRICT_BY_EXTENSION
+    True (1) if restricted completion is enabled, False (0, default) if not.
+    Example: if enabled, `acroread <TAB>' will only show files with a .pdf
+    extension.
+
+
+
+6.  Cache
+
+`Bash_completion_lib' has a fast algorithm to install completions.  During
+startup, all completions in the ./completions directory are converted to
+`complete comp_load ...' commands.  By caching the conversion result however,
+this fast startup time can even be reduced significantly (0.20 sec -> 0.10 sec
+= 50%).
+
+Caching is enabled by setting `COMP_CACHE' to a cache file:
+
+   COMP_CACHE=$HOME/.bash_completion_lib~
+
+`Bash_completion_lib' automatically sets `COMP_CACHE' if it does not already exist.
+To disable caching, set COMP_CACHE to be empty:
+
+   COMP_CACHE=
+ 
+Care must be taken to empty the cache file after updates have been made to the
+./completions directory.  The cache can be emptied with this bash command ($ =
+bash prompt):
+
+   $ > $COMP_CACHE
+
+NOTE: The cache need only be reset, if completions have been added, moved or
+      deleted, or when the arguments to `complete' have changed.  Other
+      modifications like an improved completion function are automatically
+      loaded - remember: it's only the `complete' installments which are
+      cached.  Example:
+      1.  You moved ./completions/*/cd to another directory.
+          The cache must be cleared.
+      2.  You improved the _cd completion within ./completions/*/cd.
+          You don't have to clear the cache.
+
+
+6.1.  Considerations
+
+Should cache be enabled by default?
+
+I think it should, because the cache offers important speed gains:  I was able
+to reduce the load time from 0.20 seconds to 0.10 seconds.
+
+With cache enabled, changes in the ./completions directory aren't reflected in
+the cache.  That is, 
+
+But do updates to ./completions occur frequent?  I think not.  What
+if a ./completions update would reset the cache?  This way, 99% of the users
+would benefit from a speedy bash startup.
+
+Furthermore, it's only the `complete' installments which are cached - not the
+completion functions themselves - so many improvements are coming through
+anyway, even though complete installments are being cached.
+
+
+
+
+
+
+EXTENDING 
+
+TESTS
 
 
 
