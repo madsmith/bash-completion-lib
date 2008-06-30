@@ -1,0 +1,5 @@
+comp_include _lvm
+
+comp_install  # Make completion persistent for subsequent invocations
+
+_vgsplit  # Generate completions for first invocation

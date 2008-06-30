@@ -1,0 +1,36 @@
+# civclient completion by Guillaume Rousse <rousse@ccr.jussieu.fr>
+#
+_civclient()
+{
+	local cur
+
+	COMPREPLY=()
+	cur=`_get_cword`
+	prev=${COMP_WORDS[COMP_CWORD-1]}
+
+	case "$prev" in
+		-@(l|S|t|-log|-Sound|-tiles))
+			_filedir
+			return 0
+			;;
+		-@(P|-Plugin))
+			COMPREPLY=( $( compgen -W 'none esd sdl' -- $cur ) )
+			return 0
+			;;
+		-@(s|-server))
+			_known_hosts
+			return 0
+			;;
+	esac
+
+	if [[ "$cur" == -* ]]; then
+		COMPREPLY=( $( compgen -W '-a -d -h -l -m -n -p -P -s -S -t -v\
+			--autoconnect --debug --help --log --meta --name \
+			--port --Plugin --server --Sound --tiles --version' \
+			-- $cur ) )
+	fi
+} # _civclient()
+
+comp_install  # Make completion persistent for subsequent invocations
+
+_civclient  # Generate completions for first invocation

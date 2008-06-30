@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p cancel"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames -F comp_load cancel\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/cancel.exp"
+
+
+set test "Completion via _cancel() should be installed"
+set cmd "complete -p cancel"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames -F _cancel cancel\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/cancel.exp"

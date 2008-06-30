@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p lvextend"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load lvextend\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/lvextend.exp"
+
+
+set test "Completion via _lvextend() should be installed"
+set cmd "complete -p lvextend"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _lvextend lvextend\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/lvextend.exp"

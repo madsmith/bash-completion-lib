@@ -1,0 +1,3 @@
+COMPREPLY=(
+    $(compgen -A command -- "${COMP_WORDS[COMP_CWORD]}")
+)

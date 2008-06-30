@@ -1,0 +1,3 @@
+COMPREPLY=(
+    $(compgen -A shopt -- "${COMP_WORDS[COMP_CWORD]}")
+)

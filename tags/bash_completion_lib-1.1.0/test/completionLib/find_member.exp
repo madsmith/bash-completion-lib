@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p find_member"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load find_member\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/find_member.exp"
+
+
+set test "Completion via _find_member() should be installed"
+set cmd "complete -p find_member"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _find_member find_member\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/find_member.exp"

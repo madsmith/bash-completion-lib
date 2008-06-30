@@ -1,0 +1,1 @@
+comp_filedir_xspec "'!*.@(?(la)tex|?(LA)TEX|texi|TEXI|dtx|DTX|ins|INS)'"

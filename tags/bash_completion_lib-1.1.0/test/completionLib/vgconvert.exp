@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p vgconvert"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load vgconvert\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/vgconvert.exp"
+
+
+set test "Completion via _vgconvert() should be installed"
+set cmd "complete -p vgconvert"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _vgconvert vgconvert\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/vgconvert.exp"

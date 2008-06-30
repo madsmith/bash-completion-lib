@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p mogrify"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames -F comp_load mogrify\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/mogrify.exp"
+
+
+set test "Completion via _mogrify() should be installed"
+set cmd "complete -p mogrify"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames -F _mogrify mogrify\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/mogrify.exp"

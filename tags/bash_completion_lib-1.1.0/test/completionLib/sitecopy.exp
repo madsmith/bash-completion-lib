@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p sitecopy"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o default -F comp_load sitecopy\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/sitecopy.exp"
+
+
+set test "Completion via _sitecopy() should be installed"
+set cmd "complete -p sitecopy"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o default -F _sitecopy sitecopy\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/sitecopy.exp"

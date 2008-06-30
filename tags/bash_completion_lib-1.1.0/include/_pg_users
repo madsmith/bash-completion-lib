@@ -1,0 +1,6 @@
+_pg_users()
+{
+    COMPREPLY=( $( psql -qtc 'select usename from pg_user' template1 2>/dev/null | \
+            grep "^ $cur" ) )
+    [ ${#COMPREPLY[@]} -eq 0 ] && COMPREPLY=( $( compgen -u -- $cur ) )
+}

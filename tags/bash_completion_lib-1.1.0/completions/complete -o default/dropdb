@@ -1,0 +1,33 @@
+comp_include _pg_databases _pg_users
+
+_dropdb()
+{
+    local cur prev
+
+    COMPREPLY=()
+    cur=`_get_cword`
+    prev=${COMP_WORDS[COMP_CWORD-1]}
+
+    case "$prev" in
+    -@(h|-host=)) 
+        _known_hosts
+        return 0
+        ;;
+    -@(U|-username=))
+        _pg_users
+        return 0
+        ;;
+    esac
+
+    if [[ "$cur" == -* ]]; then
+        COMPREPLY=( $( compgen -W '-h -p -U -W -e -q \
+                --host= --port= --username= --password \
+                --interactive --echo --quiet --help' -- $cur ) )
+    else
+        _pg_databases
+    fi
+} # _dropdb()
+
+comp_install  # Make completion persistent for subsequent invocations
+
+_dropdb  # Generate completions for first invocation

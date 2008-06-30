@@ -1,0 +1,22 @@
+_function()
+{
+    local cur prev
+
+    COMPREPLY=()
+    cur=`_get_cword`
+    prev=${COMP_WORDS[COMP_CWORD-1]}
+
+    if [[ $1 == @(declare|typeset) ]]; then
+        if [ "$prev" = -f ]; then
+            COMPREPLY=( $( compgen -A function -- $cur ) )
+        elif [[ "$cur" == -* ]]; then
+            COMPREPLY=( $( compgen -W '-a -f -F -i -r -x -p' -- \
+                       $cur ) )
+        fi
+    elif [ $COMP_CWORD -eq 1 ]; then
+        COMPREPLY=( $( compgen -A function -- $cur ) )
+    else
+        COMPREPLY=( "() $( type -- ${COMP_WORDS[1]} | sed -e 1,2d )" )
+    fi
+}
+_function

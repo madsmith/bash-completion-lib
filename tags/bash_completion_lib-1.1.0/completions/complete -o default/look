@@ -1,0 +1,17 @@
+# look(1) completion
+#
+_look()
+{
+    local cur
+  
+    COMPREPLY=()
+    cur=`_get_cword`
+
+    if [ $COMP_CWORD = 1 ]; then
+        COMPREPLY=( $( compgen -W '$(look $cur)' ) )
+    fi
+} # _look()
+
+comp_install  # Make completion persistent for subsequent invocations
+
+_look  # Generate completions for first invocation
