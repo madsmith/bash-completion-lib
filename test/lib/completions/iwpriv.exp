@@ -11,10 +11,10 @@ setup
 
 set test "Tab should complete"
     # Try completion
-set cmd "rcs "
+set cmd "iwpriv "
 send "$cmd\t"
 expect {
-    -re "^rcs \r\n.*$" { pass "$test" }
+    -re "^iwpriv .*$" { pass "$test" }
     -re /@ { unresolved "$test at prompt" }
     -re eof { unresolved "eof" }
 }; # expect

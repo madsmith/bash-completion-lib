@@ -1,6 +1,8 @@
 # Linux iwspy(8) completion
 #
-[ $UNAME = Linux ] && have iwspy &&
+
+comp_include _available_interfaces
+
 _iwspy()
 {
     local cur
@@ -18,4 +20,7 @@ _iwspy()
         COMPREPLY=( $( compgen -W 'setthr getthr off' -- $cur ) ) 
     fi
 }
-_iwspy
+
+comp_install  # Make completion persistent for subsequent invocations
+
+_add_members  # Generate completions for first invocation

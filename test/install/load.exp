@@ -39,7 +39,7 @@ expect -ex "$cmd"
 
     # Interrupt command by sending ^C
 
-sleep 0.1; 
+sleep 0.3; 
 send \003;  # Control-c
 expect -ex "/install/@"
 
@@ -57,7 +57,7 @@ expect -ex "/install/@"
 
 
 set test "Bash environment should not be polluted after comp_load"
-    # Compare expected diff with load1/load2 diff
+    # Compare expected diff with load pre/post diff
 set cmd "diff load.diff load.diff~"
 send "$cmd\r"
 expect {

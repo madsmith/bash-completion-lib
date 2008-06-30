@@ -10,3 +10,5 @@ PS1='$(cwd=$(pwd); echo ${cwd#$mwd}/)@'
 INPUTRC=$(pwd)/config/inputrc
 	# Ensure enough columns so expect doesn't have to care about line breaks
 stty columns 150
+    # Disable cache
+COMP_CACHE=

@@ -1,6 +1,8 @@
 # Linux iwlist(8) completion
 #
-[ $UNAME = Linux ] && have iwlist &&
+
+comp_include _available_interfaces
+
 _iwlist()
 {
     local cur prev
@@ -21,4 +23,7 @@ _iwlist()
             txpower retry ap accesspoint peers event' -- $cur ) ) 
     fi
 }
-_iwlist
+
+comp_install  # Make completion persistent for subsequent invocations
+
+_iwlist  # Generate completions for first invocation

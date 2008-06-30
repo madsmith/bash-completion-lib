@@ -1,6 +1,6 @@
 # Linux iwconfig(8) completion
 #
-[ $UNAME = Linux ] && have iwconfig &&
+
 _iwconfig()
 {
     local cur prev
@@ -102,4 +102,7 @@ _iwconfig()
     fi
 
 }
-_iwconfig
+
+comp_install  # Make completion persistent for subsequent invocations
+
+_iwconfig  # Generate completions for first invocation
