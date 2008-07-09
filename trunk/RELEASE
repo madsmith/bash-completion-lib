@@ -1,3 +1,11 @@
+bash_completion_lib-1.1.1, 9-Jul-2008
+
+- Fixed completions using _command: sudo, svn, reportbug, exec, etc.
+  (Issues 19, 21)
+
+
+
+
 bash_completion_lib-1.1.0, 30-Jun-2008
 
 - Added completion cache, governed by environment variable COMP_CACHE.

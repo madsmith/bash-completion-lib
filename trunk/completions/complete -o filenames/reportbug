@@ -1,3 +1,5 @@
+comp_include _command
+
 # Debian reportbug(1) completion
 #
 _reportbug()
