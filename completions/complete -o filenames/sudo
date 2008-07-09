@@ -1,8 +1,10 @@
+comp_include _command
+
 _root_command()
 {
-    OLDPATH=$PATH
-    PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin
-    . command
-    PATH=$OLDPATH
-}
-_root_command
+    PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin _command $1 $2 $3
+} # _root_command()
+
+comp_install -F _root_command  # Make completion persistent for subsequent invocations
+
+_root_command  # Generate completions for first invocation

@@ -166,11 +166,12 @@ startup, all completions in the ./completions directory are converted to
 this fast startup time can even be reduced significantly (0.20 sec -> 0.10 sec
 = 50%).
 
-Caching is enabled by setting `COMP_CACHE' to a cache file:
+
+`Bash_completion_lib' automatically sets `COMP_CACHE' if it does not already
+exist:
 
    COMP_CACHE=$HOME/.bash_completion_lib~
 
-`Bash_completion_lib' automatically sets `COMP_CACHE' if it does not already exist.
 To disable caching, set COMP_CACHE to be empty:
 
    COMP_CACHE=
