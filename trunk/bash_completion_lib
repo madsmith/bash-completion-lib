@@ -54,13 +54,13 @@ comp_load() {
         #       Syntax `*.command' is a kind of symlink notation.  E.g.
         #       `make.gnumake' lets `make' handle the completion of `gnumake'.
         #       Symlinks are not used, because they're not available on every system.
-        #       If a command ends with a dot (.), symlink notation is disabled.
+        #       If a command ends with an exclamation mark (!), symlink notation is disabled.
         #       Variables: script = path/comp, comp = target | target.link
         # NOTE: Use 'tail -1' to get the last match in case 'find' returns more than one match
-    local script="$(find "$COMP_LIB"/*/"${COMP_WORDS[0]}" "$COMP_LIB"/*/"${COMP_WORDS[0]}". "$COMP_LIB"/*/*."${COMP_WORDS[0]}" 2> /dev/null | tail -1)"
+    local script="$(find "$COMP_LIB"/*/"${COMP_WORDS[0]}" "$COMP_LIB"/*/"${COMP_WORDS[0]}"! "$COMP_LIB"/*/*."${COMP_WORDS[0]}" 2> /dev/null | tail -1)"
     local comp=${script##*/}  # Remove path
-        # Remove possible .link only if dot (.) isn't last character
-    [[ ${comp: -1:1} == . ]] || comp=${comp%.*}
+        # Remove possible .link only if exclamation mark (!) isn't last character
+    [[ ${comp: -1:1} == ! ]] || comp=${comp%.*}
     local path=${script%/*}   # Remove comp
         # Source completion of command to complete
     [ -r "$path/$comp" ] && . "$path/$comp"
@@ -110,9 +110,9 @@ comp_dir2args() {
 			if comp_dir2args "./$i"; then
 				cd "$i" && {
 					for comp in *; do
-                            # If name ends with dot (.) only strip last dot,
+                            # If name ends with exclamation mark (!) only strip last exclamation mark,
                             # otherwise strip till first dot (*.)
-						[[ ${comp: -1:1} == . ]] && comp=${comp%.} || comp=${comp#*.}
+						[[ ${comp: -1:1} == ! ]] && comp=${comp%!} || comp=${comp#*.}
 						complete -F comp_load $COMP_ARGS $comp
 					done
 					cd ..
