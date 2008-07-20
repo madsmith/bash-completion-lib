@@ -1,0 +1,22 @@
+set test "Alias completion via comp_load() should be installed"
+set cmd "complete -p scp"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o nospace -F comp_load scp\r\n/@$"  { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/scp.exp"
+
+
+set test "Alias completion via _scp() should be installed"
+set cmd "complete -p scp"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o nospace -F _scp scp\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/scp.exp"

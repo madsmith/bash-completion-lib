@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p minicom"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load minicom\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/minicom.exp"
+
+
+set test "Completion via _minicom() should be installed"
+set cmd "complete -p minicom"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _minicom minicom\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/minicom.exp"

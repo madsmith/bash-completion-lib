@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p cdrecord"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames -F comp_load cdrecord\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/cdrecord.exp"
+
+
+set test "Completion via _cdrecord() should be installed"
+set cmd "complete -p cdrecord"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames -F _cdrecord cdrecord\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/cdrecord.exp"

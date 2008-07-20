@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p pvscan"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load pvscan\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/pvscan.exp"
+
+
+set test "Completion via _pvscan() should be installed"
+set cmd "complete -p pvscan"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _pvscan pvscan\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/pvscan.exp"

@@ -1,0 +1,26 @@
+comp_include _ImageMagick
+
+_identify()
+{
+    local cur
+
+    COMPREPLY=()
+    cur=`_get_cword`
+
+    _ImageMagick
+
+    if [[ "$cur" == -* ]]; then
+        COMPREPLY=( $( compgen -W '-authenticate -debug -density \
+            -depth -extract -format -help -interlace -limit -list \
+            -log -size -sampling-factor -verbose -version \
+            -virtual-pixel' -- $cur ) )
+    elif [[ "$cur" == +* ]]; then
+        COMPREPLY=( $( compgen -W '+debug ' -- $cur ) ) 
+    else
+        _filedir
+    fi
+} # _identify()
+
+comp_install  # Make completion persistent for subsequent invocations
+
+_identify  # Generate completions for first invocation

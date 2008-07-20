@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p vgchange"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load vgchange\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/vgchange.exp"
+
+
+set test "Completion via _vgchange() should be installed"
+set cmd "complete -p vgchange"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _vgchange vgchange\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/vgchange.exp"

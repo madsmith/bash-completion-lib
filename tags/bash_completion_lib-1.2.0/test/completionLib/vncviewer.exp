@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p vncviewer"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load vncviewer\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/vncviewer.exp"
+
+
+set test "Completion via _vncviewer() should be installed"
+set cmd "complete -p vncviewer"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _vncviewer vncviewer\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/vncviewer.exp"

@@ -1,0 +1,20 @@
+# id(1) completion
+#
+_id()
+{
+    local cur
+
+    COMPREPLY=()
+    cur=`_get_cword`
+
+    if [[ "$cur" == -* ]]; then
+        COMPREPLY=( $( compgen -W '-a -g --group -G --groups -n --name\
+            -r --real -u --user --help --version' -- $cur ) )
+    else
+        COMPREPLY=( $( compgen -u $cur  ) )
+    fi
+} # _id()
+
+comp_install  # Make completion persistent for subsequent invocations
+
+_id  # Generate completions for first invocation

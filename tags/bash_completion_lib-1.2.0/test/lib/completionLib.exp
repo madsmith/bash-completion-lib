@@ -1,0 +1,35 @@
+proc completionLib_exit {} {
+        # Exit bash
+    send "\rexit\r"
+}; # comp_exit()
+
+
+proc completionLib_start {} {
+    global spawn_id
+    set test "completionLib_start"
+    send_user "completionLib_start\n"
+        # Start bash
+    exp_spawn bash --rcfile config/bashrc
+    expect -ex "/@"
+        # Do restrict by extension
+    set cmd "COMP_RESTRICT_BY_EXTENSION=1"
+    send "$cmd\r"
+    expect -ex "$cmd\r\n"
+    expect -ex "/@"
+        # Load completions
+    set cmd "source ../bash_completion_lib"
+    send "$cmd\r"
+    expect -ex "$cmd\r\n"
+    expect -ex "/@"
+}; # completionLib_start()
+
+
+proc completionLib_version {} {}
+
+
+proc sync_after_int {} {
+	set test "Sync after INT"
+	sleep .1
+	send \031\003;  # QUIT/INT
+	expect /@
+}; # sync_after_int()

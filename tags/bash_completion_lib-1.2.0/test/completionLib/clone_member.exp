@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p clone_member"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load clone_member\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/clone_member.exp"
+
+
+set test "Completion via _clone_member() should be installed"
+set cmd "complete -p clone_member"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _clone_member clone_member\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/clone_member.exp"

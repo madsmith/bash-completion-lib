@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p ant"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames (-C complete-ant-cmd.pl |)-F comp_load ant\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/ant.exp"
+
+
+set test "Completion via _ant() should be installed"
+set cmd "complete -p ant"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames (-C complete-ant-cmd.pl |)-F _ant ant\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/ant.exp"
