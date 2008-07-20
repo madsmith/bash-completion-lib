@@ -11,20 +11,17 @@ setup
 
 set test "Tab should complete"
     # Try completion
-set cmd "dpkg-reconfigure "
+set cmd "dpkg-reconfigure --"
 send "$cmd\t"
 expect {
-    -re "^dpkg-reconfigure .*$" { pass "$test" }
+    -re "^$cmd\r\n.*$cmd$" { pass "$test" }
     -re /@ { unresolved "$test at prompt" }
     -re eof { unresolved "eof" }
 }; # expect
 
 
-# Interrupt command by sending ^C
 
-sleep 0.3; 
-send \003;  # Control-c
-expect -ex /@
+sync_after_int
 
 
 teardown

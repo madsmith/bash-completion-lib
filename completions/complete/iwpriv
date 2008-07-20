@@ -35,4 +35,4 @@ _iwpriv()
 
 comp_install  # Make completion persistent for subsequent invocations
 
-_add_members  # Generate completions for first invocation
+_iwpriv  # Generate completions for first invocation

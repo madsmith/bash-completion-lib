@@ -54,8 +54,8 @@ _hg()
     local cur prev cmd opts i
 
     COMPREPLY=()
-    cur="$2"
-    prev="$3"
+	cur=`_get_cword`
+	prev=${COMP_WORDS[COMP_CWORD-1]}
 
     # searching for the command 
     # (first non-option argument that doesn't follow -R/--repository)
@@ -131,4 +131,4 @@ _hg()
 
 comp_install  # Make completion persistent for subsequent invocations
 
-_hg  # Generate completions for first invocation
+_hg $1 $2 $3  # Generate completions for first invocation

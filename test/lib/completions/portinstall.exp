@@ -14,17 +14,13 @@ set test "Tab should complete"
 set cmd "portinstall "
 send "$cmd\t"
 expect {
-    -re "^portinstall .*$" { pass "$test" }
+    -re "^${cmd}(bash: /usr/ports//INDEX: No such file or directory\r\nbash: /usr/ports//INDEX: No such file or directory\r\n|)\r\n.*$cmd$" { pass "$test" }
     -re /@ { unresolved "$test at prompt" }
     -re eof { unresolved "eof" }
 }; # expect
 
 
-# Interrupt command by sending ^C
-
-sleep 0.3; 
-send \003;  # Control-c
-expect -ex /@
+sync_after_int
 
 
 teardown

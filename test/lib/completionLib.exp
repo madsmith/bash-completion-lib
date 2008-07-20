@@ -6,6 +6,7 @@ proc completionLib_exit {} {
 
 proc completionLib_start {} {
     global spawn_id
+    set test "completionLib_start"
     send_user "completionLib_start\n"
         # Start bash
     exp_spawn bash --rcfile config/bashrc
@@ -24,3 +25,11 @@ proc completionLib_start {} {
 
 
 proc completionLib_version {} {}
+
+
+proc sync_after_int {} {
+	set test "Sync after INT"
+	sleep .1
+	send \031\003;  # QUIT/INT
+	expect /@
+}; # sync_after_int()

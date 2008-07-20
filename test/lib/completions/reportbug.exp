@@ -11,19 +11,16 @@ setup
 
 set test "Tab should complete"
     # Try completion
-set cmd "reportbug -B"
+set cmd "reportbug --m"
 send "$cmd\t"
 expect {
-    -re "^reportbug .*$" { pass "$test" }
+    -re "^$cmd\r\n.*$cmd$" { pass "$test" }
     -re /@ { unresolved "$test at prompt" }
     -re eof { unresolved "eof" }
 }; # expect
 
-# Interrupt command by sending ^C
 
-sleep 0.3; 
-send \003;  # Control-c
-expect -ex /@
+sync_after_int
 
 
 set test "Completing --editor should invoke _command"
@@ -31,17 +28,14 @@ set test "Completing --editor should invoke _command"
 set cmd "reportbug --editor vim"
 send "$cmd\t"
 expect {
-    -re "^$cmd\r\n.*$" { pass "$test" }
-    -re "^${cmd}bash: _command: command not found" { fail "$test" }
+    -re "^$cmd\r\n.*$cmd$" { pass "$test" }
+    -re "^$cmd\r\n.*$cmd$" { pass "$test" }
     -re /@ { unresolved "$test at prompt" }
     -re eof { unresolved "eof" }
 }; # expect
 
-# Interrupt command by sending ^C
 
-sleep 0.3; 
-send \003;  # Control-c
-expect -ex /@
+sync_after_int
 
 
 teardown

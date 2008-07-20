@@ -13,18 +13,15 @@ set test "Tab should complete"
     # Try completion
 set cmd "isql "
 send "$cmd\t"
+sleep 0.1
 expect {
-    -re "^isql .*$" { pass "$test" }
+    -re "^${cmd}(grep: : No such file or directory).*" { pass "$test" }
     -re /@ { unresolved "$test at prompt" }
     -re eof { unresolved "eof" }
 }; # expect
 
 
-# Interrupt command by sending ^C
-
-sleep 0.3; 
-send \003;  # Control-c
-expect -ex /@
+sync_after_int
 
 
 teardown

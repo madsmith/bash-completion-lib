@@ -2,7 +2,7 @@ comp_include _comp_dpkg_installed_packages
 
 # Debian GNU dpkg-reconfigure(8) completion
 #
-_dpkg-reconfigure()
+_dpkg_reconfigure()
 {
     local cur prev opt
 
@@ -32,8 +32,8 @@ _dpkg-reconfigure()
     else
         COMPREPLY=( $( _comp_dpkg_installed_packages $cur ) )
     fi
-} # _dpkg-reconfigure()
+} # _dpkg_reconfigure()
 
-comp_install  # Make completion persistent for subsequent invocations
+comp_install -F _dpkg_reconfigure # Make completion persistent for subsequent invocations
 
-_dpkg-reconfigure  # Generate completions for first invocation
+_dpkg_reconfigure  # Generate completions for first invocation

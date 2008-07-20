@@ -20,17 +20,14 @@ set test "Tab should complete acroread"
 set cmd "acroread fixture1/"
 send "$cmd\t"
 expect {
-    -re "^${cmd}\r\nbar bar.d/ +foo.d/ +(\.svn/ +|)t.pdf +\r\n/@$cmd$"  { pass "$test" }
+    -re "^${cmd}\r\n(\.svn/ +|)bar bar.d/ +foo.d/ +(\.svn/ +|)t.pdf +\r\n/@$cmd$"  { pass "$test" }
     -re /@ { unresolved "$test at prompt" }
     default { unresolved "$test" }
 }; # expect
 
 
-# Interrupt command by sending ^C
-
-sleep 0.1; 
-send \003;  # Control-c
-expect -ex /@
+sleep .5
+sync_after_int
 
 
 teardown

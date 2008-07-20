@@ -1,5 +1,8 @@
 # sshmitm(8) completion
 #
+
+comp_include _known_hosts
+
 _sshmitm()
 {
 	local cur
