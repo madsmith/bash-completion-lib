@@ -21,7 +21,7 @@ if { [catch {
 }
 
     # Try completion
-set cmd "scp bash_completion_split:"
+set cmd "scp bash_completion_lib:"
 send "$cmd\t"
 expect {
     -re "^$cmd$host_pwd.*$" { pass "$test" }
@@ -29,11 +29,8 @@ expect {
 }; # expect
 
 
-# Interrupt command by sending ^C
-
-sleep 0.4; 
-send \003;  # Control-c
-expect -ex /@
+sleep .5
+sync_after_int
 
 
 teardown

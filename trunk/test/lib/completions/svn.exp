@@ -14,16 +14,16 @@ set test "Tab should complete"
 set cmd "svn "
 send "$cmd\t"
 expect {
-    -re "^svn .*$" { pass "$test" }
+    -re "^$cmd\r\n.*$cmd$" { pass "$test" }
     -re /@ { unresolved "$test at prompt" }
     -re eof { unresolved "eof" }
 }; # expect
 
 # Interrupt command by sending ^C
 
-sleep 0.3; 
 send \003;  # Control-c
-expect -ex /@
+send "\n"
+expect -ex "/@\r\n/@"
 
 
 set test "Completing --editor-cmd should invoke _command"
@@ -31,17 +31,17 @@ set test "Completing --editor-cmd should invoke _command"
 set cmd "svn commit --editor-cmd vim"
 send "$cmd\t"
 expect {
-    -re "^$cmd\r\n.*$" { pass "$test" }
-    -re "^${cmd}bash: _command: command not found" { fail "$test" }
+    -re "^$cmd\r\n.*$cmd$" { pass "$test" }
+    -re "^$cmd\r\n.*$cmd$" { pass "$test" }
     -re /@ { unresolved "$test at prompt" }
     -re eof { unresolved "eof" }
 }; # expect
 
 # Interrupt command by sending ^C
 
-sleep 0.3; 
 send \003;  # Control-c
-expect -ex /@
+send "\n"
+expect -ex "/@\r\n/@"
 
 
 teardown

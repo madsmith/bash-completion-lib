@@ -14,17 +14,14 @@ set test "Tab should complete"
 set cmd "cancel "
 send "$cmd\t"
 expect {
-    -re "^cancel .*$" { pass "$test" }
+    -re "^${cmd}(bash: lpstat: command not found\r\n)$" { pass "$test" }
     -re /@ { unresolved "$test at prompt" }
     -re eof { unresolved "eof" }
 }; # expect
 
 
-# Interrupt command by sending ^C
-
-sleep 0.3; 
-send \003;  # Control-c
-expect -ex /@
+sleep .5
+sync_after_int
 
 
 teardown

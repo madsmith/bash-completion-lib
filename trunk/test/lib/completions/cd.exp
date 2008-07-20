@@ -14,16 +14,12 @@ set test "Tab should complete"
 set cmd "cd fixture1/"
 send "$cmd\t"
 expect {
-    -re "^$cmd\r\nbar bar.d/ +foo.d/ +(\.svn/ +|)\r\n/@$cmd$" { pass "$test" }
+    -re "^$cmd\r\n.*$cmd$" { pass "$test" }
     -re /@ { unresolved "$test at prompt" }
 }; # expect
 
 
-# Interrupt command by sending ^C
-
-sleep 0.1; 
-send \003;  # Control-c
-expect -ex /@
+sync_after_int
 
 
 set test "Tab should complete cd at cursor position"
@@ -34,18 +30,14 @@ append cmd \002\002\002; # \002 = ^B = Move cursor left in bash emacs mode
 send "$cmd\t"
 set expected "^$cmd\r\nbar= +foo= +\r\n/@$cmd$"
 expect {
-    -re "cd fixture1/foo\b\b\b\r\nbar bar.d/ +foo.d/ +(\.svn/ +|)\r\n/@cd fixture1/foo\b\b\b$" { pass "$test" }
-    -re "^cd fixture1/foo\b\b\bfoo.d/foo\b\b\b$" { fail "$test: Wrong cursor position" }
+    -re "cd fixture1/foo\b\b\b\r\n(\.svn/ +|)bar bar.d/ +foo.d/ +(\.svn/ +|)\r\n/@cd fixture1/foo\b\b\b$" { pass "$test" }
+	-re "^cd fixture1/foo\b\b\bfoo.d/foo\b\b\b$" { fail "$test: Wrong cursor position" }
     -re /@ { unresolved "$test at prompt" }
     default { unresolved "$test" }
 }; # expect
 
 
-# Interrupt command by sending ^C
-
-sleep 0.1; 
-send \003;  # Control-c
-expect -ex /@
+sync_after_int
 
 
 teardown

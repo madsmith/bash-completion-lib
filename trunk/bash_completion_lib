@@ -37,7 +37,7 @@ compPwd="$PWD"
 # of `bash_completion_lib'.
 #COMP_CACHE=$HOME/.bash_completion_lib~
     # Store current directory of this script
-COMP_DIR=$(cd "$(dirname "$(which "${BASH_SOURCE-$0}")")" && /bin/pwd)
+COMP_DIR=$(cd "$(dirname "$(which "${BASH_SOURCE-$0}" 2> /dev/null)")" && /bin/pwd)
 COMP_LIB="$COMP_DIR/completions"
 COMP_RESTRICT_BY_EXTENSION=${COMP_RESTRICT_BY_EXTENSION:-0}  # True (1) if restricted completion is enabled, False (0, default) if not
 
@@ -104,7 +104,7 @@ comp_dir2args() {
 		shopt -u dotglob failglob
 		. $COMP_DIR/comploadrc
 		# use GNU sed if we have it, since its extensions are still used in our code
-		[ $UNAME != Linux ] && which gsed > /dev/null && alias sed=gsed
+		[ $UNAME != Linux ] && [ $UNAME != Cygwin ] && which gsed > /dev/null && alias sed=gsed
 		for i in complete*; do
 				# Don't install completion if 'comp_dir2args()' returns false
 			if comp_dir2args "./$i"; then

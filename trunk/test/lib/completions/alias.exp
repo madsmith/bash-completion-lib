@@ -33,11 +33,7 @@ expect {
 }; # expect
 
 
-# Interrupt command by sending ^C
-
-sleep 0.1 
-send \003;  # Control-c
-expect -ex /@
+sync_after_int
 
 
 set test "Tab should complete alias at cursor position"
@@ -53,11 +49,7 @@ expect {
 }; # expect
 
 
-# Interrupt command by sending ^C
-
-sleep 0.1; 
-send \003;  # Control-c
-expect -ex /@ 
+sync_after_int
 
 
 teardown

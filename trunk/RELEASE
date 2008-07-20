@@ -1,3 +1,18 @@
+bash_completion_lib-1.2.0, 20-Jul-2008
+
+- Changed symlink-ignore character from dot (.) to exclamation mark (!) to be
+  able to run bash_completion_lib on Cygwin/Windows
+- Fixed tests to run successful on Cywgin/Windows
+- Fixed passing argument $1 to _longopt
+- Changed _dpkg-reconfigure to _dpkg_reconfigure to comply to POSIX
+- Fixed calling `_iwpriv' instead of `_add_members' upon first
+  completion of `iwpriv'
+- Added `comp_include _known_hosts' to completion of `webmitm' and `sshmitm'
+- Fixed passing argument $1 to _ypmatch
+
+
+
+
 bash_completion_lib-1.1.1, 9-Jul-2008
 
 - Fixed completions using _command: sudo, svn, reportbug, exec, etc.

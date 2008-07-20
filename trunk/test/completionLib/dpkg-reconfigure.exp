@@ -10,11 +10,11 @@ expect {
 source "lib/completions/dpkg-reconfigure.exp"
 
 
-set test "Completion via _dpkg-reconfigure() should be installed"
+set test "Completion via _dpkg_reconfigure() should be installed"
 set cmd "complete -p dpkg-reconfigure"
 send "$cmd\r"
 expect {
-    -re "^$cmd\r\ncomplete -o default -F _dpkg-reconfigure dpkg-reconfigure\r\n/@$" { pass "$test" }
+    -re "^$cmd\r\ncomplete -o default -F _dpkg_reconfigure dpkg-reconfigure\r\n/@$" { pass "$test" }
     -re /@ { fail "$test at prompt" }
 }; # expect
 

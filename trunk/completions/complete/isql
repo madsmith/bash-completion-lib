@@ -6,7 +6,7 @@ _isql()
 	local cur
 	cur=`_get_cword`
   
-	COMPREPLY=( $( grep \\[$cur $ODBCINI | tr -d \\[\\] ) )
+	COMPREPLY=( $( grep \\[$cur "$ODBCINI" | tr -d \\[\\] ) )
 } # _isql()
 
 comp_install  # Make completion persistent for subsequent invocations

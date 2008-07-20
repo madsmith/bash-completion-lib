@@ -14,7 +14,7 @@ set test "Tab should complete"
 set cmd "cc "
 send "$cmd\t"
 expect {
-    -re "^cc .*$" { pass "$test" }
+    -re "^$cmd\r\n.*$cmd$" { pass "$test" }
     -re /@ { unresolved "$test at prompt" }
     -re eof { unresolved "eof" }
 }; # expect
@@ -22,9 +22,9 @@ expect {
 
 # Interrupt command by sending ^C
 
-sleep 0.3; 
 send \003;  # Control-c
-expect -ex /@
+send "\n"
+expect -ex "/@\r\n/@"
 
 
 teardown

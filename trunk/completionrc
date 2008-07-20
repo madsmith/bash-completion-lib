@@ -305,7 +305,7 @@ comp_install() {
     if comp_dir2args "$dir"; then
         eval complete ${*:--F _$comp} $COMP_ARGS ${COMP_WORDS[0]}
     else
-        complete -r $command
+        complete -r $comp
     fi
     unset -v COMP_ARGS
 } # comp_install()

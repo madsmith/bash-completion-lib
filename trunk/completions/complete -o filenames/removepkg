@@ -7,7 +7,7 @@ _removepkg()
     COMPREPLY=()
     cur=`_get_cword`
 
-    COMPREPLY=( $( (cd /var/log/packages; compgen -f -- "$cur") ) )
+    COMPREPLY=( $( (cd /var/log/packages && compgen -f -- "$cur") ) )
 } # _removepkg()
 
 comp_install  # Make completion persistent for subsequent invocations
