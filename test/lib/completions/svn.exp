@@ -19,11 +19,8 @@ expect {
     -re eof { unresolved "eof" }
 }; # expect
 
-# Interrupt command by sending ^C
 
-send \003;  # Control-c
-send "\n"
-expect -ex "/@\r\n/@"
+sync_after_int
 
 
 set test "Completing --editor-cmd should invoke _command"
@@ -37,11 +34,8 @@ expect {
     -re eof { unresolved "eof" }
 }; # expect
 
-# Interrupt command by sending ^C
 
-send \003;  # Control-c
-send "\n"
-expect -ex "/@\r\n/@"
+sync_after_int
 
 
 teardown

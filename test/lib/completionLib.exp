@@ -1,3 +1,6 @@
+source lib/library.exp
+
+
 proc completionLib_exit {} {
         # Exit bash
     send "\rexit\r"
@@ -25,11 +28,3 @@ proc completionLib_start {} {
 
 
 proc completionLib_version {} {}
-
-
-proc sync_after_int {} {
-	set test "Sync after INT"
-	sleep .1
-	send \031\003;  # QUIT/INT
-	expect /@
-}; # sync_after_int()
