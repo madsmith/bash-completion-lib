@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p bk"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load bk\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/bk.exp"
+
+
+set test "Completion via _bk() should be installed"
+set cmd "complete -p bk"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _bk bk\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/bk.exp"

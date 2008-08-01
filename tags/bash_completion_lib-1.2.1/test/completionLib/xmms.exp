@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p xmms"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames -F comp_load xmms\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/xmms.exp"
+
+
+set test "Completion via _xmms() should be installed"
+set cmd "complete -p xmms"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames -F _xmms xmms\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/xmms.exp"

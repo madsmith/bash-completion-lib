@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p dpkg-source"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load dpkg-source\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/dpkg-source.exp"
+
+
+set test "Completion via _dpkg_source() should be installed"
+set cmd "complete -p dpkg-source"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _dpkg_source dpkg-source\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/dpkg-source.exp"

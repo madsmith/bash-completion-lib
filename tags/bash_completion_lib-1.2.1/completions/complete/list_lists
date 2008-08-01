@@ -1,0 +1,22 @@
+# Mailman completion by Guillaume Rousse <rousse@ccr.jussieu.fr>
+#
+
+comp_include _mailman_lists
+
+_list_lists()
+{
+	local cur
+
+	COMPREPLY=()
+	cur=`_get_cword`
+
+	if [[ "$cur" == -* ]]; then
+		COMPREPLY=( $( compgen -W '-a --advertised \
+			--virtual-host-overview= -V -b --bare \
+			-h --help' -- $cur ) )
+	fi
+} # _list_lists()
+
+comp_install  # Make completion persistent for subsequent invocations
+
+_list_lists  # Generate completions for first invocation

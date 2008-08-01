@@ -1,0 +1,18 @@
+# Mailman completion by Guillaume Rousse <rousse@ccr.jussieu.fr>
+#
+
+_check_perms()
+{
+	local cur
+
+	COMPREPLY=()
+	cur=`_get_cword`
+
+	if [[ "$cur" == -* ]]; then
+		COMPREPLY=( $( compgen -W '-f -v -h' -- $cur ) )
+	fi
+} # _check_perms()
+
+comp_install  # Make completion persistent for subsequent invocations
+
+_check_perms  # Generate completions for first invocation

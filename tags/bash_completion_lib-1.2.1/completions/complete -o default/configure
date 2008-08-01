@@ -1,0 +1,22 @@
+_configure_func()
+{
+    local cur
+
+    COMPREPLY=()
+    cur=`_get_cword`
+
+    # if $COMP_CONFIGURE_HINTS is not null, then completions of the form
+    # --option=SETTING will include 'SETTING' as a contextual hint
+    [[ "$cur" != -* ]] && return 0
+
+    if [ -n "$COMP_CONFIGURE_HINTS" ]; then
+        COMPREPLY=( $( $1 --help | awk '/^  --[A-Za-z]/ { print $1; if ($2 ~ /--[A-Za-z]/) print $2 }' | sed -e 's/[[,].*//g' | grep ^$cur ) )
+
+    else
+        COMPREPLY=( $( $1 --help | awk '/^  --[A-Za-z]/ { print $1; if ($2 ~ /--[A-Za-z]/) print $2 }' | sed -e 's/[[,=].*//g' | grep ^$cur ) )
+    fi
+} # _configure_func()
+
+comp_install -F _configure_func  # Make completion persistent for subsequent invocations
+
+_configure_func  # Generate completions for first invocation

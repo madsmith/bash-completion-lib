@@ -1,0 +1,20 @@
+# snownews completion by Guillaume Rousse <rousse@ccr.jussieu.fr>
+#
+
+_snownews()
+{
+	local cur
+
+	COMPREPLY=()
+	cur=`_get_cword`
+
+	if [[ "$cur" == -* ]]; then
+		# return list of available options
+		COMPREPLY=( $( compgen -W '--update --help --version \
+				  --disable-versioncheck -u -h -V' -- $cur))
+	fi
+} # _snownews()
+
+comp_install  # Make completion persistent for subsequent invocations
+
+_snownews  # Generate completions for first invocation

@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p btdownloadgui.py"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load btdownloadgui.py\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/btdownloadgui.py.exp"
+
+
+set test "Completion via _btdownload() should be installed"
+set cmd "complete -p btdownloadgui.py"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _btdownload btdownloadgui.py\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/btdownloadgui.py.exp"
