@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p sudo"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames -F comp_load sudo\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/sudo.exp"
+
+
+set test "Completion via _root_command() should be installed"
+set cmd "complete -p sudo"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames -F _root_command sudo\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/sudo.exp"

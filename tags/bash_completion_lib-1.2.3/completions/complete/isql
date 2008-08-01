@@ -1,0 +1,14 @@
+# isql completion by Victor Bogado da Silva Lins <victor@bogado.net>
+#
+
+_isql()
+{
+	local cur
+	cur=`_get_cword`
+  
+	COMPREPLY=( $( grep \\[$cur "$ODBCINI" | tr -d \\[\\] ) )
+} # _isql()
+
+comp_install  # Make completion persistent for subsequent invocations
+
+_isql  # Generate completions for first invocation

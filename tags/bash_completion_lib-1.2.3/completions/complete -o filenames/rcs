@@ -1,0 +1,38 @@
+# rcs(1) completion
+#
+_rcs()
+{
+    local cur prev file dir i
+
+    COMPREPLY=()
+    cur=`_get_cword`
+    prev=${COMP_WORDS[COMP_CWORD-1]}
+
+    file=${cur##*/}
+    dir=${cur%/*}
+
+    # deal with relative directory
+    [ "$file" = "$dir" ] && dir=.
+
+    COMPREPLY=( $( compgen -f "$dir/RCS/$file" ) )
+
+    for (( i=0; i < ${#COMPREPLY[@]}; i++ )); do
+        file=${COMPREPLY[$i]##*/}
+        dir=${COMPREPLY[$i]%RCS/*}
+        COMPREPLY[$i]=$dir$file
+    done
+    
+    COMPREPLY=( "${COMPREPLY[@]}" $( compgen -G "$dir/$file*,v" ) )
+
+    for (( i=0; i < ${#COMPREPLY[@]}; i++ )); do
+        COMPREPLY[$i]=${COMPREPLY[$i]%,v}
+    done
+
+    # default to files if nothing returned and we're checking in.
+    # otherwise, default to directories
+    [ ${#COMPREPLY[@]} -eq 0 -a "$1" = ci ] && _filedir || _filedir -d
+} # _rcs()
+
+comp_install  # Make completion persistent for subsequent invocations
+
+_rcs  # Generate completions for first invocation

@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p lvs"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load lvs\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/lvs.exp"
+
+
+set test "Completion via _lvs() should be installed"
+set cmd "complete -p lvs"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _lvs lvs\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/lvs.exp"

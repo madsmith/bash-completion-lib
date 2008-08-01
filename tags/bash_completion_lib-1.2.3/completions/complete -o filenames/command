@@ -1,0 +1,5 @@
+comp_include _command
+
+comp_install -F _command  # Make completion persistent for subsequent invocations
+
+_command  # Generate completions for first invocation

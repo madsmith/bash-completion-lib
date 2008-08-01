@@ -1,0 +1,7 @@
+- Unpack the file in your home directory:
+
+     $ tar -xvzf bash_completion_lib-0.6.tar.gz
+
+- Add the following line to ~/.bashrc:
+
+     source bash_completion_lib-0.6/bash_completion_lib

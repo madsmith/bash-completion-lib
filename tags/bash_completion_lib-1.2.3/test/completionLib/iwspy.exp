@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p iwspy"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load iwspy\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/iwspy.exp"
+
+
+set test "Completion via _iwspy() should be installed"
+set cmd "complete -p iwspy"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _iwspy iwspy\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/iwspy.exp"

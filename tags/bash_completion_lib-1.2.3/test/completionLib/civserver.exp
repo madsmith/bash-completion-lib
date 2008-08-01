@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p civserver"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load civserver\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/civserver.exp"
+
+
+set test "Completion via _civserver() should be installed"
+set cmd "complete -p civserver"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _civserver civserver\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/civserver.exp"

@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p remove_members"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load remove_members\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/remove_members.exp"
+
+
+set test "Completion via _remove_members() should be installed"
+set cmd "complete -p remove_members"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _remove_members remove_members\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/remove_members.exp"

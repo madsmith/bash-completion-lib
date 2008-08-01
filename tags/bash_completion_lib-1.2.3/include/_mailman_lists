@@ -1,0 +1,4 @@
+_mailman_lists()
+{
+	COMPREPLY=( $( list_lists -b | grep "^$cur") )
+}

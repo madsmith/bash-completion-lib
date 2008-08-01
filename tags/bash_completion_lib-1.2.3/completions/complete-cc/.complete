@@ -1,0 +1,1 @@
+[ $UNAME = GNU -o $UNAME = Linux -o $UNAME = Cygwin ] && COMP_ARGS="$filenames" || false

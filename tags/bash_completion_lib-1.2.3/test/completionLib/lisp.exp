@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p lisp"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o default -F comp_load lisp\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/lisp.exp"
+
+
+set test "Completion via _lisp() should be installed"
+set cmd "complete -p lisp"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o default -F _lisp lisp\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/lisp.exp"

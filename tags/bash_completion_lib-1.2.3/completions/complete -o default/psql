@@ -1,0 +1,49 @@
+comp_include _pg_databases _pg_users
+
+_psql()
+{
+    local cur prev
+
+    COMPREPLY=()
+    cur=`_get_cword`
+    prev=${COMP_WORDS[COMP_CWORD-1]}
+
+    case "$prev" in
+    -h|--host) 
+        _known_hosts
+        return 0
+        ;;
+    -U|--username)
+        _pg_users
+        return 0
+        ;;
+    -d|--dbname)
+        _pg_databases
+        return 0
+        ;;
+    -@(o|f)|--output|--file)
+        _filedir
+        return 0
+        ;;
+    esac
+
+    if [[ "$cur" == -* ]]; then
+        # return list of available options
+        COMPREPLY=( $( compgen -W '-a --echo-all -A --no-align \
+            -c --command -d --dbname -e --echo-queries \
+            -E --echo-hidden -f --file -F --filed-separator \
+            -h --host -H --html -l --list -n -o --output \
+            -p --port -P --pset -q -R --record-separator \
+            -s --single-step -S --single-line -t --tuples-only \
+            -T --table-attr -U --username -v --variable \
+            -V --version -W --password -x --expanded -X --nopsqlrc \
+            -? --help ' -- $cur ) )
+    else
+        # return list of available databases
+        _pg_databases
+    fi
+} # _psql()
+
+comp_install  # Make completion persistent for subsequent invocations
+
+_psql  # Generate completions for first invocation

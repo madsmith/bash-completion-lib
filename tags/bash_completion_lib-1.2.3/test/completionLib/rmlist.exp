@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p rmlist"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load rmlist\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/rmlist.exp"
+
+
+set test "Completion via _rmlist() should be installed"
+set cmd "complete -p rmlist"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _rmlist rmlist\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/rmlist.exp"
