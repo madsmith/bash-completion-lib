@@ -38,7 +38,8 @@ compPwd="$PWD"
 #COMP_CACHE=$HOME/.bash_completion_lib~
     # Store current directory of this script
 COMP_DIR=$(cd "$(dirname "$(which "${BASH_SOURCE-$0}" 2> /dev/null)")" && /bin/pwd)
-COMP_LIB="$COMP_DIR/completions"
+    # If COMP_LIB is unset, set COMP_LIB to default array
+[ "$COMP_LIB" ] || COMP_LIB=("$HOME/.bash_completion_lib.d/completions" "$COMP_DIR/completions")
 COMP_RESTRICT_BY_EXTENSION=${COMP_RESTRICT_BY_EXTENSION:-0}  # True (1) if restricted completion is enabled, False (0, default) if not
 
 
@@ -56,14 +57,25 @@ comp_load() {
         #       Symlinks are not used, because they're not available on every system.
         #       If a command ends with an exclamation mark (!), symlink notation is disabled.
         #       Variables: script = path/comp, comp = target | target.link
-        # NOTE: Use 'tail -1' to get the last match in case 'find' returns more than one match
-    local script="$(find "$COMP_LIB"/*/"${COMP_WORDS[0]}" "$COMP_LIB"/*/"${COMP_WORDS[0]}"! "$COMP_LIB"/*/*."${COMP_WORDS[0]}" 2> /dev/null | tail -1)"
+        # NOTE: Use 'head -1' to get the first match in case 'find' returns more than one match
+
+    local cmd=${COMP_WORDS[0]} globs OLDIFS=$IFS IFS=$'\n'
+    # Create globbing search strings by appending COMP_LIB elements with: *.command, command!, command
+    globs=( $(
+        for dir in "${COMP_LIB[@]}"; do 
+            echo \"$dir\"/\*/\*.$cmd
+            echo \"$dir\"/\*/$cmd\!
+            echo \"$dir\"/\*/$cmd
+        done
+    ) )
+    IFS=$OLDIFS
+    local script="$(eval find "${globs[@]}" 2> /dev/null | head -1)"
     local comp=${script##*/}  # Remove path
         # Remove possible .link only if exclamation mark (!) isn't last character
     [[ ${comp: -1:1} == ! ]] || comp=${comp%.*}
     local path=${script%/*}   # Remove comp
         # Source completion of command to complete
-    [ -r "$path/$comp" ] && . "$path/$comp"
+    [ "$script" -a -r "$path/$comp" ] && . "$path/$comp"
         # Unset `comploadrc' variables
     unset -v bashdefault default dirnames filenames nospace plusdirs UNAME
 } # comp_load()
@@ -98,35 +110,38 @@ comp_dir2args() {
 	# Use cache if set
 [ "$COMP_CACHE" ] && . "$COMP_CACHE" || {
     # No, cache isn't set or isn't available; load completions
-	if cd "$COMP_LIB"; then
-		compEnvShoptOptions=$(shopt -p dotglob failglob nullglob)
-		shopt -s nullglob
-		shopt -u dotglob failglob
-		. $COMP_DIR/comploadrc
-		# use GNU sed if we have it, since its extensions are still used in our code
-		[ $UNAME != Linux ] && [ $UNAME != Cygwin ] && which gsed > /dev/null && alias sed=gsed
-		for i in complete*; do
-				# Don't install completion if 'comp_dir2args()' returns false
-			if comp_dir2args "./$i"; then
-				cd "$i" && {
-					for comp in *; do
-                            # If name ends with exclamation mark (!) only strip last exclamation mark,
-                            # otherwise strip till first dot (*.)
-						[[ ${comp: -1:1} == ! ]] && comp=${comp%!} || comp=${comp#*.}
-						complete -F comp_load $COMP_ARGS $comp
-					done
-					cd ..
-				}
-			fi
-		done
-		    # If COMP_CACHE is unset, set COMP_CACHE.  
-            # Generate cache file if COMP_CACHE not empty.
-		[ "${COMP_CACHE=$HOME/.bash_completion_lib~}" ] && complete -p > "$COMP_CACHE"
+    compEnvShoptOptions=$(shopt -p dotglob failglob nullglob)
+    shopt -s nullglob
+    shopt -u dotglob failglob
+    . $COMP_DIR/comploadrc
+    # use GNU sed if we have it, since its extensions are still used in our code
+    [ $UNAME != Linux ] && [ $UNAME != Cygwin ] && which gsed > /dev/null && alias sed=gsed
+    # Loop through directories, starting from last so that first overwrites last and first has precedence
+    for ((k = ${#COMP_LIB[@]} - 1; k >= 0; k--)); do
+        if cd "${COMP_LIB[$k]}" 2> /dev/null; then
+            for i in complete*; do
+                    # Don't install completion if 'comp_dir2args()' returns false
+                if comp_dir2args "./$i"; then
+                    cd "$i" && {
+                        for comp in *; do
+                                # If name ends with exclamation mark (!) only strip last exclamation mark,
+                                # otherwise strip till first dot (*.)
+                            [[ ${comp: -1:1} == ! ]] && comp=${comp%!} || comp=${comp#*.}
+                            complete -F comp_load $COMP_ARGS $comp
+                        done
+                        cd ..
+                    }
+                fi
+            done
+                # 1.  If COMP_CACHE is unset, set COMP_CACHE to ~/.bash_completion_lib~  
+                # 2.  Generate cache file if COMP_CACHE not empty.
+            [ "${COMP_CACHE=$HOME/.bash_completion_lib~}" ] && complete -p > "$COMP_CACHE"
 
-		eval "$compEnvShoptOptions" 2> /dev/null  # Restore `shopt' options
-			# Unset `comploadrc' variables
-		unset -v bashdefault default dirnames filenames nospace plusdirs UNAME
-		cd $compPwd > /dev/null
-	fi
+            eval "$compEnvShoptOptions" 2> /dev/null  # Restore `shopt' options
+                # Unset `comploadrc' variables
+            unset -v bashdefault default dirnames filenames nospace plusdirs UNAME
+            cd $compPwd > /dev/null
+        fi
+    done
 }
-unset -v args comp COMP_ARGS compEnvShoptOptions compPwd i j
+unset -v args comp COMP_ARGS compEnvShoptOptions compPwd i j k

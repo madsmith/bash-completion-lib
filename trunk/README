@@ -149,7 +149,11 @@ COMP_DIR
     Directory of `bash_completion_lib'.  This variable is automatically set.
 
 COMP_LIB
-    Directory containing completions.  Default is "$COMP_DIR/completions".
+    Array variable containing directories with completions.  By default
+    `COMP_LIB' contains these directories:
+    - $HOME/.bash_completion_lib.d/completions 
+    - $COMP_DIR/completions
+    Bash-completion-lib uses the first directory in which a completion is found.
 
 COMP_RESTRICT_BY_EXTENSION
     True (1) if restricted completion is enabled, False (0, default) if not.

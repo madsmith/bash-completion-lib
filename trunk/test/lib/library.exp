@@ -1,0 +1,7 @@
+proc sync_after_int {} {
+	set test "Sync after INT"
+	sleep .1
+	send \031\003;  # QUIT/INT
+	expect /@
+}; # sync_after_int()
+
