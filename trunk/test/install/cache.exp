@@ -21,7 +21,7 @@ expect -ex "$cmd\r\n"
 expect -ex "/install/@"
 
     # Make sure cache file is deleted
-file delete [pwd]/install/.bash_completion_lib~
+file delete [pwd]/install/.bash_completion_lib.d/cache~
 
     # Allow cache to be generated automatically
 set cmd "HOME=\$PWD; unset COMP_CACHE"
@@ -38,7 +38,7 @@ expect -ex "/install/@"
 
 set test "COMP_CACHE should be set automatically after install if previously unset"
     # Filename of cache file
-set cache [pwd]/install/.bash_completion_lib~
+set cache [pwd]/install/.bash_completion_lib.d/cache~
 set cmd "echo \$COMP_CACHE"
 send "$cmd\r"
 expect -ex "$cmd\r\n"
@@ -51,12 +51,12 @@ expect {
 
 
 set test "Cache file should have size > 0 after install"
-if {[file size [pwd]/install/.bash_completion_lib~]} {pass ""} else {fail "$test"}
+if {[file size [pwd]/install/.bash_completion_lib.d/cache~]} {pass ""} else {fail "$test"}
 
 
 set test "COMP_CACHE should point to filled file after reassignment and second install"
     # Filename of secondary cache file - containing spaces
-set cache2 [pwd]/install/.bash\ completion\ lib~~
+set cache2 [pwd]/install/.bash_completion_lib.d/cache\ 2~
     # Make sure secondary cache file is deleted
 file delete cache2
     # Allow cache to be generated automatically
@@ -75,7 +75,7 @@ if {[file size $cache2]} {pass ""} else {fail "$test"}
 
 set test "COMP_CACHE should be disabled if COMP_CACHE is null"
     # Filename of tertiary cache file
-set cache3 [pwd]/install/.bash_completion_lib~~~
+set cache3 [pwd]/install/.bash_completion_lib.d/cache3~
     # Make sure tertiary cache file is deleted
 file delete cache3
     # Disable cache

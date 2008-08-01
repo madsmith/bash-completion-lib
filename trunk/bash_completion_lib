@@ -31,6 +31,7 @@
     # set in order for completion to work
 shopt -s extglob progcomp
 compPwd="$PWD"
+compLocal="$HOME/.bash_completion_lib.d"
 
 # If `COMP_CACHE' is defined and points to a writable file, completions will be
 # read from this file.  Completions are stored in this file after the first run
@@ -39,7 +40,7 @@ compPwd="$PWD"
     # Store current directory of this script
 COMP_DIR=$(cd "$(dirname "$(which "${BASH_SOURCE-$0}" 2> /dev/null)")" && /bin/pwd)
     # If COMP_LIB is unset, set COMP_LIB to default array
-[ "$COMP_LIB" ] || COMP_LIB=("$HOME/.bash_completion_lib.d/completions" "$COMP_DIR/completions")
+[ "$COMP_LIB" ] || COMP_LIB=("$compLocal/completions" "$COMP_DIR/completions")
 COMP_RESTRICT_BY_EXTENSION=${COMP_RESTRICT_BY_EXTENSION:-0}  # True (1) if restricted completion is enabled, False (0, default) if not
 
 
@@ -133,9 +134,11 @@ comp_dir2args() {
                     }
                 fi
             done
-                # 1.  If COMP_CACHE is unset, set COMP_CACHE to ~/.bash_completion_lib~  
-                # 2.  Generate cache file if COMP_CACHE not empty.
-            [ "${COMP_CACHE=$HOME/.bash_completion_lib~}" ] && complete -p > "$COMP_CACHE"
+                # *  If COMP_CACHE is unset, set COMP_CACHE to ~/.bash_completion_lib.d/cache~  
+                # *  If COMP_CACHE is not empty:
+                #    -  create directory `$compLocal' if necessary
+                #    -  generate cache file
+            [ "${COMP_CACHE=$compLocal/cache~}" ] && { [ -d "$compLocal" ] || mkdir "$compLocal"; } && complete -p > "$COMP_CACHE"
 
             eval "$compEnvShoptOptions" 2> /dev/null  # Restore `shopt' options
                 # Unset `comploadrc' variables
@@ -144,4 +147,4 @@ comp_dir2args() {
         fi
     done
 }
-unset -v args comp COMP_ARGS compEnvShoptOptions compPwd i j k
+unset -v args comp COMP_ARGS compEnvShoptOptions compLocal compPwd i j k
