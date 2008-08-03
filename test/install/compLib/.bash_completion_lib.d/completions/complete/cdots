@@ -1,0 +1,7 @@
+_cdots() {
+    COMPREPLY=(cdots)
+} # _cdots()
+
+comp_install  # Make completion persistent for subsequent invocations
+
+_cdots  # Generate completions for first invocation

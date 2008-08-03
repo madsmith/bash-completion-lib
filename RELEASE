@@ -1,5 +1,7 @@
-bash_completion_lib-1.2.dev
+bash_completion_lib-1.2.4, 3-Aug-2008
 
+- Automated calls to `comp_install' and first call to completions generation
+  (Issue 23).
 - Fixed tests to use sync_after_int() instead of individually sending ^C'
 
 

@@ -81,7 +81,14 @@ comp_load() {
     local path=${script%/*}   # Remove comp
         # Source completion of command to complete
         # If sourcing returns true, automatically call `comp_install' and '_$comp'
-    [ "$script" -a -r "$path/$comp" ] && . "$path/$comp" && declare -F _$comp &> /dev/null && _comp_install $comp "$path" && _$comp $link
+    [ "$script" -a -r "$path/$comp" ] && . "$path/$comp" && \
+            # Is function '_$comp" available?
+        declare -F _$comp &> /dev/null && \
+            # Make completion persistent for subsequent invocations
+        _comp_install $comp "$path" && \
+            # Generate completions for first invocation
+        _$comp $link
+
         # Unset `comploadrc' variables
     unset -v bashdefault default dirnames filenames nospace plusdirs UNAME
 } # comp_load()
