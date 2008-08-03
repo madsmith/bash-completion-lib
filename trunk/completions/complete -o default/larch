@@ -35,6 +35,4 @@ notify-library notify-browser push-new-revisions sendmail-mailx' $cur ))
 	return 0
 } # _larch()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_larch  # Generate completions for first invocation

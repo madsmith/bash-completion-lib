@@ -15,6 +15,4 @@ _dumpdb()
 	fi
 } # _dumpdb()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_dumpdb  # Generate completions for first invocation

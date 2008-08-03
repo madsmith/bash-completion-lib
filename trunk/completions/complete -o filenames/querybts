@@ -29,6 +29,4 @@ _querybts()
                 $( apt-cache pkgnames -- $cur 2> /dev/null ) )
 } # _querybts()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_querybts  # Generate completions for first invocation

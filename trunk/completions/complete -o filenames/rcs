@@ -33,6 +33,4 @@ _rcs()
     [ ${#COMPREPLY[@]} -eq 0 -a "$1" = ci ] && _filedir || _filedir -d
 } # _rcs()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_rcs  # Generate completions for first invocation

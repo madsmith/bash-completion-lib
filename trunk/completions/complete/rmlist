@@ -18,6 +18,4 @@ _rmlist()
 	fi
 } # _rmlist()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_rmlist  # Generate completions for first invocation

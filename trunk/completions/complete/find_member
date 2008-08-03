@@ -24,6 +24,4 @@ _find_member()
 	fi
 } # _find_member()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_find_member  # Generate completions for first invocation

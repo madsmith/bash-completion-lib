@@ -27,6 +27,4 @@ _dhclient()
     fi
 } # _dhclient()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_dhclient  # Generate completions for first invocation

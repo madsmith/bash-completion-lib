@@ -25,6 +25,4 @@ _dsniff()
 	fi
 } # _dsniff()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_dsniff  # Generate completions for first invocation

@@ -31,6 +31,4 @@ _sync_members()
 	fi
 } # _sync_members()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_sync_members  # Generate completions for first invocation

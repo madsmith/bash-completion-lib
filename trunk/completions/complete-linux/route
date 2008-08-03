@@ -32,6 +32,4 @@ _route()
     return 0
 }
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_route  # Generate completions for first invocation

@@ -19,6 +19,4 @@ _bk()
 	return 0
 } # _bk()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_bk  # Generate completions for first invocation

@@ -10,6 +10,4 @@ _removepkg()
     COMPREPLY=( $( (cd /var/log/packages && compgen -f -- "$cur") ) )
 } # _removepkg()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_removepkg  # Generate completions for first invocation

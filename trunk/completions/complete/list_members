@@ -36,6 +36,4 @@ _list_members()
 	fi
 } # _list_members()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_list_members  # Generate completions for first invocation

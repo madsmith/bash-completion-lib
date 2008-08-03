@@ -131,6 +131,4 @@ _mutt()
     esac
 } # _mutt()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_mutt  # Generate completions for first invocation

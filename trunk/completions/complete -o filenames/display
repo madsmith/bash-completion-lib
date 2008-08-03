@@ -30,6 +30,4 @@ _display()
     fi
 } # _display()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_display  # Generate completions for first invocation

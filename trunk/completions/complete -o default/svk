@@ -259,6 +259,4 @@ _svk()
 	return 0
 } # _svk()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_svk  # Generate completions for first invocation

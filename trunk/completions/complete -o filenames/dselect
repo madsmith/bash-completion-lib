@@ -32,6 +32,4 @@ _dselect()
     return 0
 } # _dselect()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_dselect  # Generate completions for first invocation

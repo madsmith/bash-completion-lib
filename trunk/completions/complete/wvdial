@@ -42,6 +42,4 @@ _wvdial()
     esac
 } # _wvdial()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_wvdial  # Generate completions for first invocation

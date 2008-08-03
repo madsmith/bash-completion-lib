@@ -33,6 +33,4 @@ _arpspoof()
 	fi
 } # _arpspoof()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_arpspoof  # Generate completions for first invocation

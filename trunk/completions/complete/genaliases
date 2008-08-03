@@ -13,6 +13,4 @@ _genaliases()
 	fi
 } # _genaliases()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_genaliases  # Generate completions for first invocation

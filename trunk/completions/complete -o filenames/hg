@@ -129,6 +129,4 @@ _hg()
     esac
 } # _hg()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_hg $1 $2 $3  # Generate completions for first invocation

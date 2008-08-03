@@ -21,6 +21,4 @@ _identify()
     fi
 } # _identify()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_identify  # Generate completions for first invocation

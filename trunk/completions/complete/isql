@@ -9,6 +9,4 @@ _isql()
 	COMPREPLY=( $( grep \\[$cur "$ODBCINI" | tr -d \\[\\] ) )
 } # _isql()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_isql  # Generate completions for first invocation

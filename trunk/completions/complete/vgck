@@ -15,6 +15,4 @@ _vgck()
     fi
 } # _vgck()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_vgck  # Generate completions for first invocation

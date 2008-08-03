@@ -16,6 +16,4 @@ _gdb()
     fi
 } # _gdb()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_gdb  # Generate completions for first invocation

@@ -27,6 +27,4 @@ _ntpdate()
     fi
 } # _ntpdate()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_ntpdate  # Generate completions for first invocation

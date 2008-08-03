@@ -24,6 +24,4 @@ _civserver()
 	fi
 } # _civserver()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_civserver  # Generate completions for first invocation

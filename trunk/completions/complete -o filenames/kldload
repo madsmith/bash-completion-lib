@@ -15,6 +15,4 @@ _kldload()
     return 0
 } # _kldload()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_kldload  # Generate completions for first invocation

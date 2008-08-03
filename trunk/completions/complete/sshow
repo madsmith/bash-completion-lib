@@ -20,6 +20,4 @@ _sshow()
 	fi
 } # _sshow()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_sshow  # Generate completions for first invocation

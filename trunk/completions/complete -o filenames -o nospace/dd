@@ -29,6 +29,4 @@ _dd()
                 -S '=' -- $cur ) )
 } # _dd()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_dd  # Generate completions for first invocation

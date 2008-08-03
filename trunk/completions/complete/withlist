@@ -18,6 +18,4 @@ _withlist()
 	fi
 } # _withlist()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_withlist  # Generate completions for first invocation

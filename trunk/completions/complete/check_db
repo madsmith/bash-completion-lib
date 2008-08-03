@@ -18,6 +18,4 @@ _check_db()
 	fi
 } # _check_db()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_check_db  # Generate completions for first invocation

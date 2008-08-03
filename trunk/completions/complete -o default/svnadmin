@@ -76,6 +76,4 @@ _svnadmin()
 	return 0
 } # _svnadmin()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_svnadmin  # Generate completions for first invocation

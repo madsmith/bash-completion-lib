@@ -28,6 +28,4 @@ _dropdb()
     fi
 } # _dropdb()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_dropdb  # Generate completions for first invocation

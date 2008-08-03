@@ -64,6 +64,4 @@ _svnlook()
 	return 0
 } # _svnlook()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_svnlook  # Generate completions for first invocation

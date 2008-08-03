@@ -67,6 +67,4 @@ _mkisofs()
     fi
 } # _mkisofs()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_mkisofs  # Generate completions for first invocation

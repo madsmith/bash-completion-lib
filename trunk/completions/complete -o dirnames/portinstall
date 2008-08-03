@@ -25,6 +25,4 @@ _portinstall()
     return 0
 } # _portinstall()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_portinstall  # Generate completions for first invocation

@@ -13,6 +13,4 @@ _lftp()
     return 0
 } # _lftp()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_lftp  # Generate completions for first invocation

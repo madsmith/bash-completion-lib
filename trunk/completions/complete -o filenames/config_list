@@ -27,6 +27,4 @@ _config_list()
 	fi
 } # _config_list()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_config_list  # Generate completions for first invocation

@@ -72,22 +72,16 @@ comp_load() {
     ) )
     IFS=$OLDIFS
     local script="$(eval find "${globs[@]}" 2> /dev/null | head -1)"
-    local comp=${script##*/}  # Remove path
+    local link comp=${script##*/}  # Remove path
         # Remove possible .link only if exclamation mark (!) isn't last character
         # 1:  Strip up to and including first dot (*.)
-        # 2:  Strip possible leftmost dot (.) plus trail, i.e. remainder of 1.
-        #                            +--------2--------+
-        #                            |       +---1----+|
-    [[ ${comp: -1:1} == ! ]] || comp=${comp%.${comp#*.}}
+        # 2:  Strip possible leftmost dot (.) plus link
+        #                              +---1----+       +-----2------+
+    [[ ${comp: -1:1} == ! ]] || { link=${comp#*.}; comp=${comp%.$link}; }
     local path=${script%/*}   # Remove comp
-        # Determine if function '_comp' was available before sourcing completion
-    declare -F _$comp &> /dev/null
-    local was__comp_declared=$?
         # Source completion of command to complete
-        # If sourcing returns true and function '_$comp' wasn't available (1),
-        # but has become available now, automatically call `comp_install' and
-        # '_$comp'
-    [ "$script" -a -r "$path/$comp" ] && . "$path/$comp" && [ $was__comp_declared -eq 1 ] && declare -F _$comp &> /dev/null && _comp_install $comp "$path" && _$comp
+        # If sourcing returns true, automatically call `comp_install' and '_$comp'
+    [ "$script" -a -r "$path/$comp" ] && . "$path/$comp" && declare -F _$comp &> /dev/null && _comp_install $comp "$path" && _$comp $link
         # Unset `comploadrc' variables
     unset -v bashdefault default dirnames filenames nospace plusdirs UNAME
 } # comp_load()

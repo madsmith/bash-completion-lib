@@ -13,6 +13,4 @@ _lvmdiskscan()
     fi
 } # _lvmdiskscan()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_lvmdiskscan  # Generate completions for first invocation

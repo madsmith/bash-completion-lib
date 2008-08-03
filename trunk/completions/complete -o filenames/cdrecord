@@ -72,6 +72,4 @@ _cdrecord()
     fi
 } # _cdrecord()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_cdrecord  # Generate completions for first invocation

@@ -76,6 +76,4 @@ _mcrypt()
 	fi
 } # _mcrypt()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_mcrypt  # Generate completions for first invocation

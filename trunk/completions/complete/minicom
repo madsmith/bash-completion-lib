@@ -33,6 +33,4 @@ _minicom()
 	fi
 } # _minicom()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_minicom  # Generate completions for first invocation

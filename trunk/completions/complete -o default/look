@@ -12,6 +12,4 @@ _look()
     fi
 } # _look()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_look  # Generate completions for first invocation

@@ -64,6 +64,4 @@ _yum()
     esac
 } # _yum()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_yum  # Generate completions for first invocation

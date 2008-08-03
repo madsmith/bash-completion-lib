@@ -27,6 +27,4 @@ _remove_members()
 	fi
 } # _remove_members()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_remove_members  # Generate completions for first invocation

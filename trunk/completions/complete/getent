@@ -41,6 +41,4 @@ _getent()
     fi
 } # _getent()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_getent  # Generate completions for first invocation

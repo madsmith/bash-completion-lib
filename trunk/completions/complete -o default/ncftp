@@ -13,6 +13,4 @@ _ncftp()
     return 0
 } # _ncftp()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_ncftp  # Generate completions for first invocation

@@ -28,6 +28,4 @@ _createdb()
     fi
 } # _createdb()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_createdb  # Generate completions for first invocation

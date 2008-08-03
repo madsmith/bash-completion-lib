@@ -24,6 +24,4 @@ _iwlist()
     fi
 }
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_iwlist  # Generate completions for first invocation

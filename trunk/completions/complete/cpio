@@ -105,6 +105,4 @@ _cpio()
     fi
 } # _cpio()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_cpio  # Generate completions for first invocation

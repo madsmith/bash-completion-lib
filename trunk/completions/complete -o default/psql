@@ -44,6 +44,4 @@ _psql()
     fi
 } # _psql()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_psql  # Generate completions for first invocation

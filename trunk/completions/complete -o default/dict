@@ -67,6 +67,4 @@ _dict()
         COMPREPLY=( $( compgen -W '$( cat $dictfile )' -- "$cur" ) )
 } # _dict()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_dict  # Generate completions for first invocation

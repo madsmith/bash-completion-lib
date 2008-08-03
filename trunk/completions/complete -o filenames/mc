@@ -39,6 +39,4 @@ _mc()
     fi
 } # _mc()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_mc  # Generate completions for first invocation

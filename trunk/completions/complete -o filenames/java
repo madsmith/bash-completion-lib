@@ -53,6 +53,4 @@ _java()
     fi
 } # _java()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_java  # Generate completions for first invocation
