@@ -293,14 +293,28 @@ comp_include() {
 
 
 # Install real completion
-# NOTE: The default function of the original bash_completion is "_$command".
-#       A less collision-prone default might be "_comp_$command", e.g.
-#       `_comp_ssh' instead of `_ssh' -- FVu, Sat Apr  5 09:21:21 CEST 2008
+# See also: _comp_install()
 # @param $* string  (optional) Arguments to use for completion.  Default is "-F _${BASH_ARGV[0]}"
 comp_install() {
     local comp=${BASH_ARGV[0]##*/}  # ${..##*/}: strip up to and including last slash
     local dir="${BASH_ARGV[0]%/$comp}"  # Extract dir from completion
 
+    _comp_install $comp "$dir" "$*"
+} # comp_install()
+
+
+# Install real completion
+# NOTE: The default function of the original bash_completion is "_$command".
+#       A less collision-prone default might be "_comp_$command", e.g.
+#       `_comp_ssh' instead of `_ssh' -- FVu, Sat Apr  5 09:21:21 CEST 2008
+# @param $1 string comp
+# @param $2 string dir
+# @param $* string  (optional) Arguments to use for completion.  Default is "-F _${BASH_ARGV[0]}"
+_comp_install() {
+    local comp=$1
+    shift
+    local dir="$1"
+    shift
         # Don't install completion if 'comp_dir2args()' returns false
     if comp_dir2args "$dir"; then
         eval complete ${*:--F _$comp} $COMP_ARGS ${COMP_WORDS[0]}
@@ -308,7 +322,7 @@ comp_install() {
         complete -r $comp
     fi
     unset -v COMP_ARGS
-} # comp_install()
+} # _comp_install()
 
 
 # Load and install completion.

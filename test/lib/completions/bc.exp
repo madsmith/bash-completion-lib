@@ -15,7 +15,7 @@ set cmd "bc --"
 send "$cmd\t"
   # NOTE: Wait in case `bc' isn't installed, so that "^$cdm$" doesn't match
   #       before comp_install has finished
-sleep .1
+sleep .2
 expect {
     -re "^$cmd\r\n.*$cmd$" { pass "$test" }
     -re "^$cmd$" { pass "$test" }

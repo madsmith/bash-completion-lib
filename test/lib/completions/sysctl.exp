@@ -15,7 +15,7 @@ set cmd "sysctl "
 send "$cmd\t"
   # NOTE: Wait in case `sysctl' returns nothing, so that "^$cdm.*$" doesn't match
   #       too early -- before comp_install has finished
-sleep .4
+sleep 1 
 expect {
     -re "^$cmd\.*$" { pass "$test" }
     -re /@ { unresolved "$test at prompt" }

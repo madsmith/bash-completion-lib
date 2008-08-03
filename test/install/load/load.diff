@@ -1,5 +1,6 @@
 declare -f _alias
 declare -f _available_interfaces
+declare -f _comp_install
 declare -f _configured_interfaces
 declare -f _count_args
 declare -f _expand
