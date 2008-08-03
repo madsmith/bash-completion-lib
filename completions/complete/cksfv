@@ -27,6 +27,4 @@ _cksfv()
 	return 0
 } # _cksfv()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_cksfv  # Generate completions for first invocation

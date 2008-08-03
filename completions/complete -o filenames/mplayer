@@ -326,6 +326,4 @@ _mplayer()
     return 0
 } # _mplayer()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_mplayer  # Generate completions for first invocation

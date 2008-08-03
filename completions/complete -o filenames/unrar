@@ -26,6 +26,4 @@ _unrar()
 	return 0
 } # _unrar()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_unrar  # Generate completions for first invocation

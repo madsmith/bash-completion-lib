@@ -85,6 +85,4 @@ _ri()
 	ri_get_methods
 } # _ri()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_ri  # Generate completions for first invocation

@@ -2,6 +2,9 @@
 set -o emacs
     # Use bash strict mode
 set -o posix
+    # Unset `command_not_found_handle' as defined on Debian/Ubuntu, because this handling
+    # troubles and slows down testing?
+unset -f command_not_found_handle
 	# Set prompt to ignore current working directory; display path starting from here
 	# E.g. prompt: //fixture1/1-1@
 mwd=$(pwd)

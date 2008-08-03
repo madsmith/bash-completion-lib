@@ -31,6 +31,4 @@ _links()
     return 0
 } # _links()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_links  # Generate completions for first invocation

@@ -45,6 +45,4 @@ _gcc()
     fi
 } # _gcc()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_gcc  # Generate completions for first invocation

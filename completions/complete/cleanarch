@@ -16,6 +16,4 @@ _cleanarch()
 	fi
 } # _cleanarch()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_cleanarch  # Generate completions for first invocation

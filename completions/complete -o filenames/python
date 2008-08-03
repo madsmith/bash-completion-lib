@@ -47,6 +47,4 @@ _python()
     return 0
 } # _python()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_python  # Generate completions for first invocation

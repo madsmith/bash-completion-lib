@@ -14,6 +14,4 @@ _dcop()
     COMPREPLY=( $( compgen -W '$( command $compstr | sed s/\(.*\)// )'  -- $cur ) )
 } # _dcop()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_dcop  # Generate completions for first invocation

@@ -33,6 +33,4 @@ _iwpriv()
     fi
 }
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_iwpriv  # Generate completions for first invocation

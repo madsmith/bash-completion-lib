@@ -24,6 +24,4 @@ _ypmatch()
     return 0
 } # _ypmatch()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_ypmatch $1  # Generate completions for first invocation

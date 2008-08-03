@@ -58,6 +58,4 @@ _mkinitrd()
     fi
 } # _mkinitrd()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_mkinitrd  # Generate completions for first invocation

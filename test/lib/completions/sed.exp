@@ -13,6 +13,7 @@ set test "Tab should complete"
     # Try completion
 set cmd "sed "
 send "$cmd\t"
+sync_after_tab
 expect {
     -re "^$cmd\r\n.*$cmd$" { pass "$test" }
     -re /@ { unresolved "$test at prompt" }

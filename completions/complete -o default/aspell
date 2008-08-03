@@ -95,6 +95,4 @@ _aspell()
     fi
 } # _aspell()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_aspell  # Generate completions for first invocation

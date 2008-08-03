@@ -18,6 +18,4 @@ _xmms()
     fi
 } # _xmms()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_xmms  # Generate completions for first invocation

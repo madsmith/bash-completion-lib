@@ -30,6 +30,4 @@ _montage()
     fi
 } # _montage()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_montage  # Generate completions for first invocation

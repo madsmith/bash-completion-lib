@@ -24,6 +24,4 @@ _unace()
 	return 0
 } # _unace()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_unace  # Generate completions for first invocation

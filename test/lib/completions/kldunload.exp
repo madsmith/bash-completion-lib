@@ -13,9 +13,7 @@ set test "Tab should complete"
     # Try completion
 set cmd "kldunload "
 send "$cmd\t"
-  # NOTE: Wait in case `kldunload' isn't installed, so that "^$cdm.*$" doesn't match
-  #       before comp_install has finished
-sleep .1
+sync_after_tab
 expect {
     -re "^$cmd.*$" { pass "$test" }
     -re /@ { unresolved "$test at prompt" }
@@ -23,6 +21,7 @@ expect {
 }; # expect
 
 
+sleep .4
 sync_after_int
 
 

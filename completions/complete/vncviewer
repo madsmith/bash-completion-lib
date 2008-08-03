@@ -28,6 +28,4 @@ _vncviewer()
     return 0
 } # _vncviewer()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_vncviewer  # Generate completions for first invocation

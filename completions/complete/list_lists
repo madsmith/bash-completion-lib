@@ -17,6 +17,4 @@ _list_lists()
 	fi
 } # _list_lists()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_list_lists  # Generate completions for first invocation

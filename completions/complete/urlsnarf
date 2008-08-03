@@ -20,6 +20,4 @@ _urlsnarf()
 	fi
 } # _urlsnarf()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_urlsnarf  # Generate completions for first invocation

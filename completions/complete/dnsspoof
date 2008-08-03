@@ -24,6 +24,4 @@ _dnsspoof()
 	fi
 } # _dnsspoof()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_dnsspoof  # Generate completions for first invocation

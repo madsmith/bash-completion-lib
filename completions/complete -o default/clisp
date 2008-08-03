@@ -23,6 +23,4 @@ _clisp()
     return 0
 } # _clisp()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_clisp  # Generate completions for first invocation

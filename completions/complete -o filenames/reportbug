@@ -71,6 +71,4 @@ _reportbug()
     return 0
 } # _reportbug()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_reportbug  # Generate completions for first invocation

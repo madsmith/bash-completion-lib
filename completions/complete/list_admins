@@ -18,6 +18,4 @@ _list_admins()
 	fi
 } # _list_admins()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_list_admins  # Generate completions for first invocation

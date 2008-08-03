@@ -42,6 +42,4 @@ _mtx()
     return 0
 } # _mtx()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_mtx  # Generate completions for first invocation

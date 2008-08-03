@@ -16,6 +16,4 @@ _pkg_delete()
     return 0
 } # _pkg_delete()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_pkg_delete  # Generate completions for first invocation

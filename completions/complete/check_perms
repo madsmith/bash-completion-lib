@@ -13,6 +13,4 @@ _check_perms()
 	fi
 } # _check_perms()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_check_perms  # Generate completions for first invocation

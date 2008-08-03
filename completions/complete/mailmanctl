@@ -16,6 +16,4 @@ _mailmanctl()
 	fi
 } # _mailmanctl()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_mailmanctl  # Generate completions for first invocation

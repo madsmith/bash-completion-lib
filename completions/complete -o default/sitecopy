@@ -27,6 +27,4 @@ _sitecopy()
 	return 0
 } # _sitecopy()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_sitecopy  # Generate completions for first invocation

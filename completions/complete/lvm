@@ -133,6 +133,4 @@ _lvm()
     fi
 } # _lvm()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_lvm  # Generate completions for first invocation

@@ -17,6 +17,4 @@ _newlist()
 	fi
 } # _newlist()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_newlist  # Generate completions for first invocation

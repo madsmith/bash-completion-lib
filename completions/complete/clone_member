@@ -24,6 +24,4 @@ _clone_member()
 	fi
 } # _clone_member()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_clone_member  # Generate completions for first invocation

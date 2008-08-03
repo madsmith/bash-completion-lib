@@ -12,6 +12,4 @@ _sysctl()
     return 0
 } # _sysctl()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_sysctl  # Generate completions for first invocation

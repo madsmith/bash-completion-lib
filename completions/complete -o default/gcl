@@ -20,6 +20,4 @@ _gcl()
     return 0
 } # _gcl()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_gcl  # Generate completions for first invocation

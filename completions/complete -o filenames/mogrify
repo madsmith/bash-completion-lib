@@ -41,6 +41,4 @@ _mogrify()
     fi
 } # _mogrify()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_mogrify  # Generate completions for first invocation

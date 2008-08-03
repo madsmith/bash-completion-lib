@@ -55,6 +55,4 @@ _povray()
   esac
 } # _povray()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_povray  # Generate completions for first invocation

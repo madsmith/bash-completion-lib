@@ -17,6 +17,4 @@ _sshmitm()
 	fi
 } # _sshmitm()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_sshmitm  # Generate completions for first invocation

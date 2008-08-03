@@ -103,6 +103,4 @@ _iwconfig()
 
 }
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_iwconfig  # Generate completions for first invocation

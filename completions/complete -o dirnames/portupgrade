@@ -17,6 +17,4 @@ _portupgrade()
     return 0
 } # _portupgrade()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_portupgrade  # Generate completions for first invocation

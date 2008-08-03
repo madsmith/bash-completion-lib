@@ -26,6 +26,4 @@ _inject()
 	fi
 } # _inject()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_inject  # Generate completions for first invocation

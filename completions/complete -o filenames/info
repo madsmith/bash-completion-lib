@@ -47,6 +47,4 @@ _info()
     return 0
 } # _info()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_info  # Generate completions for first invocation

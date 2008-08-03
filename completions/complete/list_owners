@@ -18,6 +18,4 @@ _list_owners()
 	fi
 } # _list_owners()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_list_owners  # Generate completions for first invocation

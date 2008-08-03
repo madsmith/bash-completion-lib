@@ -51,6 +51,4 @@ _p4()
 	return 0
 } # _p4()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_p4  # Generate completions for first invocation

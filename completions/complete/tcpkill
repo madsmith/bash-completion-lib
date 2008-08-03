@@ -20,6 +20,4 @@ _tcpkill()
 	fi
 } # _tcpkill()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_tcpkill  # Generate completions for first invocation

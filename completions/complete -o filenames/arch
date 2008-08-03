@@ -43,6 +43,4 @@ _arch()
 	fi
 } # _arch()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_arch  # Generate completions for first invocation

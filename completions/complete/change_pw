@@ -24,6 +24,4 @@ _change_pw()
 	fi
 } # _change_pw()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_change_pw  # Generate completions for first invocation

@@ -28,6 +28,4 @@ _gnatmake()
 	fi
 } # _gnatmake()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_gnatmake  # Generate completions for first invocation

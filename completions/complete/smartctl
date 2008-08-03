@@ -187,6 +187,4 @@ _smartctl()
     fi
 } # _smartctl()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_smartctl  # Generate completions for first invocation

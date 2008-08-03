@@ -24,6 +24,4 @@ _iconv()
     fi
 } # _iconv()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_iconv  # Generate completions for first invocation

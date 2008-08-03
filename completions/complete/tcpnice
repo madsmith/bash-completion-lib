@@ -20,6 +20,4 @@ _tcpnice()
 	fi
 } # _tcpnice()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_tcpnice  # Generate completions for first invocation

@@ -41,6 +41,4 @@ _perl()
     return 0
 } # _perl()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_perl  # Generate completions for first invocation

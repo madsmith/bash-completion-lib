@@ -24,6 +24,4 @@ _animate()
     fi
 } # _animate()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_animate  # Generate completions for first invocation

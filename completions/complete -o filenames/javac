@@ -33,6 +33,4 @@ _javac()
     fi
 } # _javac()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_javac  # Generate completions for first invocation

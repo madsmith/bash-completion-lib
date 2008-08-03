@@ -32,6 +32,4 @@ _gkrellm()
 	fi
 } # _gkrellm()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_gkrellm  # Generate completions for first invocation

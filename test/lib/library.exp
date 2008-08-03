@@ -5,3 +5,11 @@ proc sync_after_int {} {
 	expect /@
 }; # sync_after_int()
 
+
+proc sync_after_tab {} {
+        # NOTE: Wait in case completion returns nothing - because `units' isn't
+        #       installed, so that "^$cdm.*$" doesn't match too early - before
+        #       comp_install has finished
+    sleep .4
+}; # sync_after_tab()
+

@@ -74,6 +74,4 @@ _dpkg()
     esac
 } # _dpkg()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_dpkg  # Generate completions for first invocation

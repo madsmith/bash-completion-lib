@@ -21,6 +21,4 @@ _macof()
 	fi
 } # _macof()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_macof  # Generate completions for first invocation

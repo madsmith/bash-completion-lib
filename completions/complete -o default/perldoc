@@ -70,6 +70,4 @@ _perldoc()
     esac
 } # _perldoc()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_perldoc  # Generate completions for first invocation

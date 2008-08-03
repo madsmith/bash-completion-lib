@@ -79,6 +79,4 @@ _module()
    return 0
 } # _module()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_module  # Generate completions for first invocation

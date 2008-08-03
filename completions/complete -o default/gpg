@@ -33,6 +33,4 @@ _gpg()
      fi
 } # _gpg()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_gpg  # Generate completions for first invocation

@@ -21,6 +21,4 @@ _sbcl()
     return 0
 } # _sbcl()
 
-comp_install  # Make completion persistent for subsequent invocations
 
-_sbcl  # Generate completions for first invocation
