@@ -36,7 +36,7 @@ compLocal="$HOME/.bash_completion_lib.d"
 # If `COMP_CACHE' is defined and points to a writable file, completions will be
 # read from this file.  Completions are stored in this file after the first run
 # of `bash_completion_lib'.
-#COMP_CACHE=$HOME/.bash_completion_lib~
+#COMP_CACHE=$HOME/.bash_completion_lib.d/cache~
     # Store current directory of this script
 COMP_DIR=$(cd "$(dirname "$(which "${BASH_SOURCE-$0}" 2> /dev/null)")" && /bin/pwd)
     # If COMP_LIB is unset, set COMP_LIB to default array
@@ -45,7 +45,7 @@ COMP_RESTRICT_BY_EXTENSION=${COMP_RESTRICT_BY_EXTENSION:-0}  # True (1) if restr
 
 
 # Load completion commands.
-# The appropriate script from the `completions' directory will be loaded.
+# The appropriate script from the `COMP_LIB' directory will be loaded.
 comp_load() {
         # Always load `comploadrc'
     . $COMP_DIR/comploadrc
@@ -61,7 +61,8 @@ comp_load() {
         # NOTE: Use 'head -1' to get the first match in case 'find' returns more than one match
 
     local cmd=${COMP_WORDS[0]} globs OLDIFS=$IFS IFS=$'\n'
-    # Create globbing search strings by appending COMP_LIB elements with: *.command, command!, command
+        # Create globbing search strings by appending COMP_LIB elements with:
+        # *.command, command!, command
     globs=( $(
         for dir in "${COMP_LIB[@]}"; do 
             echo \"$dir\"/\*/\*.$cmd
@@ -73,10 +74,20 @@ comp_load() {
     local script="$(eval find "${globs[@]}" 2> /dev/null | head -1)"
     local comp=${script##*/}  # Remove path
         # Remove possible .link only if exclamation mark (!) isn't last character
-    [[ ${comp: -1:1} == ! ]] || comp=${comp%.*}
+        # 1:  Strip up to and including first dot (*.)
+        # 2:  Strip possible leftmost dot (.) plus trail, i.e. remainder of 1.
+        #                            +--------2--------+
+        #                            |       +---1----+|
+    [[ ${comp: -1:1} == ! ]] || comp=${comp%.${comp#*.}}
     local path=${script%/*}   # Remove comp
+        # Determine if function '_comp' was available before sourcing completion
+    declare -F _$comp &> /dev/null
+    local was__comp_declared=$?
         # Source completion of command to complete
-    [ "$script" -a -r "$path/$comp" ] && . "$path/$comp"
+        # If sourcing returns true and function '_$comp' wasn't available (1),
+        # but has become available now, automatically call `comp_install' and
+        # '_$comp'
+    [ "$script" -a -r "$path/$comp" ] && . "$path/$comp" && [ $was__comp_declared -eq 1 ] && declare -F _$comp &> /dev/null && _comp_install $comp "$path" && _$comp
         # Unset `comploadrc' variables
     unset -v bashdefault default dirnames filenames nospace plusdirs UNAME
 } # comp_load()
@@ -125,8 +136,9 @@ comp_dir2args() {
                 if comp_dir2args "./$i"; then
                     cd "$i" && {
                         for comp in *; do
-                                # If name ends with exclamation mark (!) only strip last exclamation mark,
-                                # otherwise strip till first dot (*.)
+                                #  If name ends with exclamation mark (!), only
+                                #+ strip last exclamation mark, otherwise strip
+                                #+ up to and including first dot (*.)
                             [[ ${comp: -1:1} == ! ]] && comp=${comp%!} || comp=${comp#*.}
                             complete -F comp_load $COMP_ARGS $comp
                         done

@@ -62,6 +62,18 @@ expect {
 sync_after_int
 
 
+set test "Completion of .. should use cdots"
+send "\.\. \t"
+expect {
+    -re "\.\. cdots $" { pass "$test" }
+    -re "\.\. \r\n +.*/install/compLib/@\.\. $" { fail "$test" }
+    -re /install/@ { fail "$test" }
+}; # expect
+
+
+sync_after_int
+
+
     # Reload bash_completion_lib with new `COMP_LIB' settings
 set cmd "COMP_LIB=(\"\$PWD/.bash_completion_lib 2.d/completions\")"
 send "$cmd\r"
