@@ -1,0 +1,37 @@
+proc setup {} {
+}; # setup()
+
+
+proc teardown {} {
+}; # teardown()
+
+
+setup
+
+
+set test "Tab should complete scp"
+
+    # Retrieving pwd from ssh-host `bash_completion_lib' yields error? 
+    # NOTE: The host should be set in e.g. .ssh/config or /etc/ssh_config
+if { [catch {
+    exec -- ssh -o "Batchmode yes" bash_completion_lib pwd 2>> /dev/null
+} host_pwd] } {
+    # Yes, retrieving pwd from ssh yields error; reset `host_pwd'
+    set host_pwd ""
+}
+
+    # Try completion
+set cmd "scp bash_completion_lib:"
+send "$cmd\t"
+sync_after_tab
+expect {
+    -re "^$cmd$host_pwd.*$" { pass "$test" }
+    -re /@ { unresolved "$test at prompt" }
+}; # expect
+
+
+sleep .5
+sync_after_int
+
+
+teardown

@@ -1,0 +1,4 @@
+    # Return completions for first run via comp_load()
+COMPREPLY=($(compgen -A variable -- "${COMP_WORDS[COMP_CWORD]}"))
+    # Make completion persistent
+comp_install -A variable

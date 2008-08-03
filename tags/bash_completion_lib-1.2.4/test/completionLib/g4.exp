@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p g4"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o default -F comp_load g4\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/g4.exp"
+
+
+set test "Completion via _p4() should be installed"
+set cmd "complete -p g4"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o default -F _p4 g4\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/g4.exp"

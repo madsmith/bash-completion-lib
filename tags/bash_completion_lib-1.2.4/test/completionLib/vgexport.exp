@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p vgexport"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load vgexport\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/vgexport.exp"
+
+
+set test "Completion via _vgport() should be installed"
+set cmd "complete -p vgexport"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _vgport vgexport\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/vgexport.exp"

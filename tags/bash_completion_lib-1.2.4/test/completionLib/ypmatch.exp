@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p ypmatch"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load ypmatch\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/ypmatch.exp"
+
+
+set test "Completion via _ypmatch() should be installed"
+set cmd "complete -p ypmatch"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _ypmatch ypmatch\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/ypmatch.exp"

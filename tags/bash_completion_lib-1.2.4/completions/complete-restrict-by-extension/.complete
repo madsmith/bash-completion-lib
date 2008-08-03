@@ -1,0 +1,1 @@
+(( $COMP_RESTRICT_BY_EXTENSION )) && COMP_ARGS="-o filenames"

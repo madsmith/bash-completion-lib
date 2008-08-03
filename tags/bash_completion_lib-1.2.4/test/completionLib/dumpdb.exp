@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p dumpdb"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames -F comp_load dumpdb\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/dumpdb.exp"
+
+
+set test "Completion via _dumpdb() should be installed"
+set cmd "complete -p dumpdb"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames -F _dumpdb dumpdb\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/dumpdb.exp"

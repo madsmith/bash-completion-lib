@@ -1,0 +1,1 @@
+comp_filedir_xspec "'!*.@(rm?(j)|ra?(m)|smi?(l))'"

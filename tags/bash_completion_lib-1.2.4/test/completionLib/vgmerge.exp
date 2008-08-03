@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p vgmerge"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load vgmerge\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/vgmerge.exp"
+
+
+set test "Completion via _vgmerge() should be installed"
+set cmd "complete -p vgmerge"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _vgmerge vgmerge\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/vgmerge.exp"

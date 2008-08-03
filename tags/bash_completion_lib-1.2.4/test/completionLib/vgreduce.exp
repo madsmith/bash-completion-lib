@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p vgreduce"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load vgreduce\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/vgreduce.exp"
+
+
+set test "Completion via _vgreduce() should be installed"
+set cmd "complete -p vgreduce"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _vgreduce vgreduce\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/vgreduce.exp"

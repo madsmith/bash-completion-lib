@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p pkg_info"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o dirnames -F comp_load pkg_info\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/pkg_info.exp"
+
+
+set test "Completion via _pkg_delete() should be installed"
+set cmd "complete -p pkg_info"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o dirnames -F _pkg_delete pkg_info\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/pkg_info.exp"

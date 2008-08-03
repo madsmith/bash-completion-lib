@@ -1,0 +1,13 @@
+# Slackware Linux removepkg completion
+#
+_removepkg()
+{
+    local packages cur
+
+    COMPREPLY=()
+    cur=`_get_cword`
+
+    COMPREPLY=( $( (cd /var/log/packages && compgen -f -- "$cur") ) )
+} # _removepkg()
+
+

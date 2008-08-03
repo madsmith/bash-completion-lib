@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p cardctl"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load cardctl\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/cardctl.exp"
+
+
+set test "Completion via _cardctl() should be installed"
+set cmd "complete -p cardctl"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _cardctl cardctl\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/cardctl.exp"

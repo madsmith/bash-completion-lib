@@ -1,0 +1,338 @@
+#!/bin/bash
+
+[ -n "${BASH_COMPLETION_DEBUG:-}" ] && set -v || set +v
+
+
+# This function checks whether a given readline variable
+# is `on'.
+#
+_rl_enabled() 
+{
+    [[ "$( bind -v )" = *$1+([[:space:]])on* ]]
+}
+
+
+# Generate completions for file-exclude specifications.  Directories must be allowed.
+# @param string $1  Exclude pattern for complete/compgen
+comp_filedir_xspec() {
+    local cur=`_get_cword` IFS=$'\t\n'
+
+    _expand || return 0
+
+    COMPREPLY=( 
+        $( eval compgen -f -X "$1" -- "\"${cur#[\`\"\']}\"" 2>/dev/null ) \
+        $( compgen -d -- $cur ) 
+    )
+} # comp_filedir_xspec()
+
+
+# This function performs file and directory completion. It's better than
+# simply using 'compgen -f', because it honours spaces in filenames.
+# If passed -d, it completes only on directories. If passed anything else,
+# it's assumed to be a file glob to complete on.
+#
+_filedir()
+{
+	local IFS=$'\t\n' xspec #glob
+
+	_expand || return 0
+
+	#glob=$(set +o|grep noglob) # save glob setting.
+	#set -f		 # disable pathname expansion (globbing)
+
+	if [ "${1:-}" = -d ]; then
+		COMPREPLY=( ${COMPREPLY[@]:-} $( compgen -d -- $cur ) )
+		#eval "$glob"    # restore glob setting.
+		return 0
+	fi
+
+	xspec=${1:+"!*.$1"}	# set only if glob passed in as $1
+	COMPREPLY=( ${COMPREPLY[@]:-} $( compgen -f -X "$xspec" -- "$cur" ) \
+		    $( compgen -d -- "$cur" ) )
+	#eval "$glob"    # restore glob setting.
+}
+
+
+# Get the word to complete
+# This is nicer than ${COMP_WORDS[$COMP_CWORD]}, since it handles cases
+# where the user is completing in the middle of a word.
+# (For example, if the line is "ls foobar",
+# and the cursor is here -------->   ^
+# it will complete just "foo", not "foobar", which is what the user wants.)
+#
+# Accepts an optional parameter indicating which characters out of
+# $COMP_WORDBREAKS should NOT be considered word breaks. This is useful
+# for things like scp where we want to return host:path and not only path.
+_get_cword()
+{
+	local i
+	local WORDBREAKS=${COMP_WORDBREAKS}
+	if [ -n $1 ]; then
+		for (( i=0; i<${#1}; ++i )); do
+			local char=${1:$i:1}
+			WORDBREAKS=${WORDBREAKS//$char/}
+		done
+	fi
+	local cur=${COMP_LINE:0:$COMP_POINT}
+	local tmp="${cur}"
+	local word_start=`expr "$tmp" : '.*['"${WORDBREAKS}"']'`
+	while [ "$word_start" -ge 2 ]; do
+        	local char=${cur:$(( $word_start - 2 )):1}
+		if [ "$char" != "\\" ]; then
+			break
+		fi
+		tmp=${COMP_LINE:0:$(( $word_start - 2 ))}
+		word_start=`expr "$tmp" : '.*['"${WORDBREAKS}"']'`
+	done
+
+
+	cur=${cur:$word_start}
+	echo $cur
+}
+
+
+# This function completes on signal names
+#
+_signals()
+{
+	local i
+
+	# standard signal completion is rather braindead, so we need
+	# to hack around to get what we want here, which is to
+	# complete on a dash, followed by the signal name minus
+	# the SIG prefix
+	COMPREPLY=( $( compgen -A signal SIG${cur#-} ))
+	for (( i=0; i < ${#COMPREPLY[@]}; i++ )); do
+		COMPREPLY[i]=-${COMPREPLY[i]#SIG}
+	done
+}
+
+# This function completes on configured network interfaces
+#
+_configured_interfaces()
+{
+	if [ -f /etc/debian_version ]; then
+		# Debian system
+		COMPREPLY=( $( sed -ne 's|^iface \([^ ]\+\).*$|\1|p' \
+			       /etc/network/interfaces ) )
+	elif [ -f /etc/SuSE-release ]; then
+		# SuSE system
+		COMPREPLY=( $( command ls \
+			/etc/sysconfig/network/ifcfg-* | \
+			sed -ne 's|.*ifcfg-\('$cur'.*\)|\1|p' ) )
+	elif [ -f /etc/pld-release ]; then
+		# PLD Linux
+		COMPREPLY=( $( command ls -B \
+			/etc/sysconfig/interfaces | \
+			sed -ne 's|.*ifcfg-\('$cur'.*\)|\1|p' ) )
+	else
+		# Assume Red Hat
+		COMPREPLY=( $( command ls \
+			/etc/sysconfig/network-scripts/ifcfg-* | \
+			sed -ne 's|.*ifcfg-\('$cur'.*\)|\1|p' ) )
+	fi
+}
+
+# This function completes on all available network interfaces
+# -a: restrict to active interfaces only
+# -w: restrict to wireless interfaces only
+#
+_available_interfaces()
+{
+	local cmd
+
+	if [ "${1:-}" = -w ]; then
+		cmd="iwconfig"
+	elif [ "${1:-}" = -a ]; then
+		cmd="ifconfig"
+	else
+		cmd="ifconfig -a"
+	fi
+
+	COMPREPLY=( $( eval $cmd 2>/dev/null | \
+		sed -ne 's|^\('$cur'[^[:space:][:punct:]]\{1,\}\).*$|\1|p') )
+}
+
+# This function expands tildes in pathnames
+#
+_expand()
+{
+	[ "$cur" != "${cur%\\}" ] && cur="$cur\\"
+
+	# expand ~username type directory specifications
+	if [[ "$cur" == \~*/* ]]; then
+		eval cur=$cur
+		
+	elif [[ "$cur" == \~* ]]; then
+		cur=${cur#\~}
+		COMPREPLY=( $( compgen -P '~' -u $cur ) )
+		return ${#COMPREPLY[@]}
+	fi
+}
+
+# This function completes on process IDs.
+# AIX and Solaris ps prefers X/Open syntax.
+[ $UNAME = SunOS -o $UNAME = AIX ] &&
+_pids()
+{
+	COMPREPLY=( $( compgen -W '$( command ps -efo pid | sed 1d )' -- $cur ))
+} ||
+_pids()
+{
+	COMPREPLY=( $( compgen -W '$( command ps axo pid | sed 1d )' -- $cur ) )
+}
+
+# This function completes on process group IDs.
+# AIX and SunOS prefer X/Open, all else should be BSD.
+[ $UNAME = SunOS -o $UNAME = AIX ] &&
+_pgids()
+{
+	COMPREPLY=( $( compgen -W '$( command ps -efo pgid | sed 1d )' -- $cur ))
+} ||
+_pgids()
+{
+	COMPREPLY=( $( compgen -W '$( command ps axo pgid | sed 1d )' -- $cur ))
+}
+
+# This function completes on user IDs
+#
+_uids()
+{
+	if type getent &>/dev/null; then
+	    COMPREPLY=( $( getent passwd | \
+			    awk -F: '{if ($3 ~ /^'$cur'/) print $3}' ) )
+	elif type perl &>/dev/null; then
+	    COMPREPLY=( $( compgen -W '$( perl -e '"'"'while (($uid) = (getpwent)[2]) { print $uid . "\n" }'"'"' )' -- $cur ) )
+	else
+	    # make do with /etc/passwd
+	    COMPREPLY=( $( awk 'BEGIN {FS=":"} {if ($3 ~ /^'$cur'/) print $3}'\
+			    /etc/passwd ) )
+	fi
+}
+
+# This function completes on group IDs
+#
+_gids()
+{
+	if type getent &>/dev/null; then
+	    COMPREPLY=( $( getent group | \
+			    awk -F: '{if ($3 ~ /^'$cur'/) print $3}' ) )
+	elif type perl &>/dev/null; then
+	    COMPREPLY=( $( compgen -W '$( perl -e '"'"'while (($gid) = (getgrent)[2]) { print $gid . "\n" }'"'"' )' -- $cur ) )
+	else
+	    # make do with /etc/group
+	    COMPREPLY=( $( awk 'BEGIN {FS=":"} {if ($3 ~ /^'$cur'/) print $3}'\
+			    /etc/group ) )
+	fi
+}
+
+# This function completes on services
+#
+_services()
+{
+	local sysvdir famdir
+	[ -d /etc/rc.d/init.d ] && sysvdir=/etc/rc.d/init.d || sysvdir=/etc/init.d
+	famdir=/etc/xinetd.d
+	COMPREPLY=( $( builtin echo $sysvdir/!(*.rpmsave|*.rpmorig|*~|functions)) )
+
+	if [ -d $famdir ]; then
+		COMPREPLY=( ${COMPREPLY[@]} $( builtin echo $famdir/!(*.rpmsave|*.rpmorig|*~)) )
+	fi
+
+	COMPREPLY=( $( compgen -W '${COMPREPLY[@]#@($sysvdir|$famdir)/}' -- $cur ) )
+}
+
+# This function complete on modules
+#
+_modules()
+{
+	local modpath
+	modpath=/lib/modules/$1
+	COMPREPLY=( $( command ls -R $modpath | \
+			sed -ne 's/^\('$cur'.*\)\.k\?o\(\|.gz\)$/\1/p') )
+}
+
+# this function complete on user:group format
+#
+_usergroup()
+{
+	local IFS=$'\n'
+	cur=${cur//\\\\ / }
+	if [[ $cur = *@(\\:|.)* ]] && [ -n "$bash205" ]; then
+		user=${cur%%*([^:.])}
+		COMPREPLY=( $(compgen -P ${user/\\\\} -g -- ${cur##*[.:]}) )
+	elif [[ $cur = *:* ]] && [ -n "$bash205" ]; then
+		COMPREPLY=( $( compgen -g -- ${cur##*[.:]} ) )
+	else
+		COMPREPLY=( $( compgen -S : -u -- $cur ) )
+	fi
+}
+
+# this function count the number of mandatory args
+#
+_count_args()
+{
+	args=1
+	for (( i=1; i < COMP_CWORD; i++ )); do
+		if [[ "${COMP_WORDS[i]}" != -* ]]; then
+			args=$(($args+1))
+		fi
+	done
+}
+
+
+# Include completion subroutine - if not already loaded.
+# The subroutine is assumed to reside in a file named after the subroutine,
+# located in $COMP_DIR/include.  E.g. cd() should reside in file $COMP_DIR/include/cd.
+# @param $* string  Subroutine(s) to include
+comp_include() {
+    for s; do
+        declare -F "$s" &> /dev/null || { [ -r "$COMP_DIR/include/$s" ] && . "$COMP_DIR/include/$s"; }
+    done
+} # comp_include()
+
+
+# Install real completion
+# See also: _comp_install()
+# @param $* string  (optional) Arguments to use for completion.  Default is "-F _${BASH_ARGV[0]}"
+comp_install() {
+    local comp=${BASH_ARGV[0]##*/}  # ${..##*/}: strip up to and including last slash
+    local dir="${BASH_ARGV[0]%/$comp}"  # Extract dir from completion
+
+    _comp_install $comp "$dir" "$*"
+} # comp_install()
+
+
+# Install real completion
+# NOTE: The default function of the original bash_completion is "_$command".
+#       A less collision-prone default might be "_comp_$command", e.g.
+#       `_comp_ssh' instead of `_ssh' -- FVu, Sat Apr  5 09:21:21 CEST 2008
+# @param $1 string comp
+# @param $2 string dir
+# @param $* string  (optional) Arguments to use for completion.  Default is "-F _${BASH_ARGV[0]}"
+_comp_install() {
+    local comp=$1
+    shift
+    local dir="$1"
+    shift
+        # Don't install completion if 'comp_dir2args()' returns false
+    if comp_dir2args "$dir"; then
+        eval complete ${*:--F _$comp} $COMP_ARGS ${COMP_WORDS[0]}
+    else
+        complete -r $comp
+    fi
+    unset -v COMP_ARGS
+} # _comp_install()
+
+
+# Load and install completion.
+# Completions are generated via compgen to satisfy the first run.  Completion
+# is installed for subsequent completion invocations.
+# @param string $1  Complete/compgen arguments
+comp_load_and_install() {
+        # Provide completions for the first time completion is invoked
+    COMPREPLY=(
+        $(eval compgen -f $1 -- "${COMP_WORDS[COMP_CWORD]}")
+    )
+    comp_install "$1"  # Make completion persistent for subsequent invocations
+} # comp_load_and_install()

@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p readonly"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load readonly\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/readonly.exp"
+
+
+set test "Completion via -v should be installed"
+set cmd "complete -p readonly"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -v readonly\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/readonly.exp"

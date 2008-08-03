@@ -1,0 +1,27 @@
+# Mailman completion by Guillaume Rousse <rousse@ccr.jussieu.fr>
+#
+
+comp_include _mailman_lists
+
+_clone_member()
+{
+	local cur prev
+
+	COMPREPLY=()
+	cur=`_get_cword`
+	prev=${COMP_WORDS[COMP_CWORD-1]}
+
+	case "$prev" in
+		-@(l|-listname=))
+			_mailman_lists
+			return 0
+			;;
+	esac
+
+	if [[ "$cur" == -* ]]; then
+		COMPREPLY=( $( compgen -W '-l --listname= --remove -r \
+		--admin -a --quiet -q --nomodify -n --help -h' -- $cur ) )
+	fi
+} # _clone_member()
+
+

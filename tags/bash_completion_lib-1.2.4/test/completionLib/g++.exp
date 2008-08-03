@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p g++"
+send "$cmd\r"
+expect {
+    -re "^complete -p g\\+\\+\r\ncomplete -o filenames -F comp_load g\\+\\+\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/g++.exp"
+
+
+set test "Completion via _gcc() should be installed"
+set cmd "complete -p g++"
+send "$cmd\r"
+expect {
+    -re "^complete -p g\\+\\+\r\ncomplete -o filenames -F _gcc g\\+\\+\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/g++.exp"

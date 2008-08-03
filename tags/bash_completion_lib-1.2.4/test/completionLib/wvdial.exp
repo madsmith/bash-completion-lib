@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p wvdial"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load wvdial\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/wvdial.exp"
+
+
+set test "Completion via _wvdial() should be installed"
+set cmd "complete -p wvdial"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _wvdial wvdial\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/wvdial.exp"

@@ -1,0 +1,4 @@
+type complete-ant-cmd.pl &>/dev/null && \
+    COMP_ARGS="-C complete-ant-cmd.pl $filenames" || \
+    COMP_ARGS="$filenames"
+true
