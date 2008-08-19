@@ -27,10 +27,6 @@ generate_completion() {
 $2()
 {
 } # $2()
-
-comp_install${comp_install_arg}  # Make completion persistent for subsequent invocations
-
-$2  # Generate completions for first invocation
 BASH
     vi -c 'set paste' "$path"
 fi
