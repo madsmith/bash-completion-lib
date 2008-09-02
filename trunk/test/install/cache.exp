@@ -58,7 +58,7 @@ set test "COMP_CACHE should point to filled file after reassignment and second i
     # Filename of secondary cache file - containing spaces
 set cache2 [pwd]/install/.bash_completion_lib.d/cache\ 2~
     # Make sure secondary cache file is deleted
-file delete cache2
+file delete $cache2
     # Allow cache to be generated automatically
 set cmd "COMP_CACHE=\"$cache2\""
 send "$cmd\r"
@@ -69,7 +69,7 @@ set cmd "source ../../bash_completion_lib"
 send "$cmd\r"
 expect -ex "$cmd\r\n"
 expect -ex "/install/@"
-if {[file size $cache2]} {pass ""} else {fail "$test"}
+if {[file size $cache2]} {pass "$test"} else {fail "$test"}
 
 
 
@@ -77,7 +77,7 @@ set test "COMP_CACHE should be disabled if COMP_CACHE is null"
     # Filename of tertiary cache file
 set cache3 [pwd]/install/.bash_completion_lib.d/cache3~
     # Make sure tertiary cache file is deleted
-file delete cache3
+file delete $cache3
     # Disable cache
 set cmd "COMP_CACHE="
 send "$cmd\r"
@@ -91,4 +91,25 @@ expect -ex "/install/@"
 if {[file exists $cache3]} {fail "$test"} else {pass ""}
 
 
+
+set test "Non-existing COMP_CACHE file should fail silently"
+    # Filename of tertiary cache file
+set cache [pwd]/install/.bash_completion_lib.d/cache~
+    # Make sure cache file is deleted
+file delete $cache
+    # Allow cache to be generated automatically
+set cmd "COMP_CACHE=\"$cache\""
+send "$cmd\r"
+expect -ex "$cmd\r\n"
+expect -ex "/install/@"
+    # Load completions
+set cmd "source ../../bash_completion_lib"
+send "$cmd\r"
+expect {
+    -re "$cmd\r\n/install/@" {pass "$test"}
+    -re /install/@ {fail "$test"}
+}
+
+
+    
 teardown
