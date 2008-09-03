@@ -93,7 +93,7 @@ if {[file exists $cache3]} {fail "$test"} else {pass ""}
 
 
 set test "Non-existing COMP_CACHE file should fail silently"
-    # Filename of tertiary cache file
+    # Filename of cache file
 set cache [pwd]/install/.bash_completion_lib.d/cache~
     # Make sure cache file is deleted
 file delete $cache
@@ -110,6 +110,49 @@ expect {
     -re /install/@ {fail "$test"}
 }
 
+
+
+set test "Cache file should not be regenerated if versions match"
+    # Filename of cache file
+set cache [pwd]/install/.bash_completion_lib.d/cache~
+    # Make sure cache file is deleted
+file delete $cache
+    # Allow cache to be generated automatically
+set cmd "COMP_CACHE=\"$cache\""
+send "$cmd\r"
+expect -ex "$cmd\r\n"
+expect -ex "/install/@"
+    # Load completions for the first time
+set cmd "source ../../bash_completion_lib"
+send "$cmd\r"
+expect -ex "$cmd\r\n"
+expect -ex "/install/@"
+    # Get cache size
+set size1 [file size $cache]
+    # Load completions for the second time
+set cmd "source ../../bash_completion_lib"
+send "$cmd\r"
+expect -ex "$cmd\r\n"
+expect -ex "/install/@"
+    # Get cache size
+set size2 [file size $cache]
+    # The cache shouldn't have been modified by the second load
+if { $size1 == $size2 } {pass "$test"} {fail "$test"}
+
+set test "Cache file should be regenerated if versions mismatch"
+    # Modify cache-version
+exec sed -e "s/^COMP_CACHE_VERSION=.*/COMP_CACHE_VERSION=foo/" -i $cache
+    # Get the new cache size
+set size2 [file size $cache]
+    # Load completions for the third time
+set cmd "source ../../bash_completion_lib"
+send "$cmd\r"
+expect -ex "$cmd\r\n"
+expect -ex "/install/@"
+    # Get cache size
+set size3 [file size $cache]
+    # The cache should have been modified by the third load
+if { $size2 != $size3 } {pass "$test"} {fail "$test, size1: $size1, size3: $size3"}
 
     
 teardown
