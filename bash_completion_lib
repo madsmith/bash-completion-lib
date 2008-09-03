@@ -41,7 +41,10 @@ compLocal="$HOME/.bash_completion_lib.d"
 COMP_DIR=$(cd "$(dirname "$(which "${BASH_SOURCE-$0}" 2> /dev/null)")" && /bin/pwd)
     # If COMP_LIB is unset, set COMP_LIB to default array
 [ "$COMP_LIB" ] || COMP_LIB=("$compLocal/completions" "$COMP_DIR/completions")
-COMP_RESTRICT_BY_EXTENSION=${COMP_RESTRICT_BY_EXTENSION:-0}  # True (1) if restricted completion is enabled, False (0, default) if not
+    # True (1) if restricted completion is enabled, False (0, default) if not
+COMP_RESTRICT_BY_EXTENSION=${COMP_RESTRICT_BY_EXTENSION:-0}
+    # Version of bash-completion-lib
+COMP_VERSION=bash_completion_lib-1.2.dev.171M
 
 
 # Load completion commands.
@@ -120,8 +123,8 @@ comp_dir2args() {
 
     # Install completion for all files in `./completions/*'
  
-	# Use cache if set
-[ "$COMP_CACHE" ] && [ -r "$COMP_CACHE" ] && . "$COMP_CACHE" || {
+	# Use cache if set, and versions (COMP_VERSION and COMP_CACHE_VERSION) match
+[ "$COMP_CACHE" ] && [ -r "$COMP_CACHE" ] && . "$COMP_CACHE" && [ $COMP_VERSION = $COMP_CACHE_VERSION ] || {
     # No, cache isn't set or isn't available; load completions
     compEnvShoptOptions=$(shopt -p dotglob failglob nullglob)
     shopt -s nullglob
@@ -151,7 +154,9 @@ comp_dir2args() {
 		# *  If COMP_CACHE is not empty:
 		#    -	create directory `$compLocal' if necessary
 		#    -	generate cache file
-	    [ "${COMP_CACHE=$compLocal/cache~}" ] && { [ -d "$compLocal" ] || mkdir "$compLocal"; } && complete -p > "$COMP_CACHE"
+	    [ "${COMP_CACHE=$compLocal/cache~}" ] && 
+	    { [ -d "$compLocal" ] || mkdir "$compLocal"; } && 
+	    { echo COMP_CACHE_VERSION=$COMP_VERSION; complete -p; } > "$COMP_CACHE"
 
 	    eval "$compEnvShoptOptions" 2> /dev/null  # Restore `shopt' options
 		# Unset `comploadrc' variables
@@ -160,4 +165,4 @@ comp_dir2args() {
 	fi
     done
 }
-unset -v args comp COMP_ARGS compEnvShoptOptions compLocal compPwd i j k
+unset -v args comp COMP_ARGS COMP_VERSION compEnvShoptOptions compLocal compPwd i j k
