@@ -1,0 +1,30 @@
+# Mailman completion by Guillaume Rousse <rousse@ccr.jussieu.fr>
+#
+
+comp_include _mailman_lists
+
+_remove_members()
+{
+	local cur prev
+
+	COMPREPLY=()
+	cur=`_get_cword`
+	prev=${COMP_WORDS[COMP_CWORD-1]}
+
+	case "$prev" in
+		-@(f|-file=))
+			_filedir
+			return 0
+			;;
+	esac
+
+	if [[ "$cur" == -* ]]; then
+		COMPREPLY=( $( compgen -W '--file= -f --all -a \
+			--fromall --nouserack -n --noadminack -N \
+			--help -h' -- $cur ) )
+	else
+		_mailman_lists
+	fi
+} # _remove_members()
+
+

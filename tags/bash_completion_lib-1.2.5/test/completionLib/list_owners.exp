@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p list_owners"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load list_owners\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/list_owners.exp"
+
+
+set test "Completion via _list_owners() should be installed"
+set cmd "complete -p list_owners"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _list_owners list_owners\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/list_owners.exp"

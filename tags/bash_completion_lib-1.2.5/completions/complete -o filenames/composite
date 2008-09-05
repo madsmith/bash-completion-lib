@@ -1,0 +1,33 @@
+comp_include _ImageMagick
+
+_composite()
+{
+    local cur
+
+    COMPREPLY=()
+    cur=`_get_cword`
+
+    _ImageMagick
+
+    if [[ "$cur" == -* ]]; then
+        COMPREPLY=( $( compgen -W '-affine -authenticate \
+            -blue-primary -colors -colorspace -comment -compose \
+            -compress -debug -density -depth -displace -display \
+            -dispose -dissolve -dither -encoding -endian -extract \
+            -filter -font -geometry -gravity -green-primary -help \
+            -interlace -label -limit -log -matte -monochrome \
+            -negate -page -profile -quality -red-primary -rotate \
+            -resize -sampling-factor -scene -sharpen -size \
+            -stegano -stereo -thumbnail -tile -transform \
+            -treedepth -type -units -unsharp -verbose -version \
+            -virtual-pixel -watermark -white-point -write' \
+            -- $cur ) )
+    elif [[ "$cur" == +* ]]; then
+        COMPREPLY=( $( compgen -W '+compress +debug +dither +endian +label \
+            +matte +negate +page +write' -- $cur ) ) 
+    else
+        _filedir
+    fi
+} # _composite()
+
+

@@ -1,0 +1,31 @@
+comp_include _pg_databases _pg_users
+
+_createdb()
+{
+    local cur prev
+
+    COMPREPLY=()
+    cur=`_get_cword`
+    prev=${COMP_WORDS[COMP_CWORD-1]}
+
+    case "$prev" in
+    -@(h|-host=)) 
+        _known_hosts
+        return 0
+        ;;
+    -@(U|-username=))
+        _pg_users
+        return 0
+        ;;
+    esac
+
+    if [[ "$cur" == -* ]]; then
+        COMPREPLY=( $( compgen -W '-D -T -E -h -p -U -W -e -q \
+            --location= --template= --encoding= --host= --port= \
+            --username= --password --echo --quiet --help' -- $cur ))
+    else
+        _pg_databases
+    fi
+} # _createdb()
+
+

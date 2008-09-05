@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p update-rc.d"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load update-rc.d\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/update-rc.d.exp"
+
+
+set test "Completion via _update_rc_d() should be installed"
+set cmd "complete -p update-rc.d"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _update_rc_d update-rc.d\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/update-rc.d.exp"

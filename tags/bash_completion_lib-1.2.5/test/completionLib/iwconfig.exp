@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p iwconfig"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load iwconfig\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/iwconfig.exp"
+
+
+set test "Completion via _iwconfig() should be installed"
+set cmd "complete -p iwconfig"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _iwconfig iwconfig\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/iwconfig.exp"

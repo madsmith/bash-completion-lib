@@ -1,0 +1,39 @@
+# postalias(1) and postmap(1)
+#
+_postmap()
+{
+    local cur prev len idx
+
+    cur=`_get_cword`
+    prev=${COMP_WORDS[COMP_CWORD-1]}
+
+    if [[ $cur == '-' ]]; then
+        COMPREPLY=(-N -f -i -n -o -p -r -v -w -c -d -q)
+        return 0
+    fi
+    if [[ $prev == '-c' ]]; then
+        _filedir -d
+        return 0
+    fi
+    if [[ $prev == -[dq] ]]; then
+        return 0
+    fi
+
+    if [[ "$cur" == *:* ]]; then
+            COMPREPLY=( $( compgen -f -- ${cur#*:} ) )
+    else
+        len=${#cur}
+        idx=0
+        for pval in $( /usr/sbin/postconf -m ); do
+            if [[ "$cur" == "${pval:0:$len}" ]]; then
+                COMPREPLY[$idx]="$pval:"
+                idx=$(($idx+1))
+            fi
+        done
+        if [[ $idx -eq 0 ]]; then
+            COMPREPLY=( $( compgen -f -- "$cur" ) )
+        fi
+    fi
+    return 0
+}
+_postmap

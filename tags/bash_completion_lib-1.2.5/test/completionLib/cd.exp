@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p cd"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames -o nospace -F comp_load cd\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/cd.exp"
+
+
+set test "Completion via _cd() should be installed"
+set cmd "complete -p cd"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames -o nospace -F _cd cd\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/cd.exp"

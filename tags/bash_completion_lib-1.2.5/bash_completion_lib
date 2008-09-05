@@ -1,0 +1,168 @@
+#-- bash_completion_lib -----------------------------------------------
+# Programmable completion functions for bash 3.x.
+#
+# Copyright (C) Freddy Vulto <fvulto@gmail.com>
+#
+# Versions
+# - 2008: This release.  Completions are split into separate files
+# - 2006: Unsplit version written by Ian Macdonald <ian@caliban.org>
+#	  See: http://caliban.org/bash/
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software 
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, 
+# MA  02110-1301, USA
+#
+# The latest version of this software can be obtained here:
+# http://fvue.nl/wiki/Bash_completion_lib
+
+
+    # Extended globbing and programmable completion have to be
+    # set in order for completion to work
+shopt -s extglob progcomp
+compPwd="$PWD"
+compLocal="$HOME/.bash_completion_lib.d"
+
+# If `COMP_CACHE' is defined and points to a writable file, completions will be
+# read from this file.	Completions are stored in this file after the first run
+# of `bash_completion_lib'.
+#COMP_CACHE=$HOME/.bash_completion_lib.d/cache~
+    # Store current directory of this script
+COMP_DIR=$(cd "$(dirname "$(which "${BASH_SOURCE-$0}" 2> /dev/null)")" && /bin/pwd)
+    # If COMP_LIB is unset, set COMP_LIB to default array
+[ "$COMP_LIB" ] || COMP_LIB=("$compLocal/completions" "$COMP_DIR/completions")
+    # True (1) if restricted completion is enabled, False (0, default) if not
+COMP_RESTRICT_BY_EXTENSION=${COMP_RESTRICT_BY_EXTENSION:-0}
+    # Version of bash-completion-lib
+COMP_VERSION=bash_completion_lib-1.2.dev.171:172M
+
+
+# Load completion commands.
+# The appropriate script from the `COMP_LIB' directory will be loaded.
+comp_load() {
+	# Always load `comploadrc'
+    . $COMP_DIR/comploadrc
+	# Load `completionrc' once
+    declare -F comp_install &> /dev/null || . $COMP_DIR/completionrc
+	# Find completion script
+	# NOTE: A search is performed for both `command' and `*.command'.
+	#	Syntax `*.command' is a kind of symlink notation.  E.g.
+	#	`make.gnumake' lets `make' handle the completion of `gnumake'.
+	#	Symlinks are not used, because they're not available on every system.
+	#	If a command ends with an exclamation mark (!), symlink notation is disabled.
+	#	Variables: script = path/comp, comp = target | target.link
+	# NOTE: Use 'head -1' to get the first match in case 'find' returns more than one match
+
+    local cmd=${COMP_WORDS[0]} globs OLDIFS=$IFS IFS=$'\n'
+	# Create globbing search strings by appending COMP_LIB elements with:
+	# *.command, command!, command
+    globs=( $(
+	for dir in "${COMP_LIB[@]}"; do 
+	    echo \"$dir\"/\*/\*.$cmd
+	    echo \"$dir\"/\*/$cmd\!
+	    echo \"$dir\"/\*/$cmd
+	done
+    ) )
+    IFS=$OLDIFS
+    local script="$(eval find "${globs[@]}" 2> /dev/null | head -1)"
+    local link comp=${script##*/}  # Remove path
+	# Remove possible .link only if exclamation mark (!) isn't last character
+	# 1:  Strip up to and including first dot (*.)
+	# 2:  Strip possible leftmost dot (.) plus link
+	#			       +---1----+	+-----2------+
+    [[ ${comp: -1:1} == ! ]] || { link=${comp#*.}; comp=${comp%.$link}; }
+    local path=${script%/*}   # Remove comp
+	# Source completion of command to complete
+	# If sourcing returns true, automatically call `comp_install' and '_$comp'
+    [ "$script" -a -r "$path/$comp" ] && . "$path/$comp" && \
+	    # Is function '_$comp" available?
+	declare -F _$comp &> /dev/null && \
+	    # Make completion persistent for subsequent invocations
+	_comp_install $comp "$path" && \
+	    # Generate completions for first invocation
+	_$comp $link
+
+	# Unset `comploadrc' variables
+    unset -v bashdefault default dirnames filenames nospace plusdirs UNAME
+} # comp_load()
+
+
+# Convert directory to completion arguments.  If a directory starts with
+# 'complete-', the file .complete will be included.  This file is supposed
+# to set the global variable 'COMP_ARGS'.
+# @param $1  Directory.  Must include at least one slash and start with "complete", e.g.:
+#	     ./complete -o nospace
+#	     /home/joe/completions/complete -o filenames
+# @result exit	True (0) if completion must be installed, False (> 0) if
+#     not.  Global 'COMP_ARGS' contains the arguments to pass to 'complete'
+#     NOTE: Global 'COMP_ARGS' is used instead of echo-ing the string
+#	    to stdout, because this saves us invoking a subshell, thus
+#	    gains speed.
+comp_dir2args() {
+    COMP_ARGS=
+    case "${1##*/}" in	# `${1##*/}' means: strip up to including last slash
+	complete-*)
+	    [ -r "$1/.complete" ] && . "$1/.complete"
+	    ;;
+	complete*)
+	    COMP_ARGS="${1##*/complete}"
+	    ;;
+    esac
+} # comp_dir2args()
+
+
+    # Install completion for all files in `./completions/*'
+ 
+	# Use cache if set, and versions (COMP_VERSION and COMP_CACHE_VERSION) match
+[ "$COMP_CACHE" ] && [ -r "$COMP_CACHE" ] && . "$COMP_CACHE" && [ "$COMP_VERSION" = "$COMP_CACHE_VERSION" ] || {
+    # No, cache isn't set or isn't available; load completions
+    compEnvShoptOptions=$(shopt -p dotglob failglob nullglob)
+    shopt -s nullglob
+    shopt -u dotglob failglob
+    . $COMP_DIR/comploadrc
+    # use GNU sed if we have it, since its extensions are still used in our code
+    [ $UNAME != Linux ] && [ $UNAME != Cygwin ] && which gsed > /dev/null && alias sed=gsed
+    # Loop through directories, starting from last so that first overwrites last and first has precedence
+    for ((k = ${#COMP_LIB[@]} - 1; k >= 0; k--)); do
+	if cd "${COMP_LIB[$k]}" 2> /dev/null; then
+	    for i in complete*; do
+		    # Don't install completion if 'comp_dir2args()' returns false
+		if comp_dir2args "./$i"; then
+		    cd "$i" && {
+			for comp in *; do
+				#  If name ends with exclamation mark (!), only
+				#+ strip last exclamation mark, otherwise strip
+				#+ up to and including first dot (*.)
+			    [[ ${comp: -1:1} == ! ]] && comp=${comp%!} || comp=${comp#*.}
+			    complete -F comp_load $COMP_ARGS $comp
+			done
+			cd ..
+		    }
+		fi
+	    done
+		# *  If COMP_CACHE is unset, set COMP_CACHE to ~/.bash_completion_lib.d/cache~	
+		# *  If COMP_CACHE is not empty:
+		#    -	create directory `$compLocal' if necessary
+		#    -	generate cache file
+	    [ "${COMP_CACHE=$compLocal/cache~}" ] && 
+	    { [ -d "$compLocal" ] || mkdir "$compLocal"; } && 
+	    { echo COMP_CACHE_VERSION=$COMP_VERSION; complete -p; } > "$COMP_CACHE"
+
+	    eval "$compEnvShoptOptions" 2> /dev/null  # Restore `shopt' options
+		# Unset `comploadrc' variables
+	    unset -v bashdefault default dirnames filenames nospace plusdirs UNAME
+	    cd $compPwd > /dev/null
+	fi
+    done
+}
+unset -v args comp COMP_ARGS COMP_CACHE_VERSION COMP_VERSION compEnvShoptOptions compLocal compPwd i j k

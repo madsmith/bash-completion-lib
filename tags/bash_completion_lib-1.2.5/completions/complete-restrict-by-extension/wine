@@ -1,0 +1,1 @@
+comp_filedir_xspec "'!*.@(exe|EXE|com|COM|scr|SCR|exe.so)'"

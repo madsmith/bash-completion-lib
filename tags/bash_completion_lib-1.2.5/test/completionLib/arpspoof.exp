@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p arpspoof"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load arpspoof\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/arpspoof.exp"
+
+
+set test "Completion via _arpspoof() should be installed"
+set cmd "complete -p arpspoof"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _arpspoof arpspoof\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/arpspoof.exp"

@@ -1,0 +1,5 @@
+comp_include _btdownload
+
+comp_install -F _btdownload  # Make completion persistent for subsequent invocations
+
+_btdownload  # Generate completions for first invocation

@@ -1,0 +1,4 @@
+COMPREPLY=(
+    $(compgen -A directory -S / -- "${COMP_WORDS[COMP_CWORD]}")
+)
+comp_install -d

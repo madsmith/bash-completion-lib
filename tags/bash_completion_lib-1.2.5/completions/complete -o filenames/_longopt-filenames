@@ -1,0 +1,5 @@
+comp_include _longopt
+
+comp_install -F _longopt  # Make completion persistent for subsequent invocations
+
+_longopt $1  # Generate completions for first invocation

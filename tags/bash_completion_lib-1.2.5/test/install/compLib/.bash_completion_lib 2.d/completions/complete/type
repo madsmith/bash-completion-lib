@@ -1,0 +1,7 @@
+_type() {
+    COMPREPLY=(lsbar2)
+} # _type()
+
+comp_install  # Make completion persistent for subsequent invocations
+
+_type  # Generate completions for first invocation

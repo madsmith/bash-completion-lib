@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p vgcfgbackup"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load vgcfgbackup\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/vgcfgbackup.exp"
+
+
+set test "Completion via _vgcfgbackup() should be installed"
+set cmd "complete -p vgcfgbackup"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _vgcfgbackup vgcfgbackup\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/vgcfgbackup.exp"
