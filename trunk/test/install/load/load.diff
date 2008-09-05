@@ -18,4 +18,3 @@ declare -f _usergroup
 declare -f comp_filedir_xspec
 declare -f comp_include
 declare -f comp_install
-declare -f comp_load_and_install

@@ -323,16 +323,3 @@ _comp_install() {
     fi
     unset -v COMP_ARGS
 } # _comp_install()
-
-
-# Load and install completion.
-# Completions are generated via compgen to satisfy the first run.  Completion
-# is installed for subsequent completion invocations.
-# @param string $1  Complete/compgen arguments
-comp_load_and_install() {
-        # Provide completions for the first time completion is invoked
-    COMPREPLY=(
-        $(eval compgen -f $1 -- "${COMP_WORDS[COMP_CWORD]}")
-    )
-    comp_install "$1"  # Make completion persistent for subsequent invocations
-} # comp_load_and_install()

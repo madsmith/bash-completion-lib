@@ -1,3 +1,20 @@
+bash_completion_lib-1.2.dev
+
+- Removed unused function `comp_load_and_install()' (Issue 24).
+
+
+
+
+bash_completion_lib-1.2.5, 4-Sep-2008
+
+- Added 'versions' environment variables COMP_VERSION and COMP_CACHE_VERSION;
+  automatically clear cache if versions differ (Issue 26).
+- Fixed error message "No such file or directory" when COMP_CACHE points to a
+  non-existing file (Issue 27).
+
+
+
+
 bash_completion_lib-1.2.4, 3-Aug-2008
 
 - Automated calls to `comp_install' and first call to completions generation
