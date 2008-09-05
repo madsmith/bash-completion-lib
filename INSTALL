@@ -1,7 +1,7 @@
-- Unpack the file in your home directory:
+- Install package or unpack the file in /etc:
 
-     $ tar -xvzf bash_completion_lib-0.6.tar.gz
+     $ tar -xvzf bash_completion_lib-version.tar.gz
 
 - Add the following line to ~/.bashrc:
 
-     source bash_completion_lib-0.6/bash_completion_lib
+     . /etc/bash_completion_lib/bash_completion_lib
