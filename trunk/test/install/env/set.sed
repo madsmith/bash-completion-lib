@@ -11,7 +11,7 @@ s/^> //
     # Remove configuration specific values
 s/COMP_CACHE=.*/COMP_CACHE=PATH/
 s/COMP_DIR=.*/COMP_DIR=PATH/
-s/COMP_LIB=.*/COMP_LIB=PATH/
+s/COMP_PATH=.*/COMP_PATH=PATH/
 s/UNAME=.*/UNAME=NAME/
 s/bash205=.*/bash205=VERSION/
 s/bash205b=.*/bash205b=VERSION/
