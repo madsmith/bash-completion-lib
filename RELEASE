@@ -1,9 +1,12 @@
-bash_completion_lib-1.2.dev
+bash_completion_lib-1.2.6, 21-Sep-2008
 
 - Removed unused function `comp_load_and_install()' (Issue 24).
-- Changed COMP_LIB from array to colon-delimited (:) string.  This allows
-  exporting COMP_LIB to a subshell.  Exporting COMP... environment variables is
-  necessary for an administrative application `bcl' to work correctly.
+- Added administrative application `bcl' (Issue 28).
+- Usage of the COMP_LIB array is deprecated, because an array can't be exported
+  to a subshell.  Upon `bash_completion_lib' invocation, the COMP_LIB array is
+  automatically converted to a colon-delimited (:) string named COMP_PATH.
+  Exporting COMP_PATH is necessary for the administrative application `bcl' to
+  work correctly.
 
 
 

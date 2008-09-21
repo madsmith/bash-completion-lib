@@ -42,21 +42,22 @@ COMP_DIR=$(cd "$(dirname "$(which "${BASH_SOURCE-$0}" 2> /dev/null)")" && /bin/p
     # If COMP_LIB is an array (bash_completion_lib <= 1.2.5)
 if declare -p COMP_LIB 2> /dev/null | grep -q '^declare \-a'; then
     # Yes, COMP_LIB is array;
-	# Turn array into a colon (:) separated string
+	# Turn array into a colon (:) separated string: COMP_PATH
     OLDIFS=$IFS; IFS=:;
-    unset COMP_LIB; COMP_LIB="$(echo "${COMP_LIB[*]}")";
+    unset COMP_LIB; export COMP_PATH="$(echo "${COMP_LIB[*]}")";
     IFS=$OLDIFS
 fi
-    # If COMP_LIB is unset, set COMP_LIB to default array
-[ "$COMP_LIB" ] || COMP_LIB="$compLocal/completions:$COMP_DIR/completions"
+    # If COMP_PATH is unset, set COMP_PATH to default array
+    # NOTE: `COMP_PATH' must be exported for the `bcl' utility to work
+[ "$COMP_PATH" ] || export COMP_PATH="$compLocal/completions:$COMP_DIR/completions"
     # True (1) if restricted completion is enabled, False (0, default) if not
 COMP_RESTRICT_BY_EXTENSION=${COMP_RESTRICT_BY_EXTENSION:-0}
     # Version of bash-completion-lib
-COMP_VERSION=bash_completion_lib-1.2.dev.175:181M
+COMP_VERSION=bash_completion_lib-1.2.6
 
 
 # Load completion commands.
-# The appropriate script from the `COMP_LIB' directory will be loaded.
+# The appropriate script from a `COMP_PATH' directory will be loaded.
 comp_load() {
 	# Always load `comploadrc'
     . $COMP_DIR/comploadrc
@@ -72,12 +73,12 @@ comp_load() {
 	# NOTE: Use 'head -1' to get the first match in case 'find' returns more than one match
 
     local cmd=${COMP_WORDS[0]} globs OLDIFS=$IFS
-	# Convert colon (:) separated string `COMP_LIB' to array `aCompLib'
-    IFS=:; local -a aCompLib=($COMP_LIB)
-	# Create globbing search strings by appending COMP_LIB elements with:
+	# Convert colon (:) separated string `COMP_PATH' to array `aPaths'
+    IFS=:; local -a aPaths=($COMP_PATH)
+	# Create globbing search strings by appending `aPaths' with:
 	# *.command, command!, command
     IFS=$'\n'; globs=( $(
-	for dir in "${aCompLib[@]}"; do 
+	for dir in "${aPaths[@]}"; do 
 	    echo \"$dir\"/\*/\*.$cmd
 	    echo \"$dir\"/\*/$cmd\!
 	    echo \"$dir\"/\*/$cmd
@@ -142,11 +143,11 @@ comp_dir2args() {
     . $COMP_DIR/comploadrc
         # use GNU sed if we have it, since its extensions are still used in our code
     [ $UNAME != Linux ] && [ $UNAME != Cygwin ] && which gsed > /dev/null && alias sed=gsed
-        # Convert string `COMP_LIB' to array `aCompLib'
-    OLDIFS=$IFS; IFS=:; declare -a aCompLib=($COMP_LIB); IFS=$OLDIFS
+        # Convert string `COMP_LIB' to array `aPaths'
+    OLDIFS=$IFS; IFS=:; declare -a aPaths=($COMP_PATH); IFS=$OLDIFS
         # Loop through directories, starting from last so that first overwrites last and first has precedence
-    for ((k = ${#aCompLib[@]} - 1; k >= 0; k--)); do
-        if cd "${aCompLib[$k]}" 2> /dev/null; then
+    for ((k = ${#aPaths[@]} - 1; k >= 0; k--)); do
+        if cd "${aPaths[$k]}" 2> /dev/null; then
             for i in complete*; do
                     # Don't install completion if 'comp_dir2args()' returns false
                 if comp_dir2args "./$i"; then
@@ -178,4 +179,4 @@ comp_dir2args() {
     { [ -d "$compLocal" ] || mkdir "$compLocal"; } && 
     { echo COMP_CACHE_VERSION=$COMP_VERSION; complete -p; } > "$COMP_CACHE"
 }
-unset -v aCompLib args comp COMP_ARGS COMP_CACHE_VERSION COMP_VERSION compEnvShoptOptions compLocal compPwd i j k OLDIFS
+unset -v aPaths args comp COMP_ARGS COMP_CACHE_VERSION COMP_VERSION compEnvShoptOptions compLocal compPwd i j k OLDIFS

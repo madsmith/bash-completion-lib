@@ -24,7 +24,7 @@ expect -ex "/install/compLib/@"
 file delete [pwd]/install/compLib/.bash_completion_lib~
 
     # Allow cache to be generated automatically
-set cmd "HOME=\$PWD; unset COMP_CACHE; unset COMP_LIB"
+set cmd "HOME=\$PWD; unset COMP_CACHE; unset COMP_PATH"
 send "$cmd\r"
 expect -ex "$cmd\r\n"
 expect -ex "/install/compLib/@"
@@ -74,8 +74,8 @@ expect {
 sync_after_int
 
 
-    # Reload bash_completion_lib with new `COMP_LIB' settings
-set cmd "COMP_LIB=\"\$PWD/.bash_completion_lib 2.d/completions\""
+    # Reload bash_completion_lib with new `COMP_PATH' settings
+set cmd "COMP_PATH=\"\$PWD/.bash_completion_lib 2.d/completions\""
 send "$cmd\r"
 expect -ex "$cmd\r\n"
 expect -ex "/install/compLib/@"
@@ -87,7 +87,7 @@ expect -ex "$cmd\r\n"
 expect -ex "/install/compLib/@"
 
 
-set test "Completion should use local `type' completion if in COMP_LIB dir with space"
+set test "Completion should use local `type' completion if in COMP_PATH dir with space"
 set cmd "type ls"
 send "$cmd\t"
 expect {

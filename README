@@ -148,9 +148,9 @@ COMP_CACHE
 COMP_DIR
     Directory of `bash_completion_lib'.  This variable is automatically set.
 
-COMP_LIB
-    Array variable containing directories with completions.  By default
-    `COMP_LIB' contains these directories:
+COMP_PATH
+    String variable containing directories to search for completions, separated
+    by a colon (:).  By default `COMP_PATH' contains these directories:
     - $HOME/.bash_completion_lib.d/completions 
     - $COMP_DIR/completions
     Bash-completion-lib uses the first directory in which a completion is found.
