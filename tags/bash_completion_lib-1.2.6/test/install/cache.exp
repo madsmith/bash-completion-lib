@@ -1,0 +1,158 @@
+proc setup {} {
+}; # setup()
+
+
+proc teardown {} {
+}; # teardown()
+
+
+setup
+
+
+set test env
+    # Start bash
+exp_spawn bash --rcfile config/bashrc
+expect -ex "/@"
+
+    # Change bash directory to `install'
+set cmd "cd install"
+send "$cmd\r"
+expect -ex "$cmd\r\n"
+expect -ex "/install/@"
+
+    # Make sure cache file is deleted
+file delete [pwd]/install/.bash_completion_lib.d/cache~
+
+    # Allow cache to be generated automatically
+set cmd "HOME=\$PWD; unset COMP_CACHE"
+send "$cmd\r"
+expect -ex "$cmd\r\n"
+expect -ex "/install/@"
+
+    # Load completions
+set cmd "source ../../bash_completion_lib"
+send "$cmd\r"
+expect -ex "$cmd\r\n"
+expect -ex "/install/@"
+
+
+set test "COMP_CACHE should be set automatically after install if previously unset"
+    # Filename of cache file
+set cache [pwd]/install/.bash_completion_lib.d/cache~
+set cmd "echo \$COMP_CACHE"
+send "$cmd\r"
+expect -ex "$cmd\r\n"
+expect {
+    -re "$cache\r\n/install/@$" { pass "$test" }
+    -re /install/@ { 
+        fail "$test" 
+    }
+}; # expect
+
+
+set test "Cache file should have size > 0 after install"
+if {[file size [pwd]/install/.bash_completion_lib.d/cache~]} {pass ""} else {fail "$test"}
+
+
+set test "COMP_CACHE should point to filled file after reassignment and second install"
+    # Filename of secondary cache file - containing spaces
+set cache2 [pwd]/install/.bash_completion_lib.d/cache\ 2~
+    # Make sure secondary cache file is deleted
+file delete $cache2
+    # Allow cache to be generated automatically
+set cmd "COMP_CACHE=\"$cache2\""
+send "$cmd\r"
+expect -ex "$cmd\r\n"
+expect -ex "/install/@"
+    # Load completions
+set cmd "source ../../bash_completion_lib"
+send "$cmd\r"
+expect -ex "$cmd\r\n"
+expect -ex "/install/@"
+if {[file size $cache2]} {pass "$test"} else {fail "$test"}
+
+
+
+set test "COMP_CACHE should be disabled if COMP_CACHE is null"
+    # Filename of tertiary cache file
+set cache3 [pwd]/install/.bash_completion_lib.d/cache3~
+    # Make sure tertiary cache file is deleted
+file delete $cache3
+    # Disable cache
+set cmd "COMP_CACHE="
+send "$cmd\r"
+expect -ex "$cmd\r\n"
+expect -ex "/install/@"
+    # Load completions
+set cmd "source ../../bash_completion_lib"
+send "$cmd\r"
+expect -ex "$cmd\r\n"
+expect -ex "/install/@"
+if {[file exists $cache3]} {fail "$test"} else {pass ""}
+
+
+
+set test "Non-existing COMP_CACHE file should fail silently"
+    # Filename of cache file
+set cache [pwd]/install/.bash_completion_lib.d/cache~
+    # Make sure cache file is deleted
+file delete $cache
+    # Allow cache to be generated automatically
+set cmd "COMP_CACHE=\"$cache\""
+send "$cmd\r"
+expect -ex "$cmd\r\n"
+expect -ex "/install/@"
+    # Load completions
+set cmd "source ../../bash_completion_lib"
+send "$cmd\r"
+expect {
+    -re "$cmd\r\n/install/@" {pass "$test"}
+    -re /install/@ {fail "$test"}
+}
+
+
+
+set test "Cache file should not be regenerated if versions match"
+    # Filename of cache file
+set cache [pwd]/install/.bash_completion_lib.d/cache~
+    # Make sure cache file is deleted
+file delete $cache
+    # Allow cache to be generated automatically
+set cmd "COMP_CACHE=\"$cache\""
+send "$cmd\r"
+expect -ex "$cmd\r\n"
+expect -ex "/install/@"
+    # Load completions for the first time
+set cmd "source ../../bash_completion_lib"
+send "$cmd\r"
+expect -ex "$cmd\r\n"
+expect -ex "/install/@"
+    # Get cache size
+set size1 [file size $cache]
+    # Load completions for the second time
+set cmd "source ../../bash_completion_lib"
+send "$cmd\r"
+expect -ex "$cmd\r\n"
+expect -ex "/install/@"
+    # Get cache size
+set size2 [file size $cache]
+    # The cache shouldn't have been modified by the second load
+if { $size1 == $size2 } {pass "$test"} {fail "$test"}
+
+set test "Cache file should be regenerated if versions mismatch"
+    # Modify cache-version
+exec sed -e "s/^COMP_CACHE_VERSION=.*/COMP_CACHE_VERSION=foo/" -i $cache
+    # Get the new cache size
+set size2 [file size $cache]
+    # Load completions for the third time
+set cmd "source ../../bash_completion_lib"
+send "$cmd\r"
+expect -ex "$cmd\r\n"
+expect -ex "/install/@"
+    # Get cache size
+set size3 [file size $cache]
+    # The cache should have been modified by the third load
+if { $size2 != $size3 } {pass "$test"} {fail "$test, size1: $size1, size3: $size3"}
+
+    
+teardown

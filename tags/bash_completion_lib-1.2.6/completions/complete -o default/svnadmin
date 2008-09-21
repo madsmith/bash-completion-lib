@@ -1,0 +1,79 @@
+_svnadmin()
+{
+	local cur prev commands options mode
+
+	COMPREPLY=()
+	cur=`_get_cword`
+
+	commands='create deltify dump help ? hotcopy list-dblogs \
+		list-unused-dblogs load lslocks lstxns recover rmlocks \
+		rmtxns setlog verify'
+
+	if [[ $COMP_CWORD -eq 1 ]] ; then
+		if [[ "$cur" == -* ]]; then
+			COMPREPLY=( $( compgen -W '--version' -- $cur ) )
+		else
+			COMPREPLY=( $( compgen -W "$commands" -- $cur ) )
+		fi
+	else
+		prev=${COMP_WORDS[COMP_CWORD-1]}
+		case $prev in
+			--config-dir)
+				_filedir -d
+				return 0;
+				;;
+			--fs-type)
+				COMPREPLY=( $( compgen -W 'fsfs bdb' -- $cur ) )
+				return 0;
+				;;
+		esac
+
+		command=${COMP_WORDS[1]}
+
+		if [[ "$cur" == -* ]]; then
+			# possible options for the command
+			case $command in
+				create)
+					options='--bdb-txn-nosync \
+						--bdb-log-keep --config-dir \
+						--fs-type'
+					;;
+				deltify)
+					options='-r --revision -q --quiet'
+					;;
+				dump)
+					options='-r --revision --incremental \
+						-q --quiet --deltas'
+					;;
+				hotcopy)
+					options='--clean-logs'
+					;;
+				load)
+					options='--ignore-uuid --force-uuid \
+						--parent-dir -q --quiet \
+						--use-pre-commit-hook \
+						--use-post-commit-hook'
+					;;
+				rmtxns)
+					options='-q --quiet'
+					;;
+				setlog)
+					options='-r --revision --bypass-hooks'
+					;;
+			esac
+
+			options="$options --help -h"
+			COMPREPLY=( $( compgen -W "$options" -- $cur ) )
+		else
+			if [[ "$command" == @(help|h|\?) ]]; then
+				COMPREPLY=( $( compgen -W "$commands" -- $cur ) )
+			else
+				_filedir
+			fi
+		fi
+	fi
+
+	return 0
+} # _svnadmin()
+
+

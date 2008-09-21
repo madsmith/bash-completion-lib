@@ -1,0 +1,16 @@
+# PINE address-book completion
+#
+_pineaddr()
+{
+    local cur
+
+    COMPREPLY=()
+    cur=`_get_cword`
+
+    COMPREPLY=( $( compgen -W '$( awk "{print \$1}" ~/.addressbook 2>/dev/null)' \
+            -- $cur ) )
+} # _pineaddr()
+
+comp_install -F _pineaddr  # Make completion persistent for subsequent invocations
+
+_pineaddr  # Generate completions for first invocation

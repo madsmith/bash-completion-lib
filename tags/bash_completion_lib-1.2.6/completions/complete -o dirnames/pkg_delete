@@ -1,0 +1,19 @@
+# FreeBSD package management tool completion
+#
+_pkg_delete()
+{
+    local cur pkgdir prev
+
+    pkgdir=${PKG_DBDIR:-/var/db/pkg}/
+    cur=`_get_cword`
+    prev=${COMP_WORDS[COMP_CWORD-1]}
+
+    [ "$prev" = "-o" -o "$prev" = "-p" -o "$prev" = "-W" ] && return 0
+
+    COMPREPLY=( $( compgen -d $pkgdir$cur ) )
+    COMPREPLY=( ${COMPREPLY[@]#$pkgdir} )
+
+    return 0
+} # _pkg_delete()
+
+

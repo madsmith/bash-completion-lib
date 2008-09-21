@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p gkrellm"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load gkrellm\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/gkrellm.exp"
+
+
+set test "Completion via _gkrellm() should be installed"
+set cmd "complete -p gkrellm"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _gkrellm gkrellm\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/gkrellm.exp"

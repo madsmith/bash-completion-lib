@@ -1,0 +1,46 @@
+# Mailman completion by Guillaume Rousse <rousse@ccr.jussieu.fr>
+#
+
+comp_include _mailman_lists
+
+_arch()
+{
+	local cur prev
+
+	COMPREPLY=()
+	cur=`_get_cword`
+	prev=${COMP_WORDS[COMP_CWORD-1]}
+
+	case "$prev" in
+		-@(w|g|d|--welcome-msg=|-goodbye-msg|-digest=))
+			COMPREPLY=( $( compgen -W 'y n' -- $cur) )
+			return 0
+			;;
+		-@(d|-file))
+			_filedir
+			return 0
+			;;
+	esac
+
+	if [[ "$cur" == -* ]]; then
+		COMPREPLY=( $( compgen -W '--wipe -s --start= -e --end= \
+			-q --quiet -h --help' -- $cur ) )
+	else
+		args=$COMP_CWORD
+		for (( i=1; i < COMP_CWORD; i++ )); do
+			if [[ "${COMP_WORDS[i]}" == -* ]]; then
+				args=$(($args-1))
+			fi
+		done
+		case $args in
+			1)
+				_mailman_lists
+				;;
+			2)	
+				_filedir
+				;;
+		esac
+	fi
+} # _arch()
+
+

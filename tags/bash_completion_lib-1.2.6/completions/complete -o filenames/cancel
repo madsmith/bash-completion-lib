@@ -1,0 +1,13 @@
+# CUPS cancel(1) completion
+#
+_cancel()
+{
+    local cur
+
+    COMPREPLY=()
+    cur=`_get_cword`
+
+    COMPREPLY=( $( lpstat | cut -d' ' -f1 | grep "^$cur" ) )
+} # _cancel()
+
+

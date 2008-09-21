@@ -1,0 +1,1 @@
+comp_filedir_xspec "'!*.@(?(e)ps|?(E)PS)'"

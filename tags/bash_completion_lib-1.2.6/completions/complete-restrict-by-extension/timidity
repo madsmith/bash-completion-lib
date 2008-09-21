@@ -1,0 +1,1 @@
+comp_filedir_xspec "'!*.@(mid?(i)|MID?(I)|rmi|RMI|rcp|RCP|[gr]36|[GR]36|g18|G18|mod|MOD|xm|XM|it|IT|x3m|X3M)'"

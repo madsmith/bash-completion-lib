@@ -1,0 +1,61 @@
+proc setup {} {
+}; # setup()
+
+
+proc teardown {} {
+}; # teardown()
+
+
+setup
+
+
+set test "no arguments"
+exp_spawn $BCL
+set ret [exp_wait]
+expect {
+    -re ".*--help.*" { pass $test }
+    default { fail "$test" }
+    timeout { fail "$test (timeout)" }
+}
+set test "$test should exit 1"
+set exit_status [lindex $ret 3]
+if {$exit_status == 1} { pass $test } { fail "$test (exit is $exit_status)" }
+
+
+set test "--help"
+exp_spawn $BCL --help
+expect {
+    -re "Usage:.*--help.*--version" { pass $test }
+    default { fail "$test" }
+    timeout { fail "$test (timeout)" }
+}
+
+
+set test "help"
+exp_spawn $BCL help
+expect {
+    -re "Usage:.*--help.*--version" { pass $test }
+    default { fail "$test" }
+    timeout { fail "$test (timeout)" }
+}
+
+
+set test "help add"
+exp_spawn $BCL help add
+expect {
+    -re "Usage:.*-o comp-option.*" { pass $test }
+    default { fail "$test" }
+    timeout { fail "$test (timeout)" }
+}
+
+
+set test "version"
+exp_spawn $BCL --version
+expect {
+    -re "bcl \\d+.\\d+.\\d+" { pass "$test" }
+	default { fail "$test" }
+	timeout { fail "$test (timeout)" }
+}
+
+
+teardown

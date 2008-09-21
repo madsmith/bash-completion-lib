@@ -1,0 +1,33 @@
+comp_include _ImageMagick
+
+_montage()
+{
+    local cur
+
+    COMPREPLY=()
+    cur=`_get_cword`
+
+    _ImageMagick
+
+    if [[ "$cur" == -* ]]; then
+        COMPREPLY=( $( compgen -W '-adjoin -affine -authenticate \
+            -blue-primary -blur -colors -colorspace -comment \
+            -compose -compress -crop -debug -density -depth \
+            -display -dispose -dither -draw -encoding -endian \
+            -extract -fill -filter -flip -flop -frame -gamma \
+            -geometry -gravity -green-primary -interlace -help \
+            -label -limit -log -matte -mode -monochrome -noop \
+            -page -pointsize -quality -red-primary -resize \
+            -rotate -sampling-factor -scene -shadow -size \
+            -stroke -texture -thumbnail -tile -transform \
+            -transparent -treedepth -trim -type -verbose \
+            -version -virtual-pixel -white-point' -- $cur ) )
+    elif [[ "$cur" == +* ]]; then
+        COMPREPLY=( $( compgen -W '+adjoin +compress +debug +dither \
+            +endian +gamma +label +matte +page' -- $cur ) ) 
+    else
+        _filedir
+    fi
+} # _montage()
+
+

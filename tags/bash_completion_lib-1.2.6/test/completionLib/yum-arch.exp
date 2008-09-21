@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p yum-arch"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames -F comp_load yum-arch\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/yum-arch.exp"
+
+
+set test "Completion via _yum_arch() should be installed"
+set cmd "complete -p yum-arch"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames -F _yum_arch yum-arch\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/yum-arch.exp"

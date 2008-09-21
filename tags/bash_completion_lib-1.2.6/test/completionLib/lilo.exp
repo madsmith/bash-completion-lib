@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p lilo"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load lilo\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/lilo.exp"
+
+
+set test "Completion via _lilo() should be installed"
+set cmd "complete -p lilo"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _lilo lilo\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/lilo.exp"

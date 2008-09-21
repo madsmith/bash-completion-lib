@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p cc"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames -F comp_load cc\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/cc.exp"
+
+
+set test "Completion via _gcc() should be installed"
+set cmd "complete -p cc"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames -F _gcc cc\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/cc.exp"

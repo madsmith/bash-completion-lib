@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p mkinitrd"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load mkinitrd\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/mkinitrd.exp"
+
+
+set test "Completion via _mkinitrd() should be installed"
+set cmd "complete -p mkinitrd"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _mkinitrd mkinitrd\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/mkinitrd.exp"

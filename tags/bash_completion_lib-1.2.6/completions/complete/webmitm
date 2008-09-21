@@ -1,0 +1,20 @@
+# webmitm(8) completion
+#
+
+comp_include _known_hosts
+
+_webmitm()
+{
+	local cur
+
+	COMPREPLY=()
+	cur=`_get_cword`
+
+	if [[ "$cur" == -* ]]; then
+		COMPREPLY=( $( compgen -W '-d' -- $cur ) )
+	else
+		_known_hosts
+	fi
+} # _webmitm()
+
+

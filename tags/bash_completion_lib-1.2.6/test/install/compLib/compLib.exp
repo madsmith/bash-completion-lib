@@ -1,0 +1,102 @@
+proc setup {} {
+}; # setup()
+
+
+proc teardown {} {
+}; # teardown()
+
+
+setup
+
+
+set test env
+    # Start bash
+exp_spawn bash --rcfile config/bashrc
+expect -ex "/@"
+
+    # Change bash directory to `install'
+set cmd "cd install/compLib"
+send "$cmd\r"
+expect -ex "$cmd\r\n"
+expect -ex "/install/compLib/@"
+
+    # Make sure cache file is deleted
+file delete [pwd]/install/compLib/.bash_completion_lib~
+
+    # Allow cache to be generated automatically
+set cmd "HOME=\$PWD; unset COMP_CACHE; unset COMP_PATH"
+send "$cmd\r"
+expect -ex "$cmd\r\n"
+expect -ex "/install/compLib/@"
+
+    # Load completions
+set cmd "source ../../../bash_completion_lib"
+send "$cmd\r"
+expect -ex "$cmd\r\n"
+expect -ex "/install/compLib/@"
+
+
+set test "Completion should use local cd completion definition"
+set cmd "cd "
+send "$cmd\t"
+expect {
+    -re "${cmd}foo $" { pass "$test" }
+    -re "$cmd\r\n(\.svn/ +|)completions/.*/install/compLib/@$cmd$" { fail "$test" }
+    -re /install/@ { fail "$test" }
+}; # expect
+
+
+sync_after_int
+
+
+set test "Completion should use local `type' completion definition instead of system `which.type'"
+set cmd "type ls"
+send "$cmd\t"
+expect {
+    -re "${cmd}foo $" { pass "$test" }
+    -re "$cmd\r\nls +.*/install/compLib/@$cmd$" { fail "$test" }
+    -re /install/@ { fail "$test" }
+}; # expect
+
+
+sync_after_int
+
+
+set test "Completion of .. should use cdots"
+send "\.\. \t"
+expect {
+    -re "\.\. cdots $" { pass "$test" }
+    -re "\.\. \r\n +.*/install/compLib/@\.\. $" { fail "$test" }
+    -re /install/@ { fail "$test" }
+}; # expect
+
+
+sync_after_int
+
+
+    # Reload bash_completion_lib with new `COMP_PATH' settings
+set cmd "COMP_PATH=\"\$PWD/.bash_completion_lib 2.d/completions\""
+send "$cmd\r"
+expect -ex "$cmd\r\n"
+expect -ex "/install/compLib/@"
+
+    # Load completions
+set cmd "source ../../../bash_completion_lib"
+send "$cmd\r"
+expect -ex "$cmd\r\n"
+expect -ex "/install/compLib/@"
+
+
+set test "Completion should use local `type' completion if in COMP_PATH dir with space"
+set cmd "type ls"
+send "$cmd\t"
+expect {
+    -re "${cmd}bar2 $" { pass "$test" }
+    -re "$cmd\r\nls +.*/install/compLib/@$cmd$" { fail "$test" }
+    -re /install/@ { fail "$test" }
+}; # expect
+
+
+
+
+teardown

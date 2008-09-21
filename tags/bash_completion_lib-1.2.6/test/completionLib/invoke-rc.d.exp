@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p invoke-rc.d"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load invoke-rc.d\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/invoke-rc.d.exp"
+
+
+set test "Completion via _invoke_rc_d() should be installed"
+set cmd "complete -p invoke-rc.d"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _invoke_rc_d invoke-rc.d\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/invoke-rc.d.exp"
