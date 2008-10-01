@@ -1,3 +1,12 @@
+$VERSION
+
+- Prevent bash_completion_lib from sourcing twice.  If `COMP_VERSION' is
+  non-empty, bash_completion_lib returns immediately without loading any
+  completions (Issue 31).
+
+
+
+
 bash_completion_lib-1.2.6, 21-Sep-2008
 
 - Removed unused function `comp_load_and_install()' (Issue 24).

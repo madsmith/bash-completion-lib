@@ -26,6 +26,8 @@
 # The latest version of this software can be obtained here:
 # http://fvue.nl/wiki/Bash_completion_lib
 
+    # If `bash_completion_lib' already loaded, return
+[ "$COMP_VERSION" ] && return
 
     # Extended globbing and programmable completion have to be
     # set in order for completion to work
@@ -53,7 +55,7 @@ fi
     # True (1) if restricted completion is enabled, False (0, default) if not
 COMP_RESTRICT_BY_EXTENSION=${COMP_RESTRICT_BY_EXTENSION:-0}
     # Version of bash-completion-lib
-COMP_VERSION=bash_completion_lib-1.2.6
+COMP_VERSION=bash_completion_lib-1.2.dev.185:193M
 
 
 # Load completion commands.
@@ -179,4 +181,4 @@ comp_dir2args() {
     { [ -d "$compLocal" ] || mkdir "$compLocal"; } && 
     { echo COMP_CACHE_VERSION=$COMP_VERSION; complete -p; } > "$COMP_CACHE"
 }
-unset -v aPaths args comp COMP_ARGS COMP_CACHE_VERSION COMP_VERSION compEnvShoptOptions compLocal compPwd i j k OLDIFS
+unset -v aPaths args comp COMP_ARGS COMP_CACHE_VERSION compEnvShoptOptions compLocal compPwd i j k OLDIFS

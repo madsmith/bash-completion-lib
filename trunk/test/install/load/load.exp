@@ -37,11 +37,7 @@ set cmd "alias "
 send "$cmd\t"
 expect -ex "$cmd"
 
-    # Interrupt command by sending ^C
-
-sleep 0.3; 
-send \003;  # Control-c
-expect -ex "/install/load/@"
+sync_after_int
 
     # Echo environment to load_post.txt
 set cmd "\{ set; declare -F; \} > load_post.txt~"

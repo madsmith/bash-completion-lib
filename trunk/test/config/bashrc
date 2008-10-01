@@ -15,3 +15,5 @@ export INPUTRC=$(pwd)/config/inputrc
 stty columns 150
     # Disable cache
 COMP_CACHE=
+    # Make sure `COMP_' variables are unset
+unset -v COMP_PATH COMP_VERSION
