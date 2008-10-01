@@ -145,8 +145,19 @@ COMP_CACHE
     read from this file.  Completions are stored in this file after the first run
     of `bash_completion_lib'.  Default is `~/.bash_completion_lib.d/cache~'.
 
+COMP_CACHE_VERSION
+    Version of bash_completion_lib while cache was generated.  
+    Every time bash_completion_lib loads the cache, the value of
+    `COMP_CACHE_VERSION' is compared with the value of `COMP_VERSION'.  If the
+    versions differ, the cache is regenerated.
+
 COMP_DIR
     Directory of `bash_completion_lib'.  This variable is automatically set.
+
+COMP_LIB
+    Array version of `COMP_PATH'.
+    Not used anymore because an array cannot be exported to a bash subshell.
+    Use `COMP_PATH' instead.  Deprecated as of bash_completion_lib >= 1.2.6.
 
 COMP_PATH
     String variable containing directories to search for completions, separated
@@ -160,6 +171,14 @@ COMP_RESTRICT_BY_EXTENSION
     Example: if enabled, `acroread <TAB>' will only show files with a .pdf
     extension.
 
+COMP_VERSION
+    Version of bash_completion_lib.
+    If this variable is non-empty, bash_completion_lib will return without
+    loading any completions.  This prevents bash_completion_lib from doing too
+    much work if bash_completion_lib is sourced for a second time within the
+    same shell.
+    If the value of `COMP_VERSION' differs from the value of
+    `COMP_CACHE_VERSION', the cache will be regenerated.
 
 
 6.  Cache
