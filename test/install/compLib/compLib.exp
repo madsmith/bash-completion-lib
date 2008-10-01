@@ -81,7 +81,7 @@ expect -ex "$cmd\r\n"
 expect -ex "/install/compLib/@"
 
     # Load completions
-set cmd "source ../../../bash_completion_lib"
+set cmd "COMP_VERSION=; source ../../../bash_completion_lib"
 send "$cmd\r"
 expect -ex "$cmd\r\n"
 expect -ex "/install/compLib/@"

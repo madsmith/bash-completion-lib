@@ -65,7 +65,7 @@ send "$cmd\r"
 expect -ex "$cmd\r\n"
 expect -ex "/install/@"
     # Load completions
-set cmd "source ../../bash_completion_lib"
+set cmd "COMP_VERSION=; source ../../bash_completion_lib"
 send "$cmd\r"
 expect -ex "$cmd\r\n"
 expect -ex "/install/@"
@@ -84,7 +84,7 @@ send "$cmd\r"
 expect -ex "$cmd\r\n"
 expect -ex "/install/@"
     # Load completions
-set cmd "source ../../bash_completion_lib"
+set cmd "COMP_VERSION=; source ../../bash_completion_lib"
 send "$cmd\r"
 expect -ex "$cmd\r\n"
 expect -ex "/install/@"
@@ -103,7 +103,7 @@ send "$cmd\r"
 expect -ex "$cmd\r\n"
 expect -ex "/install/@"
     # Load completions
-set cmd "source ../../bash_completion_lib"
+set cmd "COMP_VERSION=; source ../../bash_completion_lib"
 send "$cmd\r"
 expect {
     -re "$cmd\r\n/install/@" {pass "$test"}
@@ -123,14 +123,14 @@ send "$cmd\r"
 expect -ex "$cmd\r\n"
 expect -ex "/install/@"
     # Load completions for the first time
-set cmd "source ../../bash_completion_lib"
+set cmd "COMP_VERSION=; source ../../bash_completion_lib"
 send "$cmd\r"
 expect -ex "$cmd\r\n"
 expect -ex "/install/@"
     # Get cache size
 set size1 [file size $cache]
     # Load completions for the second time
-set cmd "source ../../bash_completion_lib"
+set cmd "COMP_VERSION=; source ../../bash_completion_lib"
 send "$cmd\r"
 expect -ex "$cmd\r\n"
 expect -ex "/install/@"
@@ -145,7 +145,7 @@ exec sed -e "s/^COMP_CACHE_VERSION=.*/COMP_CACHE_VERSION=foo/" -i $cache
     # Get the new cache size
 set size2 [file size $cache]
     # Load completions for the third time
-set cmd "source ../../bash_completion_lib"
+set cmd "COMP_VERSION=; source ../../bash_completion_lib"
 send "$cmd\r"
 expect -ex "$cmd\r\n"
 expect -ex "/install/@"
