@@ -1,32 +1,4 @@
-# helper functions for rpm completion
-#
-_rpm_installed_packages()
-{
-    local ver nodig nosig
-
-    if [ -r /var/log/rpmpkgs -a \
-        /var/log/rpmpkgs -nt /var/lib/rpm/Packages ]; then
-        # using RHL 7.2 or later - this is quicker than querying the DB
-        COMPREPLY=( $( sed -ne \
-        's|^\('$cur'.*\)-[0-9a-zA-Z._]\+-[0-9a-z.@]\+.*\.rpm$|\1|p' \
-                /var/log/rpmpkgs ) )
-    else
-        nodig=""
-        nosig=""
-        ver=$(rpm --version)
-        ver=${ver##* }
-      
-        if [[ "$ver" > "4.0.4" ]]; then
-            nodig="--nodigest"
-        fi
-        if [[ "$ver" > "4.0.99" ]]; then
-            nosig="--nosignature"
-        fi
-
-        COMPREPLY=( $( rpm -qa $nodig $nosig | sed -ne \
-        's|^\('$cur'.*\)-[0-9a-zA-Z._]\+-[0-9a-z.@]\+$|\1|p' ) )
-    fi
-}
+comp_include _rpm_installed_packages
 
 _rpm_groups()
 {

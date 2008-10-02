@@ -14,22 +14,28 @@ set -o errexit  # Exit if simple command fails
 # @param $2 string  Completion function, e.g. _command
 # @param $3 string  Completion arguments, e.g. ' -o filenames'
 generate_completion() {
-        # If `function' differs from _`command', set `comp_install' argument
-    [ $2 = _$1 ] || local comp_install_arg=" -F $2"
-	local path="completions/complete$3/$1"
+    local path="completions/complete$3/$1"
         # If `command' contains dot (.), trail filename with dot (.)
     [ $1 = ${1/./} ] || path=$path. 
-	echo "$path"
-		# Does file already exist?
-	if [ ! -f "$path" ]; then
-		# No, file doesn't exist; generate file
-	cat <<BASH > "$path"
+    echo "$path"
+        # Does file already exist?
+    if [ ! -f "$path" ]; then
+        # No, file doesn't exist; generate file
+    cat <<BASH > "$path"
 $2()
 {
 } # $2()
 BASH
-    vi -c 'set paste' "$path"
-fi
+	# If `function' doesn't equal `_command', additional code is required
+	# to install completions
+    if [ "_$1" != "$2" ]; then
+	cat <<BASH >> "$path"
+
+comp_install -F $2  # Make completion persistent for subsequent invocations
+
+$2  # Generate completions for first invocation
+BASH
+    fi
 } # generate_completion()
 
 
