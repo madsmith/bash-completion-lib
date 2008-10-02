@@ -47,13 +47,20 @@ files with extension `.pdf'.  Default is false (0).
 
 
 
-2.  Adding completions
+2.  Creating completions
 
-
-Use the command `script/generate' to add completions.  For example, say you
-wish to add completion for the `foo' command:
+Use the command `script/generate' to create completions.  For example, say you
+wish to create completion for the `foo' command:
 
    $ script/generate foo _foo ' -o filenames'
+
+The command above will generate the following files:
+
+   ./completions/complete -o filenames/foo
+   ./test/completionDebian/foo.exp
+   ./test/completionLib/foo.exp
+   ./test/completionOrig/foo.exp
+   ./test/lib/completions/foo.exp
 
 
 
