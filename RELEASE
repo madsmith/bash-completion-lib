@@ -1,8 +1,10 @@
 $VERSION
 
+- Fixed and improved support for apt-get, apt-cache, apt-build and aptititude
+  (Issue 3, 32).
 - Prevent bash_completion_lib from sourcing twice.  If `COMP_VERSION' is
   non-empty, bash_completion_lib returns immediately without loading any
-  completions (Issue 31).
+  completions (Issue 3, 31).
 
 
 
