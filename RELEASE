@@ -1,5 +1,6 @@
 $VERSION
 
+- evince: Autocomplete on cbr/cbz/djvu files (Issue 3).
 - Fixed and improved support for apt-get, apt-cache, apt-build and aptititude
   (Issue 3, 32).
 - Prevent bash_completion_lib from sourcing twice.  If `COMP_VERSION' is

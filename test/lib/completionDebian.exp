@@ -1,3 +1,6 @@
+source lib/library.exp
+
+
 proc completionDebian_exit {} {
         # Exit bash
     send "\rexit\r"
@@ -11,7 +14,7 @@ proc completionDebian_start {} {
     exp_spawn bash --rcfile config/bashrc
     expect -ex "/@"
         # Load completions
-    set cmd "source ../bash_completion-20060301.debian.4/bash-completion-20060301/bash_completion"
+    set cmd "BASH_COMPLETION=../bash_completion-20060301.debian.4/bash-completion-20060301/bash_completion; source \$BASH_COMPLETION"
     send "$cmd\r"
     expect -ex "$cmd\r\n"
     expect -ex "/@"
