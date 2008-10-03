@@ -1,1 +1,1 @@
-comp_filedir_xspec "'!*.@(@(?(e)ps|?(E)PS)?(.gz|.GZ)|pdf|PDF|dvi|DVI|gif|jp?(e)g|miff|tif?(f)|pn[gm]|p[bgp]m|bmp|xpm|ico|xwd|tga|pcx|GIF|JP?(E)G|MIFF|TIF?(F)|PN[GM]|P[BGP]M|BMP|XPM|ICO|XWD|TGA|PCX)'"
+comp_filedir_xspec "'!*.@(@(?(e)ps|?(E)PS)?(.gz|.GZ)|cb[rz]|CB[RZ]|djv?(u)|DJV?(U)|pdf|PDF|dvi|DVI|gif|jp?(e)g|miff|tif?(f)|pn[gm]|p[bgp]m|bmp|xpm|ico|xwd|tga|pcx|GIF|JP?(E)G|MIFF|TIF?(F)|PN[GM]|P[BGP]M|BMP|XPM|ICO|XWD|TGA|PCX)'"

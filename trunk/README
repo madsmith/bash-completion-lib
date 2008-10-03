@@ -1,5 +1,7 @@
 1.  Introduction
 2.  Adding completions
+    2.1.  Local
+    2.2.  System
 3.  Unit testing
 4.  Questions
 5.  Environment variables
@@ -47,9 +49,17 @@ files with extension `.pdf'.  Default is false (0).
 
 
 
-2.  Creating completions
+2.  Adding completions
 
-Use the command `script/generate' to create completions.  For example, say you
+
+2.1.  Local
+
+Use `bcl add' to add completions to the local ~/.bash_completion_lib.d/completions directory.
+
+
+2.1.  System
+
+Use the command `script/generate' to add completions to the bash_completion_lib core.  For example, say you
 wish to create completion for the `foo' command:
 
    $ script/generate foo _foo ' -o filenames'
@@ -61,6 +71,8 @@ The command above will generate the following files:
    ./test/completionLib/foo.exp
    ./test/completionOrig/foo.exp
    ./test/lib/completions/foo.exp
+
+NOTE: These test files are for normal tests.  If you wish to test complete-restrict-by-extension, take a look at the test files for `acroread'.
 
 
 
