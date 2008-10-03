@@ -26,15 +26,16 @@ $2()
 {
 } # $2()
 BASH
-	# If `function' doesn't equal `_command', additional code is required
-	# to install completions
-    if [ "_$1" != "$2" ]; then
-	cat <<BASH >> "$path"
+	    # If `function' doesn't equal `_command', additional code is required
+	    # to install completions
+	if [ "_$1" != "$2" ]; then
+	    cat <<BASH >> "$path"
 
 comp_install -F $2  # Make completion persistent for subsequent invocations
 
 $2  # Generate completions for first invocation
 BASH
+	fi
     fi
 } # generate_completion()
 
