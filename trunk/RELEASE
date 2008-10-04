@@ -1,6 +1,6 @@
 bash_completion_lib-1.2.7, 4-Oct-2008
 
-- Added patches 20060301-0ubuntu1 (Issue 3).
+- Completed patches of 20060301-0ubuntu1 (Issue 3).
 - kpdf: Complete postscript files (Issue 3).
 - kdvi: complete .*\.dvi\.(gz|bz2) (Issue 3).
 - evince: Autocomplete on cbr/cbz/djvu files (Issue 3).
