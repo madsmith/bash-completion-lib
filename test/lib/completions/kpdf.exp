@@ -1,6 +1,6 @@
 proc setup {} {
     set test setup
-    set cmd "touch fixture1/t.pdf";  # Create temporary files
+    set cmd "touch fixture1/t.{pdf,PDF,{,e}ps,{,E}PS}";  # Create temporary files
     send "$cmd\r"
     expect -ex "$cmd\r\n/@"
 }; # setup()
@@ -8,7 +8,7 @@ proc setup {} {
 
 proc teardown {} {
     set test teardown
-    set cmd "rm fixture1/t.pdf";  # Remove temporary files
+    set cmd "rm fixture1/t.{pdf,PDF,{,e}ps,{,E}PS}";  # Remove temporary files
     send "$cmd\r"
     expect -ex "$cmd\r\n/@"
 }; # teardown()
@@ -17,12 +17,12 @@ proc teardown {} {
 setup
 
 
-set test "Tab should complete acroread"
+set test "Tab should complete kpdf"
     # Try completion
-set cmd "acroread fixture1/"
+set cmd "kpdf fixture1/"
 send "$cmd\t"
 expect {
-    -re "^${cmd}\r\n(\.svn/ +|)bar bar.d/ +foo.d/ +(\.svn/ +|)t.pdf +\r\n/@$cmd$"  { pass "$test" }
+    -re "^${cmd}\r\n(\.svn/ +|)bar bar.d/ +foo.d/ +(\.svn/ +|)t.eps +t.EPS +t.pdf +t.PDF +t.ps +t.PS +\r\n/@$cmd$"  { pass "$test" }
     -re /@ { unresolved "$test at prompt" }
     default { unresolved "$test" }
 }; # expect
