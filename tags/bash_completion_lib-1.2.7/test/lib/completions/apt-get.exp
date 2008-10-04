@@ -1,0 +1,27 @@
+proc setup {} {
+}; # setup()
+
+
+proc teardown {} {
+}; # teardown()
+
+
+setup
+
+
+set test "Tab should complete"
+    # Try completion
+set cmd "apt-get "
+send "$cmd\t"
+expect {
+    # -re "$cmd\r\nautoclean +build-dep +clean +dselect-upgrade +purge +source +upgrade +\r\nautoremove +check +dist-upgrade +install/ +remove +update +\r\n$cmd$" { pass "$test" }
+    -re "$cmd\r\nautoclean +build-dep +clean +dselect-upgrade +purge +source +upgrade +\r\nautoremove +check +dist-upgrade +install/ +remove +update +\r\n/@$cmd$" { pass "$test" }
+    -re /@ { unresolved "$test at prompt" }
+    -re eof { unresolved "eof" }
+}; # expect
+
+
+sync_after_int
+
+
+teardown

@@ -1,0 +1,234 @@
+bash_completion_lib-1.2.7, 4-Oct-2008
+
+- Completed patches of 20060301-0ubuntu1 (Issue 3).
+- kpdf: Complete postscript files (Issue 3).
+- kdvi: complete .*\.dvi\.(gz|bz2) (Issue 3).
+- evince: Autocomplete on cbr/cbz/djvu files (Issue 3).
+- Fixed and improved support for apt-get, apt-cache, apt-build and aptititude
+  (Issue 3, 32).
+- Prevent bash_completion_lib from sourcing twice.  If `COMP_VERSION' is
+  non-empty, bash_completion_lib returns immediately without loading any
+  completions (Issue 3, 31).
+
+
+
+
+bash_completion_lib-1.2.6, 21-Sep-2008
+
+- Removed unused function `comp_load_and_install()' (Issue 24).
+- Added administrative application `bcl' (Issue 28).
+- Usage of the COMP_LIB array is deprecated, because an array can't be exported
+  to a subshell.  Upon `bash_completion_lib' invocation, the COMP_LIB array is
+  automatically converted to a colon-delimited (:) string named COMP_PATH.
+  Exporting COMP_PATH is necessary for the administrative application `bcl' to
+  work correctly.
+
+
+
+
+bash_completion_lib-1.2.5, 4-Sep-2008
+
+- Added 'versions' environment variables COMP_VERSION and COMP_CACHE_VERSION;
+  automatically clear cache if versions differ (Issue 26).
+- Fixed error message "No such file or directory" when COMP_CACHE points to a
+  non-existing file (Issue 27).
+
+
+
+
+bash_completion_lib-1.2.4, 3-Aug-2008
+
+- Automated calls to `comp_install' and first call to completions generation
+  (Issue 23).
+- Fixed tests to use sync_after_int() instead of individually sending ^C'
+
+
+
+
+bash_completion_lib-1.2.3, 1-Aug-2008
+
+- Within comp_load(), when relocating the completion, fixed removing from the
+  leftmost dot instead of the rightmost dot.
+- Improved tests.  Added test.
+
+
+
+
+bash_completion_lib-1.2.2, 1-Aug-2008
+
+- Moved default location of COMP_CACHE to ~/.bash_completion_lib.d/cache~ (was
+  ~/.bash_completion_lib~)
+
+
+
+
+bash_completion_lib-1.2.1, 1-Aug-2008
+
+- Turned COMP_LIB into array variable, allowing for local completion overrides
+  (Issue 20).  If COMP_LIB is unset, COMP_LIB defaults to array:
+  - ~/.bash_completion_lib.d/completions
+  - $COMP_DIR/completions
+- Fixed tests to run successful on Cygwin/Windows
+
+
+
+
+bash_completion_lib-1.2.0, 20-Jul-2008
+
+- Changed symlink-ignore character from dot (.) to exclamation mark (!) to be
+  able to run bash_completion_lib on Cygwin/Windows
+- Fixed tests to run successful on Cywgin/Windows
+- Fixed passing argument $1 to _longopt
+- Changed _dpkg-reconfigure to _dpkg_reconfigure to comply to POSIX
+- Fixed calling `_iwpriv' instead of `_add_members' upon first
+  completion of `iwpriv'
+- Added `comp_include _known_hosts' to completion of `webmitm' and `sshmitm'
+- Fixed passing argument $1 to _ypmatch
+
+
+
+
+bash_completion_lib-1.1.1, 9-Jul-2008
+
+- Fixed completions using _command: sudo, svn, reportbug, exec, etc.
+  (Issues 19, 21)
+
+
+
+
+bash_completion_lib-1.1.0, 30-Jun-2008
+
+- Added completion cache, governed by environment variable COMP_CACHE.
+- Fixed completions and removed `have()' dependency: ifup, ifdown, iwconfig,
+  iwpriv, iwspy, cc, ant
+- Fixed error message when completing `rcs': "bash: [: too many arguments"
+
+
+
+
+bash_completion_lib-1.0.1, 16-Jun-2008
+
+- Within comp_load(), looked for `comp_install' instead of `_filedir' as test
+  whether to include `completionrc' in comp_load(), because `_filedir' is
+  already defined by original bash_completion.
+
+
+
+
+bash_completion_lib-1.0.0, 15-Jun-2008
+
+- 100% of bash_completion-20060301-4 (Debian) completions are now added
+- Allowed command to contain a dot (.) - to be specified by ending the command
+  with a dot.  Otherwise the dot is used as command.symlink notation.
+- Added completions: mkinitrd, pkg-config, cpio, id, getent, ntpdate, smartctl,
+  vncviewer, sysctl, update-rc.d, invoke-rc.d, minicom, svn, svnadmin, svnlook,
+  bk, btdownloadheadless.py, btdownloadcurses.py, btdownloadgui.py, cksfv,
+  clisp, arpspoof, dnsspoof, dsniff, filesnarf, mailsnarf, msgsnarf, macof,
+  sshmitm, sshow, tcpkill, tcpnice, urlsnarf, webmitm, civserver, civclient, gcl,
+  gkrellm, gnatmake, harbour, gharbour, hbpp, hbrun, hg, isql, larch, lisp,
+  lilypond, ly2dvi, add_members, remove_members, find_member, clone_member,
+  sync_members, list_lists, unshunt, list_admins, list_owners, list_members,
+  change_pw, withlist, newlist, rmlist, config_list, arch, cleanarch, inject,
+  dumpdb, check_db, check_perms, genaliases, mmsitepass, qrunner, mailmanctl,
+  mcrypt, mdecrypt, module, mtx, p4, g4, povray, xpovray, spovray, ri, sbcl,
+  sbcl-mt, sitecopy, snownews, svk, unace, unrar
+  (Issue 15)
+
+
+
+
+bash_completion_lib-0.8.0, 14-Jun-2008
+
+- 80% of bash_completion-20060301-4 (Debian) is now added
+- Added completions: pine, mutt, muttng, configure, reportbug,
+  querybts, update-alternatives, python, perl, perldoc, rcs, ci, co, rlog, rcs,
+  rdiff, lilo, links, pkg_delete, pkg_info, pkg_deinstall, kldload, kldunload,
+  portupgrade, portinstall, removepkg, look, ypmatch, ypcat, mplayer,
+  mencoder, gmplayer, kplayer, dcop, wvdial, gpg, iconv, dict, rdict, cdrecord,
+  mkisofs, mc, yum, yum-arch, convert, mogrify, display, animate, identify,
+  montage, composite, dd, cancel, aspell, xmms, info, dhclient,
+  lvmdiskscan, pvscan, pvs, pvdisplay, pvchange, pvcreate, pvmove, pvremove,
+  vgscan, vgs, vgdisplay, vgchange, vgcreate, vgremove, vgrename, vgreduce,
+  vgextend, vgimport, vgexport, vgck, vgconvert, vgcfbackup, vgcfgrestore,
+  vgmerge, vgsplit, vgmknodes, lvscan, lvs, lvdisplay, lvchange, lvcreate,
+  lvremove, lvrename, lvreduce, lvresize, lvextend, lvm
+  (Issue 15)
+
+
+
+
+bash_completion_lib-0.6.3, 13-Jun-2008
+
+- Added completions: gdb, lftp, createdb, ncftp, dropdb, psql,
+  a2ps, autoconf, automake, bc, gprof, ld, nm, objcopy,
+  objdump, readelf, strip bison, cpio, diff, patch, enscript,
+  cp, df, dir, du, ln, ls, mkfifo, mknod, mv, rm touch, vdir,
+  awk, gperf, grep, grub, indent, less, m4, sed, shar, date tee,
+  who, texindex, cat, csplit, cut, expand, fmt, fold, head
+  md5sum, nl, od, paste, pr, ptx, sha1sum, sort, split, tac,
+  tail, tr, unexpand uniq, wc, ldd, bash, id, irb, mkdir, rmdir,
+  env, netstat, seq, uname, units, wget, gcc, g++, c++, g77,
+  gcj, gpc, cc, cardctl, dpkg, dpkg-deb, dpkg-reconfigure,
+  dpkg-source, dselect, java, javadoc, javac
+  (Issue 14, 15)
+- Added helper file `script/generate' for creating new completion
+- Propagated use of `comp_include()' for including lib files
+
+
+
+
+bash_completion_lib-0.6.2, 9-Jun-2008
+
+- Added completions: mysqladmin, gzip, bzip2 and openssl (Issue 14, 15)
+- Fixed installing tar completion after first completion (Issue 16)
+- Added completion for `ant' (Issue 12)
+- Added testsuite for Debian package bash-completion_20060301-4
+- Make completion working in the middle of a word (Adam Simpkins). (Ubuntu LP: #139666))
+- Removed erroneous completion for the `file' command
+- Test: Bash_completion_lib is now only sourced once at the beginning of the
+  test tool "completionLib".  Removed host and target definitions.  (Issue 4)
+
+
+
+
+bash_completion_lib-0.6.1, 21-May-2008
+
+- Cleaned up bash environment after completion
+- Fixed COMP_RESTRICT_BY_EXTENSION
+- Test: Added test install/load.exp to test for clean bash environment after
+  completion
+- Test: Added test for: acroread (COMP_RESTRICT_BY_EXTENSION)
+
+
+
+
+bash_completion_lib-0.6, 14-May-2008
+
+- Additional file `comploadrc' contains setting of helper functions
+  and variables during loading of completion
+- Renamed project to bash_completion_lib (was bash_completion_split)
+- All parameters to `comp_install' are now passed to `complete'
+- Improved install for `command' completions: time, sudo, etc.
+- Test: Added test for clean install with no leftover bash variables or
+  functions
+- Test: Changed test prompt from `$>' to `@' to contain less regexp characters
+- Test: Added tests for: readonly, setopt, time, unset
+- Test: Removed .svn dependency in testing `cd'
+- Test: Split tests so that core can be run against original bash_completion
+  package as well
+
+
+
+
+bash_completion_split-0.5, 10-Apr-2008
+
+- First release
+
+
+
+
+
+
+1)  For issues, see: http://code.google.com/p/bash-completion-lib/issues/detail?id=
+
+2)  Ubuntu LP = Ubuntu Launchpad, see: https://bugs.launchpad.net/ubuntu

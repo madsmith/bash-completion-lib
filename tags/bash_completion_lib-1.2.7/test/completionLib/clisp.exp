@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p clisp"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o default -F comp_load clisp\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/clisp.exp"
+
+
+set test "Completion via _clisp() should be installed"
+set cmd "complete -p clisp"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o default -F _clisp clisp\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/clisp.exp"

@@ -1,0 +1,19 @@
+# RedHat & Debian GNU/Linux if{up,down} completion
+#
+_ifupdown()
+{
+    local cur
+
+    COMPREPLY=()
+    cur=`_get_cword`
+
+    if [ $COMP_CWORD -eq 1 ]; then
+        _configured_interfaces
+       fi
+
+       return 0
+}
+
+comp_install -F _ifupdown  # Make completion persistent for subsequent invocations
+
+_ifupdown  # Generate completions for first invocation

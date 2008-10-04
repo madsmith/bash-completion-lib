@@ -1,0 +1,26 @@
+source lib/library.exp
+
+
+proc completionDebian_exit {} {
+        # Exit bash
+    send "\rexit\r"
+}; # comp_exit()
+
+
+proc completionDebian_start {} {
+    global spawn_id
+    send_user "completionDebian_start\n"
+        # Start bash
+    exp_spawn bash --rcfile config/bashrc
+    expect -ex "/@"
+        # Load completions
+    set cmd "BASH_COMPLETION=../bash_completion-20060301.debian.4/bash-completion-20060301/bash_completion; source \$BASH_COMPLETION"
+    send "$cmd\r"
+    expect -ex "$cmd\r\n"
+    expect -ex "/@"
+}; # completionDebian_start()
+
+
+proc completionDebian_version {} {
+    puts "bash_completion-20060301.debian.4"
+}; # completionDebian_version()

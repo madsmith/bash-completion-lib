@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p pvmove"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load pvmove\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/pvmove.exp"
+
+
+set test "Completion via _pvmove() should be installed"
+set cmd "complete -p pvmove"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _pvmove pvmove\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/pvmove.exp"

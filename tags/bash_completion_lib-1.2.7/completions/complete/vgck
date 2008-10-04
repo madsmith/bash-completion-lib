@@ -1,0 +1,18 @@
+comp_include _lvm
+
+_vgck()
+{
+    local cur prev
+
+    COMPREPLY=()
+    cur=`_get_cword`
+
+    if [[ "$cur" == -* ]]; then
+        COMPREPLY=( $( compgen -W '-d --debug -h \
+            -? --help -v --verbose --version' -- $cur ) )
+    else
+        _volumegroups
+    fi
+} # _vgck()
+
+

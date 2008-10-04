@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p info"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames -F comp_load info\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/info.exp"
+
+
+set test "Completion via _info() should be installed"
+set cmd "complete -p info"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames -F _info info\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/info.exp"

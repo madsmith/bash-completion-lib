@@ -1,0 +1,34 @@
+# Mailman completion by Guillaume Rousse <rousse@ccr.jussieu.fr>
+#
+
+comp_include _mailman_lists
+
+_add_members()
+{
+	local cur prev
+
+	COMPREPLY=()
+	cur=`_get_cword`
+	prev=${COMP_WORDS[COMP_CWORD-1]}
+
+	case "$prev" in
+		-@(r|d|-regular-members-file=|-digest-members-file=))
+			_filedir
+			return 0
+			;;
+		-@(w|a|-welcome-msg=|-admin-notify=))
+			COMPREPLY=( $( compgen -W 'y n' -- $cur) )
+			return 0
+			;;
+	esac
+
+	if [[ "$cur" == -* ]]; then
+		COMPREPLY=( $( compgen -W '--regular-members-file= -r \
+			--digest-members-file= -d --welcome-msg= -w \
+			--admin-notify= -a --help -h' -- $cur ) )
+	else
+		_mailman_lists
+	fi
+} # _add_members()
+
+

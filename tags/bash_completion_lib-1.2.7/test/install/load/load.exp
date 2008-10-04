@@ -1,0 +1,68 @@
+proc setup {} {
+}; # setup()
+
+
+proc teardown {} {
+}; # teardown()
+
+
+setup
+
+
+set test env
+    # Start bash
+exp_spawn bash --rcfile config/bashrc
+expect -ex "/@"
+
+    # Change bash directory to `install/load'
+set cmd "cd install/load"
+send "$cmd\r"
+expect -ex "$cmd\r\n"
+expect -ex "/install/load/@"
+
+    # Load completions
+set cmd "source ../../../bash_completion_lib"
+send "$cmd\r"
+expect -ex "$cmd\r\n"
+expect -ex "/install/load/@"
+
+    # Echo environment to load_pre.txt
+set cmd "\{ set; declare -F; \} > load_pre.txt~"
+send "$cmd\r"
+expect -ex "$cmd\r\n"
+expect -ex "/install/load/@"
+
+    # Install `alias' completion by sending "alias <TAB>"
+set cmd "alias "
+send "$cmd\t"
+expect -ex "$cmd"
+
+sync_after_int
+
+    # Echo environment to load_post.txt
+set cmd "\{ set; declare -F; \} > load_post.txt~"
+send "$cmd\r"
+expect -ex "$cmd\r\n"
+expect -ex "/install/load/@"
+
+    # Generate diff between load1 and load2
+set cmd "diff load_pre.txt~ load_post.txt~ | sed -f load.sed > load.diff~"
+send "$cmd\r"
+expect -ex "$cmd\r\n"
+expect -ex "/install/load/@"
+
+
+set test "Bash environment should not be polluted after comp_load"
+    # Compare expected diff with load pre/post diff
+set cmd "diff load.diff load.diff~"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\n/install/load/@$" { pass "$test" }
+    -re /install/load/@ { 
+        fail "$test" 
+        send_user /install/load/@$expect_out(buffer)
+    }
+}
+
+
+teardown

@@ -1,0 +1,49 @@
+proc setup {} {
+}; # setup()
+
+
+proc teardown {} {
+}; # teardown()
+
+
+setup
+
+
+set test env
+    # Start bash
+exp_spawn bash --rcfile config/bashrc
+expect -ex "/@"
+
+    # Change bash directory to `install'
+set cmd "cd install"
+send "$cmd\r"
+expect -ex "$cmd\r\n"
+expect -ex "/install/@"
+
+    # Load completions
+set cmd "source ../../bash_completion_lib"
+send "$cmd\r"
+expect -ex "$cmd\r\n"
+expect -ex "/install/@"
+
+    # Make bash verbose
+set cmd "set -v"
+send "$cmd\r"
+expect -ex "$cmd\r\n"
+expect -ex "/install/@"
+
+
+set test "Second include should return quick"
+set cmd "source ../../bash_completion_lib"
+send "$cmd\r"
+expect -ex "$cmd\r\n"
+expect {
+    -re "comp_load" { fail "$test" }
+    -re "\r\n/install/@$" { pass "$test" }
+    -re /install/@ { 
+        fail "$test" 
+    }
+}; # expect
+
+    
+teardown

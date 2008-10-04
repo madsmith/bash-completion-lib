@@ -1,0 +1,9 @@
+COMP_DIR=PATH
+COMP_PATH=PATH
+COMP_RESTRICT_BY_EXTENSION=0
+COMP_VERSION=version
+bash205=VERSION
+bash205b=VERSION
+bash3=VERSION
+declare -f comp_dir2args
+declare -f comp_load

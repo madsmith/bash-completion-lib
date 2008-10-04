@@ -1,0 +1,27 @@
+# dnsspoof(8) completion
+#
+_dnsspoof()
+{
+	local cur
+
+	COMPREPLY=()
+	cur=`_get_cword`
+	prev=${COMP_WORDS[COMP_CWORD-1]}
+
+	case "$prev" in
+		-i)
+			_interfaces
+			return 0
+			;;
+		-f)
+			_filedir
+			return 0
+			;;
+	esac
+
+	if [[ "$cur" == -* ]]; then
+		COMPREPLY=( $( compgen -W '-i -f' -- $cur ) )
+	fi
+} # _dnsspoof()
+
+

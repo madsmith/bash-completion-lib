@@ -1,0 +1,7 @@
+_cd() {
+    COMPREPLY=(foo)
+} # _cd()
+
+comp_install  # Make completion persistent for subsequent invocations
+
+_cd  # Generate completions for first invocation

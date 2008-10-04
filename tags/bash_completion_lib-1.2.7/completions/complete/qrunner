@@ -1,0 +1,17 @@
+# Mailman completion by Guillaume Rousse <rousse@ccr.jussieu.fr>
+#
+
+_qrunner()
+{
+	local cur
+
+	COMPREPLY=()
+	cur=`_get_cword`
+
+	if [[ "$cur" == -* ]]; then
+		COMPREPLY=( $( compgen -W '-r --runner= --once -o \
+			-l --list -v --verbose -s --subproc -h --help' -- $cur ) )
+	fi
+} # _qrunner()
+
+
