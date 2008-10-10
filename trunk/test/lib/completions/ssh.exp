@@ -1,0 +1,27 @@
+proc setup {} {
+}; # setup()
+
+
+proc teardown {} {
+}; # teardown()
+
+
+setup
+
+
+set test "Tab should complete ssh known-hosts"
+    # Try completion
+set cmd "ssh -F fixtures/ssh/config "
+send "$cmd\t"
+set expected "^${cmd}doo $"
+expect {
+    -re $expected  { pass "$test" }
+    -re /@ { unresolved "$test at prompt" }
+    default { unresolved "$test" }
+}; # expect
+
+
+sync_after_int
+
+
+teardown

@@ -1,3 +1,12 @@
+$VERSION
+
+- Fix loading completionrc once (1.2.7 bug)
+- Added handling of option `-F configfile' to ssh completion and _known_hosts
+- Exclude hashed hostnames from ssh host completion results (Issue 5).
+
+
+
+
 bash_completion_lib-1.2.7, 4-Oct-2008
 
 - Completed patches of 20060301-0ubuntu1 (Issue 3).

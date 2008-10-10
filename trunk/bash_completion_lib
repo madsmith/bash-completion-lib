@@ -55,7 +55,7 @@ fi
     # True (1) if restricted completion is enabled, False (0, default) if not
 COMP_RESTRICT_BY_EXTENSION=${COMP_RESTRICT_BY_EXTENSION:-0}
     # Version of bash-completion-lib
-COMP_VERSION=bash_completion_lib-1.2.7
+COMP_VERSION=bash_completion_lib-1.2.dev.185:200M
 
 
 # Load completion commands.
@@ -64,8 +64,7 @@ comp_load() {
 	# Always load `comploadrc'
     . $COMP_DIR/comploadrc
 	# Load `completionrc' once
-    #declare -F comp_install &> /dev/null || . $COMP_DIR/completionrc
-    . $COMP_DIR/completionrc
+    declare -F comp_install &> /dev/null || . $COMP_DIR/completionrc
 	# Find completion script
 	# NOTE: A search is performed for both `command' and `*.command'.
 	#	Syntax `*.command' is a kind of symlink notation.  E.g.
