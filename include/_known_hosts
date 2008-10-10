@@ -1,26 +1,39 @@
 # This function performs host completion based on ssh's known_hosts files,
 # defaulting to standard host completion if they don't exist.
-#
+# Arguments:  -a             Use aliases
+#             -c             Use `:' suffix
+#             -F configfile  Use `configfile' for configuration settings
 _known_hosts() {
-       local cur curd ocur user suffix aliases global_kh user_kh hosts i host
-       local -a kh khd config
+    local configfile cur curd ocur user suffix aliases global_kh user_kh hosts i host
+    local -a kh khd config
 
     COMPREPLY=()
     cur=`_get_cword`
     ocur=$cur
 
-    [ "$1" = -a ] || [ "$2" = -a ] && aliases='yes'
-    [ "$1" = -c ] || [ "$2" = -c ] && suffix=':'
+    local OPTIND=1
+    while getopts "acF:" flag "$@"; do 
+	case $flag in
+	    a) aliases=yes ;;
+	    c) suffix=: ;;
+	    F) configfile="$OPTARG" ;;
+	esac
+    done
+
     [[ $cur == *@* ]] && user=${cur%@*}@ && cur=${cur#*@}
     kh=()
 
     # ssh config files
-    [ -r /etc/ssh/ssh_config ] &&
-      config=( ${config[@]} /etc/ssh/ssh_config )
-    [ -r ~/.ssh/config ] &&
-      config=( ${config[@]} ~/.ssh/config )
-    [ -r ~/.ssh2/config ] &&
-      config=( ${config[@]} ~/.ssh2/config )
+    if [ "$configfile" ]; then
+	[ -r "$configfile" ] && config=("$configfile")
+    else
+	[ -r /etc/ssh/ssh_config ] &&
+	  config=( ${config[@]} /etc/ssh/ssh_config )
+	[ -r ~/.ssh/config ] &&
+	  config=( ${config[@]} ~/.ssh/config )
+	[ -r ~/.ssh2/config ] &&
+	  config=( ${config[@]} ~/.ssh2/config );
+    fi
 
     if [ ${#config[@]} -gt 0 ]; then
         # expand path (if present) to global known hosts file
@@ -32,7 +45,7 @@ _known_hosts() {
     # choose which global known hosts file to use
     if [ -r "$global_kh" ]; then
         kh=( "$global_kh" )
-    else
+    elif [ -z "$configfile" ]; then
         [ -r /etc/ssh/ssh_known_hosts ] &&
           kh=( ${kh[@]} /etc/ssh/ssh_known_hosts )
         [ -r /etc/ssh/ssh_known_hosts2 ] &&
@@ -48,7 +61,7 @@ _known_hosts() {
     # choose which user known hosts file to use
     if [ -r "$user_kh" ]; then
         kh=( ${kh[@]} "$user_kh" )
-    else
+    elif [ -z "$configfile" ]; then
         [ -r ~/.ssh/known_hosts ] &&
           kh=( ${kh[@]} ~/.ssh/known_hosts )
         [ -r ~/.ssh/known_hosts2 ] &&
@@ -58,7 +71,7 @@ _known_hosts() {
     fi
 
     # If we have known_hosts files to use
-    if [ ${#kh[@]} -gt 0 -o ${#khd[@]} -gt 0 ]; then
+    if [ ${#kh[@]} -gt 0 -o ${#khd[@]} -gt 0 -o -n "$configfile" ]; then
         # Escape slashes and dots in paths for awk
         cur=${cur//\//\\\/}
         cur=${cur//\./\\\.}
@@ -82,7 +95,7 @@ _known_hosts() {
 
         # FS needs to look for a comma separated list
         COMPREPLY=( $( awk 'BEGIN {FS=","}
-                {for (i=1; i<=2; ++i) { \
+                /^[^|]/ {for (i=1; i<=2; ++i) { \
                        gsub(" .*$", "", $i); \
                        if ($i ~ /'$cur'/) {print $i} \
                 }}' ${kh[@]} 2>/dev/null ) )
@@ -110,7 +123,7 @@ _known_hosts() {
         for (( i=0; i < ${#COMPREPLY[@]}; i++ )); do
         COMPREPLY[i]=$user${COMPREPLY[i]}$suffix
         done
-    else
+    elif [ -z "$configfile" ]; then
         # Just do normal hostname completion
         COMPREPLY=( $( compgen -A hostname -S "$suffix" -- $cur ) )
     fi

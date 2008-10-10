@@ -1,0 +1,22 @@
+set test "Alias completion via comp_load() should be installed"
+set cmd "complete -p ssh"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load ssh\r\n/@$"  { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/ssh.exp"
+
+
+set test "Alias completion via _ssh() should be installed"
+set cmd "complete -p ssh"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _ssh ssh\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/ssh.exp"
