@@ -1,1 +1,6 @@
-UserKnownHostsFile fixtures/ssh/known_hosts
+    UserKnownHostsFile fixtures/ssh/known_hosts
+
+    # Unindented
+Host gee
+	# Indented
+    Host hus
