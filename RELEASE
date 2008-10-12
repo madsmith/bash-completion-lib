@@ -6,6 +6,8 @@ $VERSION
 - Allow indented ssh config settings `GlobalKnownHostFile', `UserKnownHostFile'
   and `HostName' in _known_hosts completion.
 - Added handling of option `-F configfile' to scp completion (Issue 36).
+- Fixed _known_hosts completion offering `Name' of `HostName' as completion
+  (Issue 37)
 
 
 

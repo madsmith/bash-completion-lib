@@ -3,4 +3,4 @@
     # Unindented
 Host gee
 	# Indented
-    Host hus
+    HostName hus
