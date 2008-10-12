@@ -1,15 +1,23 @@
 proc setup {} {
+    set test setup
+    set cmd "cd fixtures/scp"
+    send "$cmd\r"
+    expect -re "^$cmd\r\n/fixtures/scp/@"
 }; # setup()
 
 
 proc teardown {} {
+    set test teardown
+    set cmd "cd ../.."
+    send "$cmd\r"
+    expect -re "^$cmd\r\n/@"
 }; # teardown()
 
 
 setup
 
 
-set test "Tab should complete scp"
+set test "Tab should complete remote pwd"
 
     # Retrieving `host_pwd' from ssh-host `bash_completion_lib' yields error? 
     # NOTE: The host should be set in e.g. .ssh/config or /etc/ssh_config
@@ -33,6 +41,21 @@ expect {
 
 
 sleep .5
+sync_after_int
+
+
+set test "Tab should complete scp known-hosts"
+    # Try completion
+set cmd "scp -F config "
+send "$cmd\t"
+set expected "^${cmd}\r\nconfig +doo: +gee: +hus: +known_hosts +\r\n/fixtures/scp/@$cmd$"
+expect {
+    -re $expected  { pass "$test" }
+    -re /@ { unresolved "$test at prompt" }
+    default { unresolved "$test" }
+}; # expect
+
+
 sync_after_int
 
 

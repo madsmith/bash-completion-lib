@@ -5,6 +5,7 @@ $VERSION
 - Exclude hashed hostnames from ssh host completion results (Issue 5).
 - Allow indented ssh config settings `GlobalKnownHostFile', `UserKnownHostFile'
   and `HostName' in _known_hosts completion.
+- Added handling of option `-F configfile' to scp completion (Issue 36).
 
 
 
