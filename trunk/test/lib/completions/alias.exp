@@ -1,4 +1,5 @@
 proc setup {} {
+    set test setup
     set cmd "unalias -a";  # Remove all aliases
     send "$cmd\r"
     expect -ex "$cmd\r\n/@"
@@ -12,6 +13,7 @@ proc setup {} {
 
 
 proc teardown {} {
+    set test teardown
     set cmd "unalias -a";  # Remove all aliases
     send "$cmd\r"
     expect -ex "$cmd\r\n/@"
