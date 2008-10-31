@@ -3,130 +3,136 @@
 # Arguments:  -a             Use aliases
 #             -c             Use `:' suffix
 #             -F configfile  Use `configfile' for configuration settings
-_known_hosts() {
-    local configfile cur curd ocur user suffix aliases global_kh user_kh hosts i host
-    local -a kh khd config
+_known_hosts()
+{
+	local configfile cur curd ocur user suffix aliases global_kh user_kh hosts i host
+	local -a kh khd config
 
-    COMPREPLY=()
-    cur=`_get_cword`
-    ocur=$cur
+	COMPREPLY=()
+	cur=`_get_cword`
+	ocur=$cur
 
-    local OPTIND=1
-    while getopts "acF:" flag "$@"; do 
-	case $flag in
-	    a) aliases=yes ;;
-	    c) suffix=: ;;
-	    F) configfile="$OPTARG" ;;
-	esac
-    done
+	local OPTIND=1
+	while getopts "acF:" flag "$@"; do 
+	    case $flag in
+		a) aliases='yes' ;;
+		c) suffix=':' ;;
+		F) configfile="$OPTARG" ;;
+	    esac
+	done
 
-    [[ $cur == *@* ]] && user=${cur%@*}@ && cur=${cur#*@}
-    kh=()
+	[[ $cur == *@* ]] && user=${cur%@*}@ && cur=${cur#*@}
+	kh=()
 
-    # ssh config files
-    if [ "$configfile" ]; then
-	[ -r "$configfile" ] && config=("$configfile")
-    else
-	[ -r /etc/ssh/ssh_config ] &&
-	  config=( ${config[@]} /etc/ssh/ssh_config )
-	[ -r ~/.ssh/config ] &&
-	  config=( ${config[@]} ~/.ssh/config )
-	[ -r ~/.ssh2/config ] &&
-	  config=( ${config[@]} ~/.ssh2/config );
-    fi
+	# ssh config files
+	if [ -n "$configfile" ]; then
+	    [ -r "$configfile" ] && 
+		config=( "${config[@]}" "$configfile" )
+	else
+	    [ -r /etc/ssh/ssh_config ] &&
+		config=( "${config[@]}" "/etc/ssh/ssh_config" )
+	    [ -r "${HOME}/.ssh/config" ] &&
+		config=( "${config[@]}" "${HOME}/.ssh/config" )
+	    [ -r "${HOME}/.ssh2/config" ] &&
+		config=( "${config[@]}" "${HOME}/.ssh2/config" );
+	fi
 
-    if [ ${#config[@]} -gt 0 ]; then
-        # expand path (if present) to global known hosts file
-        global_kh=$( eval echo $( sed -ne 's/^[ \t]*[Gg][Ll][Oo][Bb][Aa][Ll][Kk][Nn][Oo][Ww][Nn][Hh][Oo][Ss][Tt][Ss][Ff][Ii][Ll][Ee]['"$'\t '"']*\(.*\)$/\1/p' ${config[@]} ) )
-        # expand path (if present) to user known hosts file
-        user_kh=$( eval echo $( sed -ne 's/^[ \t]*[Uu][Ss][Ee][Rr][Kk][Nn][Oo][Ww][Nn][Hh][Oo][Ss][Tt][Ss][Ff][Ii][Ll][Ee]['"$'\t '"']*\(.*\)$/\1/p' ${config[@]} ) )
-    fi
+	if [ ${#config[@]} -gt 0 ]; then
+	    # expand path (if present) to global known hosts file
+	    global_kh=$( eval echo $( sed -ne 's/^[ \t]*[Gg][Ll][Oo][Bb][Aa][Ll][Kk][Nn][Oo][Ww][Nn][Hh][Oo][Ss][Tt][Ss][Ff][Ii][Ll][Ee]['"$'\t '"']*\(.*\)$/\1/p' "${config[@]}" ) )
+	    # expand path (if present) to user known hosts file
+	    user_kh=$( eval echo $( sed -ne 's/^[ \t]*[Uu][Ss][Ee][Rr][Kk][Nn][Oo][Ww][Nn][Hh][Oo][Ss][Tt][Ss][Ff][Ii][Ll][Ee]['"$'\t '"']*\(.*\)$/\1/p' "${config[@]}" ) )
+	fi
 
-    # choose which global known hosts file to use
-    if [ -r "$global_kh" ]; then
-        kh=( "$global_kh" )
-    elif [ -z "$configfile" ]; then
-        [ -r /etc/ssh/ssh_known_hosts ] &&
-          kh=( ${kh[@]} /etc/ssh/ssh_known_hosts )
-        [ -r /etc/ssh/ssh_known_hosts2 ] &&
-          kh=( ${kh[@]} /etc/ssh/ssh_known_hosts2 )
-        [ -r /etc/known_hosts ] &&
-          kh=( ${kh[@]} /etc/known_hosts )
-        [ -r /etc/known_hosts2 ] &&
-          kh=( ${kh[@]} /etc/known_hosts2 )
-        [ -d /etc/ssh2/knownhosts ] &&
-          khd=( ${khd[@]} /etc/ssh2/knownhosts/*pub )
-    fi
+	# Global known_hosts files
+	[ -r "$global_kh" ] &&
+		kh=( "${kh[@]}" "$global_kh" )
+	if [ -z "$configfile" ]; then
+	    [ -r /etc/ssh/ssh_known_hosts ] &&
+		kh=( "${kh[@]}" /etc/ssh/ssh_known_hosts )
+	    [ -r /etc/ssh/ssh_known_hosts2 ] &&
+		kh=( "${kh[@]}" /etc/ssh/ssh_known_hosts2 )
+	    [ -r /etc/known_hosts ] &&
+		kh=( "${kh[@]}" /etc/known_hosts )
+	    [ -r /etc/known_hosts2 ] &&
+		kh=( "${kh[@]}" /etc/known_hosts2 )
+	    [ -d /etc/ssh2/knownhosts ] &&
+		khd=( "${khd[@]}" /etc/ssh2/knownhosts/*pub )
+	fi
 
-    # choose which user known hosts file to use
-    if [ -r "$user_kh" ]; then
-        kh=( ${kh[@]} "$user_kh" )
-    elif [ -z "$configfile" ]; then
-        [ -r ~/.ssh/known_hosts ] &&
-          kh=( ${kh[@]} ~/.ssh/known_hosts )
-        [ -r ~/.ssh/known_hosts2 ] &&
-          kh=( ${kh[@]} ~/.ssh/known_hosts2 )
-        [ -d ~/.ssh2/hostkeys ] &&
-          khd=( ${khd[@]} ~/.ssh2/hostkeys/*pub )
-    fi
+	# User known_hosts files
+	[ -r "$user_kh" ] &&
+		kh=( "${kh[@]}" "$user_kh" )
+	if [ -z "$configfile" ]; then
+	    [ -r ~/.ssh/known_hosts ] &&
+		kh=( "${kh[@]}" ~/.ssh/known_hosts )
+	    [ -r ~/.ssh/known_hosts2 ] &&
+		kh=( "${kh[@]}" ~/.ssh/known_hosts2 )
+	    [ -d ~/.ssh2/hostkeys ] &&
+		khd=( "${khd[@]}" ~/.ssh2/hostkeys/*pub )
+	fi
 
-    # If we have known_hosts files to use
-    if [ ${#kh[@]} -gt 0 -o ${#khd[@]} -gt 0 -o -n "$configfile" ]; then
-        # Escape slashes and dots in paths for awk
-        cur=${cur//\//\\\/}
-        cur=${cur//\./\\\.}
-        curd=$cur
+	# If we have known_hosts files to use
+	if [ ${#kh[@]} -gt 0 -o ${#khd[@]} -gt 0 -o -n "$configfile" ]; then
+	    # Escape slashes and dots in paths for awk
+	    cur=${cur//\//\\\/}
+	    cur=${cur//\./\\\.}
+	    curd=$cur
 
-        if [[ "$cur" == [0-9]*.* ]]; then
-        # Digits followed by a dot - just search for that
-        cur="^$cur.*"
-        elif [[ "$cur" == [0-9]* ]]; then
-        # Digits followed by no dot - search for digits followed
-        # by a dot
-        cur="^$cur.*\."
-        elif [ -z "$cur" ]; then
-        # A blank - search for a dot or an alpha character
-        cur="[a-z.]"
-        else
-        cur="^$cur"
-        fi
+	    if [[ "$cur" == [0-9]*.* ]]; then
+		# Digits followed by a dot - just search for that
+		cur="^$cur.*"
+	    elif [[ "$cur" == [0-9]* ]]; then
+		# Digits followed by no dot - search for digits followed
+		# by a dot
+		cur="^$cur.*\."
+	    elif [ -z "$cur" ]; then
+		# A blank - search for a dot or an alpha character
+		cur="[a-z.]"
+	    else
+		cur="^$cur"
+	    fi
 
-        if [ ${#kh[@]} -gt 0 ]; then
+	    if [ ${#kh[@]} -gt 0 ]; then
 
-        # FS needs to look for a comma separated list
-        COMPREPLY=( $( awk 'BEGIN {FS=","}
-                /^[^|]/ {for (i=1; i<=2; ++i) { \
-                       gsub(" .*$", "", $i); \
-                       if ($i ~ /'$cur'/) {print $i} \
-                }}' ${kh[@]} 2>/dev/null ) )
-        fi
-        if [ ${#khd[@]} -gt 0 ]; then
-        # Needs to look for files called
-        # .../.ssh2/key_22_<hostname>.pub
-        # dont fork any processes, because in a cluster environment, 
-        # there can be hundreds of hostkeys
-        for i in ${khd[@]} ; do
-            if [[ "$i" == *key_22_$curd*.pub ]] && [ -r "$i" ] ; then
-            host=${i/#*key_22_/}
-            host=${host/%.pub/}
-            COMPREPLY=( ${COMPREPLY[@]} $host )
-            fi
-        done
-        fi
-        # append any available aliases from config files
-        if [ ${#config[@]} -gt 0 ] && [ -n "$aliases" ]; then
-        hosts=$( compgen -W "$( sed -ne 's/^[ \t]*[Hh][Oo][Ss][Tt]\([Nn][Aa][Mm][Ee]\)\?['"$'\t '"']\+\([^*?]*\)$/\2/p' ${config[@]} )" -- $ocur )
-        COMPREPLY=( ${COMPREPLY[@]} $hosts )
-        fi
+		# FS needs to look for a comma separated list
+		COMPREPLY=( $( awk 'BEGIN {FS=","}
+				/^[^|]/ {for (i=1; i<=2; ++i) { \
+				       gsub(" .*$", "", $i); \
+				       if ($i ~ /'$cur'/) {print $i} \
+				}}' "${kh[@]}" 2>/dev/null ) )
+	    fi
+	    if [ ${#khd[@]} -gt 0 ]; then
+		# Needs to look for files called
+		# .../.ssh2/key_22_<hostname>.pub
+		# dont fork any processes, because in a cluster environment,
+		# there can be hundreds of hostkeys
+		for i in "${khd[@]}" ; do
+		    if [[ "$i" == *key_22_$curd*.pub ]] && [ -r "$i" ] ; then
+			host=${i/#*key_22_/}
+			host=${host/%.pub/}
+			COMPREPLY=( "${COMPREPLY[@]}" $host )
+		    fi
+		done
+	    fi
+	    # append any available aliases from config files
+	    if [ ${#config[@]} -gt 0 ] && [ -n "$aliases" ]; then
+	    local host_aliases=$( sed -ne 's/^[ \t]*[Hh][Oo][Ss][Tt]\([Nn][Aa][Mm][Ee]\)\?['"$'\t '"']\+\([^*?]*\)$/\2/p' "${config[@]}" )
+	    hosts=$( compgen -W "$host_aliases" -- $ocur )
+		COMPREPLY=( "${COMPREPLY[@]}" $hosts )
+	    fi
+	    
+	    # Now add results of normal hostname completion
+	    COMPREPLY=( "${COMPREPLY[@]}" $( compgen -A hostname -- $ocur ) )
 
-        # apply suffix
-        for (( i=0; i < ${#COMPREPLY[@]}; i++ )); do
-        COMPREPLY[i]=$user${COMPREPLY[i]}$suffix
-        done
-    elif [ -z "$configfile" ]; then
-        # Just do normal hostname completion
-        COMPREPLY=( $( compgen -A hostname -S "$suffix" -- $cur ) )
-    fi
+	    # apply suffix
+	    for (( i=0; i < ${#COMPREPLY[@]}; i++ )); do
+		COMPREPLY[i]=$user${COMPREPLY[i]}$suffix
+	    done
+	elif [ -z "$configfile" ]; then
+	    # Just do normal hostname completion
+	    COMPREPLY=( $( compgen -A hostname -S "$suffix" -- $cur ) )
+	fi
 
-    return 0
+	return 0
 } # _known_hosts()

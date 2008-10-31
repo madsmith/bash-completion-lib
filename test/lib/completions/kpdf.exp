@@ -22,7 +22,7 @@ set test "Tab should complete kpdf"
 set cmd "kpdf fixture1/"
 send "$cmd\t"
 expect {
-    -re "^${cmd}\r\n(\.svn/ +|)bar bar.d/ +foo.d/ +(\.svn/ +|)t.eps +t.EPS +t.pdf +t.PDF +t.ps +t.PS +\r\n/@$cmd$"  { pass "$test" }
+    -re "^${cmd}\r\n(\.svn/ +|)bar bar.d/ +foo.d/ +(\.svn/ +|)t.eps +t.EPS +t.pdf +t.PDF +t.ps +t.PS *\r\n/@$cmd$"  { pass "$test" }
     -re /@ { unresolved "$test at prompt" }
     default { unresolved "$test" }
 }; # expect

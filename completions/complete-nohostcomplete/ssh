@@ -2,7 +2,7 @@ comp_include _known_hosts
 
 _ssh()
 {
-    local optconfigfile cur prev
+    local cur optconfigfile prev
     local -a config
 
     COMPREPLY=()
@@ -42,7 +42,7 @@ _ssh()
         _known_hosts -a $optconfigfile
 
         [ $COMP_CWORD -eq 1 -o -n "$optconfigfile" ] || \
-        COMPREPLY=( ${COMPREPLY[@]} $( compgen -c -- $cur ) )
+	    COMPREPLY=( "${COMPREPLY[@]}" $( compgen -c -- $cur ) )
     esac
 
     return 0
