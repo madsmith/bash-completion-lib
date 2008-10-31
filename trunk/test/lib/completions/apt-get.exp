@@ -14,8 +14,7 @@ set test "Tab should complete"
 set cmd "apt-get "
 send "$cmd\t"
 expect {
-    # -re "$cmd\r\nautoclean +build-dep +clean +dselect-upgrade +purge +source +upgrade +\r\nautoremove +check +dist-upgrade +install/ +remove +update +\r\n$cmd$" { pass "$test" }
-    -re "$cmd\r\nautoclean +build-dep +clean +dselect-upgrade +purge +source +upgrade +\r\nautoremove +check +dist-upgrade +install/ +remove +update +\r\n/@$cmd$" { pass "$test" }
+    -re	"$cmd\r\nautoclean\\s+autoremove\\s+build-dep\\s+check\\s+clean\\s+dist-upgrade\\s+dselect-upgrade\\s+install/\r\npurge\\s+remove\\s+source\\s+update\\s+upgrade\\s*\r\n/@$cmd$" { pass "$test" }
     -re /@ { unresolved "$test at prompt" }
     -re eof { unresolved "eof" }
 }; # expect

@@ -5,3 +5,5 @@
 set show-all-if-ambiguous on
     # No bell.  No ^G in output
 set bell-style none
+    # Display completions sorted horizontally, not vertically
+set print-completions-horizontally on

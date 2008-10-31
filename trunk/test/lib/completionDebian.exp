@@ -8,13 +8,25 @@ proc completionDebian_exit {} {
 
 
 proc completionDebian_start {} {
+    set test "start"
     global spawn_id
     send_user "completionDebian_start\n"
         # Start bash
     exp_spawn bash --rcfile config/bashrc
     expect -ex "/@"
         # Load completions
-    set cmd "BASH_COMPLETION=../bash_completion-20060301.debian.4/bash-completion-20060301/bash_completion; source \$BASH_COMPLETION"
+    #set cmd "BASH_COMPLETION=../bash_completion-20060301.debian.4/bash-completion-20060301/bash_completion; source \$BASH_COMPLETION"
+    set cmd "BASH_COMPLETION_DIR=\$(cd ../bash_completion-debian.bzr; pwd)/contrib"
+    send "$cmd\r"
+    expect -ex "$cmd\r\n"
+    expect -ex "/@"
+    
+    set cmd "BASH_COMPLETION=\$(cd ../bash_completion-debian.bzr; pwd)/bash_completion"
+    send "$cmd\r"
+    expect -ex "$cmd\r\n"
+    expect -ex "/@"
+
+    set cmd "source \$BASH_COMPLETION"
     send "$cmd\r"
     expect -ex "$cmd\r\n"
     expect -ex "/@"
@@ -22,5 +34,5 @@ proc completionDebian_start {} {
 
 
 proc completionDebian_version {} {
-    puts "bash_completion-20060301.debian.4"
+    puts "bash_completion-debian.bzr"
 }; # completionDebian_version()

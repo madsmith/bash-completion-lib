@@ -6,13 +6,13 @@ _scp()
 {
     local cur optconfigfile userhost path
 
-    local IFS=$'\t\n'
     COMPREPLY=()
     cur=`_get_cword ":"`
 
     _expand || return 0
 
     if [[ "$cur" == *:* ]]; then
+	local IFS=$'\t\n'
         # remove backslash escape from :
         cur=${cur/\\:/:}
         userhost=${cur%%?(\\):*}
@@ -48,7 +48,8 @@ _scp()
     done
 
     [[ "$cur" == */* ]] || _known_hosts -c -a $optconfigfile
-        COMPREPLY=( ${COMPREPLY[@]} $( command ls -aF1d $cur* \
+	local IFS=$'\t\n'
+        COMPREPLY=( "${COMPREPLY[@]}" $( command ls -aF1d $cur* \
                 2>/dev/null | sed \
                 -e "s/[][(){}<>\",:;^&!$&=?\`|\\ ']/\\\\&/g" \
                 -e 's/[*@|=]$//g' -e 's/[^\/]$/& /g' ) )

@@ -1,4 +1,4 @@
-$VERSION
+bash_completion_lib-1.2.8, 31-Oct-2008
 
 - Fix loading completionrc once (1.2.7 bug)
 - Added handling of option `-F configfile' to ssh completion and _known_hosts
@@ -8,6 +8,8 @@ $VERSION
 - Added handling of option `-F configfile' to scp completion (Issue 36).
 - Fixed _known_hosts completion offering `Name' of `HostName' as completion
   (Issue 37)
+- Added ssh/scp/_known_hosts improvements from latest bash-completion debian
+  source: http://bash-completion.alioth.debian.org/
 
 
 
