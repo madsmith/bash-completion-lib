@@ -62,7 +62,7 @@ bclScriptPath="$(dirname "$(which "$0")")"
 
     # @global string
     # Version
-bclVersion=1.2.8
+bclVersion=1.2.dev
 
 
 # Add completion to `bclOptLib'
