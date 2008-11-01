@@ -1,6 +1,10 @@
 # RedHat & Debian GNU/Linux if{up,down} completion
-#
-_ifupdown()
+
+
+comp_include _configured_interfaces
+
+
+_ifup()
 {
     local cur
 
@@ -8,12 +12,9 @@ _ifupdown()
     cur=`_get_cword`
 
     if [ $COMP_CWORD -eq 1 ]; then
-        _configured_interfaces
-       fi
+	_configured_interfaces
+	COMPREPLY=( $(compgen -W '${COMPREPLY[@]}' -- "$cur") )
+    fi
 
-       return 0
+    return 0
 }
-
-comp_install -F _ifupdown  # Make completion persistent for subsequent invocations
-
-_ifupdown  # Generate completions for first invocation
