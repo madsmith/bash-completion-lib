@@ -1,3 +1,12 @@
+$VERSION
+
+- Fixed argument completion of ifup/ifdown (Issue 5).
+- Moved _configured_interfaces() from completionrc to separate file:
+  include/_configured_interfaces
+
+
+
+
 bash_completion_lib-1.2.8, 31-Oct-2008
 
 - Fix loading completionrc once (1.2.7 bug)

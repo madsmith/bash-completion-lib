@@ -10,11 +10,11 @@ expect {
 source "lib/completions/ifup.exp"
 
 
-set test "Completion via _ifupdown() should be installed"
+set test "Completion via _ifup() should be installed"
 set cmd "complete -p ifup"
 send "$cmd\r"
 expect {
-    -re "^$cmd\r\ncomplete -F _ifupdown ifup\r\n/@$" { pass "$test" }
+    -re "^$cmd\r\ncomplete -F _ifup ifup\r\n/@$" { pass "$test" }
     -re /@ { fail "$test at prompt" }
 }; # expect
 
