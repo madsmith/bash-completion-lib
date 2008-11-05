@@ -40,7 +40,7 @@ _scp()
 		optconfigfile="$i"
 	    else
 		shift
-		optconfigfile="-F$1"
+		[ "$1" ] && optconfigfile="-F$1"
 	    fi
 	    break
 	fi

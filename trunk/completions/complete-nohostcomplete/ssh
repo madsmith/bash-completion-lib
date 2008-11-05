@@ -29,10 +29,10 @@ _ssh()
 	while [ $# -gt 0 ]; do
 	    if [ "${1:0:2}" = -F ]; then
 		if [ ${#1} -gt 2 ]; then
-		    optconfigfile="$i"
+		    optconfigfile="$1"
 		else
 		    shift
-		    optconfigfile="-F$1"
+		    [ "$1" ] && optconfigfile="-F$1"
 		fi
 		break
 	    fi
