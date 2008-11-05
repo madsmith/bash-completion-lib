@@ -3,6 +3,8 @@ $VERSION
 - Fixed argument completion of ifup/ifdown (Issue 5).
 - Moved _configured_interfaces() from completionrc to separate file:
   include/_configured_interfaces
+- Allow perl completion to complete filenames, complete -I and -x arguments (Issue 5).
+- Fixed error message in ssh/scp -F completion: "option -F requires argument".
 
 
 
