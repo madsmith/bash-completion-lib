@@ -130,7 +130,7 @@ proc teardown {} {
 setup
 
 
-set test "Tab should complete"
+set test "Tab should show completions"
     # Try completion
 set cmd "$1 "
 send "\$cmd\\t"
@@ -151,7 +151,11 @@ fi
 
 
 	# If argument count is wrong, show help
-[ $# -eq 3 ] || { echo "Usage: $0 command function complete-options"; exit 1; }
+if [ $# -ne 3 ]; then
+    echo "Usage: $0 command function complete-options"
+    echo "Example: $0 make _make ' -o filenames'"
+    exit 1
+fi
 
 
 generate_completion "$1" "$2" "$3"
