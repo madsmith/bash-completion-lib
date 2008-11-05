@@ -1,1 +1,1 @@
-source "lib/completions/scp.exp"
+source "lib/completions/ssh.exp"

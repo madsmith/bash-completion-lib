@@ -6,6 +6,10 @@ $VERSION
 - Allow perl completion to complete filenames, complete -I and -x arguments (Issue 5).
 - Fixed error message in ssh/scp -F completion: "option -F requires argument".
 - Add find -wholename completion (Issue 5).
+- Handle whitespaces in $HOME for _known_hosts() completion (Issue 5).
+- Allow ssh/scp configfile to contain spaces.
+- Improved _known_hosts to allow GlobalKnownHostsFile and UserKnownHostsFile to
+  contain multiple subsequent spaces.
 
 
 
