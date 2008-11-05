@@ -54,18 +54,14 @@ set comps [exec bash -c "compgen -A hostname"]
     # Hosts `gee' and `hus' are defined in ./fixtures/scp/config
     # Hosts `doo' and `ike' are defined in ./fixtures/scp/known_hosts
 lappend comps doo gee hus ike
-    # Postfix hosts with `:'
-for { set i 0 } { $i < [llength $comps] } { incr i } {
-    lset comps $i "[lindex $comps $i]:"
-}; # for
     # Append filenames `config' and `known_hosts'
-lappend comps config known_hosts
+lappend comps config known_hosts "spaced\\\\ \\\\ conf"
 set comps [lsort -ascii $comps]
-set comps [join $comps "\\s+"]
+set comps [join $comps ":{0,1}\\s+"]
     # Try completion
 set cmd "scp -F config "
 send "$cmd\t"
-set expected "^${cmd}\r\n$comps\r\n/fixtures/scp/@$cmd$"
+set expected "^${cmd}\r\n$comps:{0,1}\\s*/fixtures/scp/@$cmd$"
 expect {
     -re $expected  { pass "$test" }
     -re /@ { unresolved "$test at prompt" }
@@ -83,6 +79,34 @@ send "$cmd\t "
 set expected "^$cmd $"
 expect {
     -re "^${cmd}bash: option requires an argument -- F" { fail "$test" }
+    -re $expected  { pass "$test" }
+    -re /@ { unresolved "$test at prompt" }
+    default { unresolved "$test" }
+}; # expect
+
+
+sync_after_int
+
+
+set test "Config file containing space should work"
+
+    # Build string list of completions, separated by regexp whitespace marker (\s+).
+    # Example string: comp1\s+comp2\s+comp3
+
+    # Get hostnames
+set comps [exec bash -c "compgen -A hostname"]
+    # Hosts `gee' and `hus' are defined in ./fixtures/scp/config
+    # Hosts `doo' and `ike' are defined in ./fixtures/scp/known_hosts
+lappend comps doo gee hus ike
+    # Append filenames `config' and `known_hosts'
+lappend comps config known_hosts "spaced\\\\ \\\\ conf"
+set comps [lsort -ascii $comps]
+set comps [join $comps ":{0,1}\\s+"]
+    # Try completion
+set cmd "scp -F 'spaced  conf' "
+send "$cmd\t"
+set expected "^${cmd}\r\n$comps:{0,1}\\s*/fixtures/scp/@$cmd$"
+expect {
     -re $expected  { pass "$test" }
     -re /@ { unresolved "$test at prompt" }
     default { unresolved "$test" }
