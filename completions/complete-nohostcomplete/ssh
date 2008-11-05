@@ -1,4 +1,4 @@
-comp_include _known_hosts
+comp_include _dequote _known_hosts
 
 _ssh()
 {
@@ -24,22 +24,22 @@ _ssh()
         COMPREPLY=( $( compgen -u -- $cur ) )
         ;;
     *)
-	# Search COMP_WORDS for '-F configfile' argument
+	# Search COMP_WORDS for '-F[ ]configfile' argument
 	set -- "${COMP_WORDS[@]}"
 	while [ $# -gt 0 ]; do
 	    if [ "${1:0:2}" = -F ]; then
 		if [ ${#1} -gt 2 ]; then
-		    optconfigfile="$1"
+		    optconfigfile="$(_dequote "$1")"
 		else
 		    shift
-		    [ "$1" ] && optconfigfile="-F$1"
+		    [ "$1" ] && optconfigfile="$(_dequote "-F$1")"
 		fi
 		break
 	    fi
 	    shift
 	done
 
-        _known_hosts -a $optconfigfile
+        _known_hosts -a "$optconfigfile"
 
         [ $COMP_CWORD -eq 1 -o -n "$optconfigfile" ] || \
 	    COMPREPLY=( "${COMPREPLY[@]}" $( compgen -c -- $cur ) )
