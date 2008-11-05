@@ -5,6 +5,7 @@ $VERSION
   include/_configured_interfaces
 - Allow perl completion to complete filenames, complete -I and -x arguments (Issue 5).
 - Fixed error message in ssh/scp -F completion: "option -F requires argument".
+- Add find -wholename completion (Issue 5).
 
 
 
