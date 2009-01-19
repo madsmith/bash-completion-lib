@@ -1,3 +1,6 @@
+comp_include _rl_enabled
+
+
 # This meta-cd function observes the CDPATH variable, so that cd additionally
 # completes on directories under those specified in CDPATH.
 #
@@ -44,5 +47,3 @@ _cd()
         
     return 0
 }
-_cd
-comp_install  # Make completion persistent

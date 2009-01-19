@@ -3,15 +3,6 @@
 [ -n "${BASH_COMPLETION_DEBUG:-}" ] && set -v || set +v
 
 
-# This function checks whether a given readline variable
-# is `on'.
-#
-_rl_enabled() 
-{
-    [[ "$( bind -v )" = *$1+([[:space:]])on* ]]
-}
-
-
 # Generate completions for file-exclude specifications.  Directories must be allowed.
 # @param string $1  Exclude pattern for complete/compgen
 comp_filedir_xspec() {

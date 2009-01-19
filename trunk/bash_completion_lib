@@ -153,7 +153,7 @@ comp_dir2args() {
             for i in complete*; do
                     # Don't install completion if 'comp_dir2args()' returns false
                 if comp_dir2args "./$i"; then
-                    cd "$i" && {
+                    cd "$i" > /dev/null && {
 			for comp in *; do
 			    #  If name ends with exclamation mark (!), only
 			    #+ strip last exclamation mark, otherwise strip

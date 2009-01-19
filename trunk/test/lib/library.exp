@@ -13,3 +13,16 @@ proc sync_after_tab {} {
     sleep .4
 }; # sync_after_tab()
 
+
+# TODO
+# If a command is not available, fail the test with status UNSUPPORTED
+proc is_available {$command} {
+    #set status 0 
+    #   # $results contains error messages
+    #if {[catch [exec false] results]} { 
+    #    if {[lindex $::errorCode 0] eq "CHILDSTATUS"} { 
+    #        set status [lindex $::errorCode 2] 
+    #    }   
+    #}
+    # type command > /dev/null 2>&1
+}
