@@ -1,7 +1,7 @@
 # Mailman completion by Guillaume Rousse <rousse@ccr.jussieu.fr>
 #
+comp_include _filedir _mailman_lists
 
-comp_include _mailman_lists
 
 _list_members()
 {

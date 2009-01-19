@@ -1,5 +1,8 @@
 # unrar(1) completion by Guillaume Rousse <rousse@ccr.jussieu.fr>
-#
+
+
+comp_include _filedir _get_cword
+
 
 _unrar()
 {
@@ -25,5 +28,3 @@ _unrar()
   
 	return 0
 } # _unrar()
-
-

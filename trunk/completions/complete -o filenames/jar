@@ -1,3 +1,6 @@
+comp_include _filedir _get_cword
+
+
 _jar()
 {
     local cur
@@ -22,5 +25,3 @@ _jar()
             ;;
     esac
 }
-_jar
-comp_install  # Make completion persistent

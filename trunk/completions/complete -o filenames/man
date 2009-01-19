@@ -1,3 +1,6 @@
+comp_include _filedir _get_cword
+
+
 _man()
 {
     local cur prev sect manpath UNAME

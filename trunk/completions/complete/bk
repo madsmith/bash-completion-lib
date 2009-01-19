@@ -2,6 +2,7 @@
 #
 # $Id: bitkeeper,v 1.2 2002/06/12 22:03:23 ianmacd Exp $
 #
+comp_include _get_cword _filedir
 
 _bk()
 {

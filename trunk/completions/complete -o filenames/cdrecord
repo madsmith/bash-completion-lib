@@ -1,5 +1,9 @@
 # cdrecord(1) completion
-#
+
+
+comp_include _filedir _get_cword
+
+
 _cdrecord()
 {
     local cur prev i generic_options track_options track_mode

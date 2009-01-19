@@ -1,7 +1,7 @@
 # Debian aptitude(1) completion
 
 
-comp_include _comp_dpkg_hold_packages _comp_dpkg_installed_packages
+comp_include _comp_dpkg_hold_packages _comp_dpkg_installed_packages _filedir _get_cword
 
 
 aptitude()

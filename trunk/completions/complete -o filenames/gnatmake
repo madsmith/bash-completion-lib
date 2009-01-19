@@ -1,5 +1,8 @@
 # Gnatmake completion by Ralf_Schroth@t-online.de (Ralf Schroth)
-#
+
+
+comp_include _filedir _get_cword
+
 
 _gnatmake()
 {

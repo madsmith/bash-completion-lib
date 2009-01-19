@@ -1,5 +1,9 @@
 # smartctl(8) completion
-#
+
+
+comp_include _filedir _get_cword
+
+
 _smartctl_quietmode()
 {
     COMPREPLY=( $( compgen -W 'errorsonly silent' -- $cur ) )

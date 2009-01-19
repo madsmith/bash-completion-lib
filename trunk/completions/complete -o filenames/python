@@ -1,5 +1,9 @@
 # Python completion
-#
+
+
+comp_include _filedir _get_cword
+
+
 _python()
 {
     local prev cur
@@ -46,5 +50,3 @@ _python()
 
     return 0
 } # _python()
-
-

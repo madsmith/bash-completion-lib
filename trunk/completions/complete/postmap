@@ -1,5 +1,8 @@
 # postalias(1) and postmap(1)
 #
+comp_include _filedir _get_cword
+
+
 _postmap()
 {
     local cur prev len idx

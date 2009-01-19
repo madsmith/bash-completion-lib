@@ -1,5 +1,8 @@
 # Postfix completion.
 #
+comp_include _filedir _get_cword
+
+
 _postfix()
 {
     local cur prev

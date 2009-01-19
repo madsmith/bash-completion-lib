@@ -1,5 +1,8 @@
 # postcat(1)
 #
+comp_include _filedir _get_cword
+
+
 _postcat()
 {
     local cur prev pval len idx qfile

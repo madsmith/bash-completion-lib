@@ -1,4 +1,5 @@
-comp_include _ImageMagick
+comp_include _filedir _get_cword _ImageMagick
+
 
 _identify()
 {
@@ -20,5 +21,3 @@ _identify()
         _filedir
     fi
 } # _identify()
-
-

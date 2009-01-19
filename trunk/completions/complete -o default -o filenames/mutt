@@ -2,6 +2,11 @@
 #
 # Mutt doesn't have an "addressbook" like Pine, but it has aliases and
 # a "query" function to retrieve addresses, so that's what we use here.
+
+
+comp_include _filedir _get_cword
+
+
 _muttaddr()
 {
     _muttaliases

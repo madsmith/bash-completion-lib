@@ -1,7 +1,9 @@
-comp_include _java
-
 # javac completion
-#
+
+
+comp_include _filedir _get_cword _java
+
+
 _javac()
 {
     COMPREPLY=()

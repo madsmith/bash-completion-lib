@@ -1,5 +1,8 @@
 # ntpdate(1) completion
 #
+comp_include _filedir _get_cword
+
+
 _ntpdate()
 {
     local cur prev

@@ -1,5 +1,8 @@
 # povray completion by "David Necas (Yeti)" <yeti@physics.muni.cz>
-#
+
+
+comp_include _filedir _get_cword
+
 
 _povray()
 {

@@ -1,6 +1,10 @@
 # bash programmable completion for various Common Lisp implementations by
 # Nikodemus Siivola <nikodemus@random-state.net>
 
+
+comp_include _filedir _get_cword
+
+
 _gcl()
 {
     local cur
@@ -19,5 +23,3 @@ _gcl()
 
     return 0
 } # _gcl()
-
-

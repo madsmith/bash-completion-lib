@@ -1,5 +1,9 @@
 # info(1) completion
-#
+
+
+comp_include _filedir _get_cword
+
+
 _info()
 {
     local cur infopath UNAME
@@ -46,5 +50,3 @@ _info()
 
     return 0
 } # _info()
-
-

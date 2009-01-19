@@ -1,5 +1,9 @@
 # mc(1) completion
-#
+
+
+comp_include _filedir _get_cword
+
+
 _mc()
 {
     local cur prev
@@ -38,5 +42,3 @@ _mc()
         _filedir -d
     fi
 } # _mc()
-
-

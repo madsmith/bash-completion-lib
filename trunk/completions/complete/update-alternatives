@@ -1,5 +1,7 @@
 # update-alternatives completion
-#
+
+
+comp_include _filedir _get_cword
 
 installed_alternatives()
 {

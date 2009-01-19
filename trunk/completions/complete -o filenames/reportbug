@@ -1,7 +1,9 @@
-comp_include _command
-
 # Debian reportbug(1) completion
-#
+
+
+comp_include _command _filedir _get_cword
+
+
 _reportbug()
 {
     local cur prev

@@ -7,7 +7,11 @@
 # linker takes a -z option, but you must type -Wl,-z for gcc.)  Instead, we
 # ask the driver ("g++") for the name of the compiler ("cc1"), and parse the
 # --help output of the compiler.
-#
+
+
+comp_include _filedir _get_cword
+
+
 _gcc()
 {
     local cur cc backend

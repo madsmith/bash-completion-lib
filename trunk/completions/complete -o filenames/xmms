@@ -1,5 +1,9 @@
 # xmms(1) completion
-#
+
+
+comp_include _filedir _get_cword
+
+
 _xmms()
 {
     local cur
@@ -17,5 +21,3 @@ _xmms()
 
     fi
 } # _xmms()
-
-
