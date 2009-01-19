@@ -1,5 +1,9 @@
 # yum(8) completion
-#
+
+
+comp_include _filedir _get_cword _rpm_installed_packages
+
+
 _yum()
 {
     local cur prev special
@@ -63,5 +67,3 @@ _yum()
         ;;
     esac
 } # _yum()
-
-

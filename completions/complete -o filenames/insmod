@@ -1,7 +1,11 @@
 # Linux insmod(8), modprobe(8) and modinfo(8) completion. This completes on a
 # list of all available modules for the version of the kernel currently
 # running.
-#
+
+
+comp_include _filedir _get_cword
+
+
 _insmod()
 {
     local cur prev modpath
@@ -35,5 +39,4 @@ _insmod()
     fi
 
     return 0
-}
-_insmod
+} # _insmod()

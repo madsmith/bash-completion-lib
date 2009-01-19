@@ -3,6 +3,10 @@
 #
 # $Id: clisp,v 1.2 2004/03/30 23:05:45 ianmacd Exp $
 
+
+comp_include _filedir _get_cword
+
+
 _clisp()
 {
     local cur

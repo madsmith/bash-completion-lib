@@ -1,5 +1,9 @@
 # rsync(1) completion
-#
+
+
+comp_include _filedir _get_cword _known_hosts
+
+
 _rsync()
 {
     local cur prev shell i userhost path
@@ -87,5 +91,4 @@ _rsync()
     esac
  
     return 0
-}
-_rsync
+} # _rsync()

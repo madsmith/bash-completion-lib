@@ -1,7 +1,8 @@
 # Mailman completion by Guillaume Rousse <rousse@ccr.jussieu.fr>
-#
 
-comp_include _mailman_lists
+
+comp_include _filedir _get_cword _mailman_lists
+
 
 _config_list()
 {

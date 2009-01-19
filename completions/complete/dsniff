@@ -1,5 +1,7 @@
 # dsniff(8) completion
 #
+comp_include _filedir _get_cword _interfaces
+
 _dsniff()
 {
 	local cur

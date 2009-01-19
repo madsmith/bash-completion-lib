@@ -1,4 +1,5 @@
-comp_include _perlmodules
+comp_include _filedir _get_cword _perlmodules
+
 
 _perl()
 {
@@ -42,5 +43,3 @@ _perl()
             -n -a -F -l -0 -I -m -M -P -S -x -i -e ' -- $cur ) )
     return 0
 } # _perl()
-
-

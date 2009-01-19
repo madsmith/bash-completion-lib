@@ -1,7 +1,9 @@
-comp_include _command
-
 # svn completion
-#
+
+
+comp_include _command _filedir _get_cword
+
+
 _svn()
 {
 	local cur prev commands options command

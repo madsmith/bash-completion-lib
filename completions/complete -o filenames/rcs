@@ -1,5 +1,9 @@
 # rcs(1) completion
-#
+
+
+comp_include _filedir _get_cword
+
+
 _rcs()
 {
     local cur prev file dir i
@@ -32,5 +36,3 @@ _rcs()
     # otherwise, default to directories
     [ ${#COMPREPLY[@]} -eq 0 -a "$1" = ci ] && _filedir || _filedir -d
 } # _rcs()
-
-

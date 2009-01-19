@@ -1,5 +1,8 @@
 # svk completion by Guillaume Rousse <guillomovitch@zarb.org>
-#
+
+
+comp_include _filedir _get_cword
+
 
 _svk()
 {

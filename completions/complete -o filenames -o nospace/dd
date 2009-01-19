@@ -1,5 +1,9 @@
 # dd(1) completion
-#
+
+
+comp_include _filedir _get_cword
+
+
 _dd()
 {
      local cur
@@ -28,5 +32,3 @@ _dd()
              $( compgen -W 'bs cbs conv count ibs if obs of seek skip'\
                 -S '=' -- $cur ) )
 } # _dd()
-
-

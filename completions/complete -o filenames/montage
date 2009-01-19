@@ -1,4 +1,5 @@
-comp_include _ImageMagick
+comp_include _filedir _get_cword _ImageMagick
+
 
 _montage()
 {
@@ -29,5 +30,3 @@ _montage()
         _filedir
     fi
 } # _montage()
-
-

@@ -1,5 +1,9 @@
 # cvs(1) completion
-#
+
+
+comp_include _filedir _get_cword
+
+
 set_prefix()
 {
     [ -z ${prefix:-} ] || prefix=${cur%/*}/

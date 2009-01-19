@@ -1,5 +1,8 @@
 # postconf(1)
 #
+comp_include _filedir _get_cword
+
+
 _postconf()
 {
     local cur prev pval len idx eqext

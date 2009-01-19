@@ -1,5 +1,9 @@
 # GNU tar(1) completion
-#
+
+
+comp_include _filedir _get_cword
+
+
 _tar()
 {
     local cur ext regex tar untar
@@ -54,6 +58,4 @@ _tar()
     _filedir $ext
 
     return 0
-}
-comp_install  # Make completion persistent
-_tar
+} # _tar()

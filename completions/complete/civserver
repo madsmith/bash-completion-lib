@@ -1,5 +1,6 @@
 # civserver completion by Guillaume Rousse <rousse@ccr.jussieu.fr>
 #
+comp_include _filedir _get_cword
 
 _civserver()
 {

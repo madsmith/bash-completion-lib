@@ -1,5 +1,9 @@
 # GNU make(1) completion
-#
+
+
+comp_include _filedir _get_cword
+
+
 _make()
 {
     local file makef makef_dir="." makef_inc cur prev i

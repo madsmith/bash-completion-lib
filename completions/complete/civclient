@@ -1,5 +1,7 @@
 # civclient completion by Guillaume Rousse <rousse@ccr.jussieu.fr>
 #
+comp_include _filedir _known_hosts
+
 _civclient()
 {
 	local cur
@@ -30,5 +32,3 @@ _civclient()
 			-- $cur ) )
 	fi
 } # _civclient()
-
-

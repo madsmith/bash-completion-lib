@@ -1,6 +1,9 @@
 # bash programmable completion for various Common Lisp implementations by
 # Nikodemus Siivola <nikodemus@random-state.net>
-#
+
+
+comp_include _filedir _get_cword
+
 
 _sbcl()
 {
@@ -20,5 +23,3 @@ _sbcl()
 
     return 0
 } # _sbcl()
-
-

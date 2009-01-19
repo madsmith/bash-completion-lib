@@ -1,5 +1,9 @@
 # wvdial(1) completion
-#
+
+
+comp_include _filedir _get_cword
+
+
 _wvdial()
 {
     local cur prev config i IFS=$'\t\n'

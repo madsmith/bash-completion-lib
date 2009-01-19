@@ -1,3 +1,6 @@
+comp_include _available_interfaces _filedir _get_cword
+
+
 _tcpdump()
 {
     local cur
@@ -25,5 +28,3 @@ _tcpdump()
     fi
 
 }
-_tcpdump
-comp_install

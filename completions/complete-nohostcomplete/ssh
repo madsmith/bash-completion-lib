@@ -1,4 +1,5 @@
-comp_include _dequote _known_hosts
+comp_include _dequote _filedir _get_cword _known_hosts
+
 
 _ssh()
 {
