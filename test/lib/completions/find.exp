@@ -54,7 +54,11 @@ expect {
     -re /@ { unresolved "$test at prompt" }
     -re eof { unresolved "eof" }
 }; # expect
+
+
 sync_after_int
+
+
     # Restore directory
 set cmd "cd .."
 send "$cmd\r"

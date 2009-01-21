@@ -56,5 +56,12 @@ expect {
 
 sync_after_int
 
+    # Reset CDPATH
+set cmd "unset CDPATH"
+send "$cmd\r"
+expect -ex "$cmd\r\n"
+expect -ex "/@"
+
+
 
 teardown
