@@ -2,7 +2,7 @@ set test "Completion via comp_load() should be installed"
 set cmd "complete -p perl"
 send "$cmd\r"
 expect {
-    -re "^$cmd\r\ncomplete -o filenames -F comp_load perl\r\n/@$" { pass "$test" }
+    -re "^$cmd\r\ncomplete -o filenames -o nospace -F comp_load perl\r\n/@$" { pass "$test" }
     -re /@ { fail "$test at prompt" }
 }; # expect
 
@@ -14,7 +14,7 @@ set test "Completion via _perl() should be installed"
 set cmd "complete -p perl"
 send "$cmd\r"
 expect {
-    -re "^$cmd\r\ncomplete -o filenames -F _perl perl\r\n/@$" { pass "$test" }
+    -re "^$cmd\r\ncomplete -o filenames -o nospace -F _perl perl\r\n/@$" { pass "$test" }
     -re /@ { fail "$test at prompt" }
 }; # expect
 

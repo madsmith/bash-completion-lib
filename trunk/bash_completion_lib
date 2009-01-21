@@ -4,7 +4,7 @@
 # Copyright (C) Freddy Vulto <fvulto@gmail.com>
 #
 # Versions
-# - 2008: This release.  Completions are split into separate files
+# - 2009: This release.  Completions are split into separate files
 # - 2006: Unsplit version written by Ian Macdonald <ian@caliban.org>
 #	  See: http://caliban.org/bash/
 #
@@ -55,7 +55,7 @@ fi
     # True (1) if restricted completion is enabled, False (0, default) if not
 COMP_RESTRICT_BY_EXTENSION=${COMP_RESTRICT_BY_EXTENSION:-0}
     # Version of bash-completion-lib
-COMP_VERSION=bash_completion_lib-1.2.dev.185:213M
+COMP_VERSION=bash_completion_lib-1.2.9
 
 
 # Load completion commands.
