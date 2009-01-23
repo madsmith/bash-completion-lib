@@ -262,6 +262,4 @@ _cvs()
     esac
     
     return 0
-}
-comp_install  # Make this completion persistent
-_cvs  # Generate completions first time
+} # _cvs()
