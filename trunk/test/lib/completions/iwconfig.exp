@@ -20,12 +20,21 @@ expect {
 }; # expect
 
 
-# Interrupt command by sending ^C
+sync_after_int
 
-set test "Sync after QUIT/INT"
-sleep 0.01
-send \031\003
-expect -ex /@
+
+set test "Tab should not complain about _available_interfaces() not being available"
+    # Try completion
+set cmd "iwconfig #"
+send "$cmd\t"
+expect {
+    -re "^$cmd$" { pass "$test" }
+    -re /@ { unresolved "$test at prompt" }
+    -re eof { unresolved "eof" }
+}; # expect
+
+
+sync_after_int
 
 
 teardown
