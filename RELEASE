@@ -4,8 +4,9 @@ $VERSION
 - comp_include() now checks each directory of $COMP_PATH for "./include/file"
   instead of doing a single check for "$COMP_DIR/include/file".
 - Moved functions from completionrc to separate include files:
-  _available_interfaces, _filedir_xspec, _get_cword, _signals (Issue 30).
-- Added tests for kill, killall.
+  _available_interfaces, _expand, _filedir_xspec, _get_cword, _pgids, _pids,
+  _signals (Issue 30).
+- Added tests for kill, killall, man, renice, rsync.
 
 
 
