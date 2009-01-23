@@ -1,9 +1,10 @@
+# This meta-cd function observes the CDPATH variable, so that cd additionally
+# completes on directories under those specified in CDPATH.
+
+
 comp_include _filedir _get_cword _rl_enabled
 
 
-# This meta-cd function observes the CDPATH variable, so that cd additionally
-# completes on directories under those specified in CDPATH.
-#
 _cd()
 {
     local IFS=$'\t\n' cur=`_get_cword` i j k

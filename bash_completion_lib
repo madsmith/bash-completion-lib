@@ -35,10 +35,12 @@ shopt -s extglob progcomp
 compPwd="$PWD"
 compLocal="$HOME/.bash_completion_lib.d"
 
-# If `COMP_CACHE' is defined and points to a writable file, completions will be
-# read from this file.	Completions are stored in this file after the first run
-# of `bash_completion_lib'.
-#COMP_CACHE=$HOME/.bash_completion_lib.d/cache~
+# If COMP_CACHE is unset upon the first run of `bash_completion_lib',
+# COMP_CACHE is automatically set to: ~/.bash_completion_lib.d/cache~ and
+# completion definitions will be stored in this file.  The next time
+# `bash_completion_lib' runs, completion definitions will be read from this
+# file.
+    #
     # Store current directory of this script
 COMP_DIR=$(cd "$(dirname "$(which "${BASH_SOURCE-$0}" 2> /dev/null)")" && /bin/pwd)
     # If COMP_LIB is an array (bash_completion_lib <= 1.2.5)
@@ -55,7 +57,7 @@ fi
     # True (1) if restricted completion is enabled, False (0, default) if not
 COMP_RESTRICT_BY_EXTENSION=${COMP_RESTRICT_BY_EXTENSION:-0}
     # Version of bash-completion-lib
-COMP_VERSION=bash_completion_lib-1.2.9
+COMP_VERSION=bash_completion_lib-1.2.dev.228M
 
 
 # Load completion commands.
@@ -120,7 +122,7 @@ comp_load() {
 #     not.  Global 'COMP_ARGS' contains the arguments to pass to 'complete'
 #     NOTE: Global 'COMP_ARGS' is used instead of echo-ing the string
 #	    to stdout, because this saves us invoking a subshell, thus
-#	    gains speed.
+#	    gains us speed.
 comp_dir2args() {
     COMP_ARGS=
     case "${1##*/}" in	# `${1##*/}' means: strip up to including last slash
