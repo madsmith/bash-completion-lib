@@ -1,0 +1,20 @@
+# RedHat & Debian GNU/Linux if{up,down} completion
+
+
+comp_include _get_cword _configured_interfaces
+
+
+_ifup()
+{
+    local cur
+
+    COMPREPLY=()
+    cur=`_get_cword`
+
+    if [ $COMP_CWORD -eq 1 ]; then
+	_configured_interfaces
+	COMPREPLY=( $(compgen -W '${COMPREPLY[@]}' -- "$cur") )
+    fi
+
+    return 0
+}

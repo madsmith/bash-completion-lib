@@ -1,0 +1,26 @@
+# Mailman completion by Guillaume Rousse <rousse@ccr.jussieu.fr>
+
+
+comp_include _get_cword _mailman_lists
+
+
+_change_pw()
+{
+	local cur prev
+
+	COMPREPLY=()
+	cur=`_get_cword`
+	prev=${COMP_WORDS[COMP_CWORD-1]}
+
+	case "$prev" in
+		-@(l|-listname=))
+			_mailman_lists
+			return 0
+			;;
+	esac
+
+	if [[ "$cur" == -* ]]; then
+		COMPREPLY=( $( compgen -W '-a --all --domain= -d --listname= -l \
+			--password= -p --quiet -q -h --help' -- $cur ) )
+	fi
+} # _change_pw()

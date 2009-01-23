@@ -14,7 +14,7 @@ set -o errexit  # Exit if simple command fails
 # @param $2 string  Completion function, e.g. _command
 # @param $3 string  Completion arguments, e.g. ' -o filenames'
 generate_completion() {
-    local path="completions/complete$3/$1"
+    local path="complete$3/$1"
         # If `command' contains dot (.), trail filename with dot (.)
     [ $1 = ${1/./} ] || path=$path. 
     echo "$path"
