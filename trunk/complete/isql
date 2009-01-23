@@ -1,0 +1,15 @@
+# isql completion by Victor Bogado da Silva Lins <victor@bogado.net>
+
+
+comp_include _get_cword
+
+
+_isql()
+{
+	local cur
+	cur=`_get_cword`
+  
+	COMPREPLY=( $( grep \\[$cur "$ODBCINI" | tr -d \\[\\] ) )
+} # _isql()
+
+

@@ -1,11 +1,11 @@
 $VERSION
 
+- Moved completions from ./completions/complete*/* to ./complete*/*
 - comp_include() now checks each directory of $COMP_PATH for "./include/file"
-  instead of doing a single check for "$COMP_DIR/include/file".  This also
-  means the location of the `include' directory has moved from ./include to
-  ./completions/include.  (Issue 40)
+  instead of doing a single check for "$COMP_DIR/include/file".
 - Moved functions from completionrc to separate include files:
-  _filedir_xspec (Issue 30).
+  _filedir_xspec, _get_cword (Issue 30).
+
 
 
 

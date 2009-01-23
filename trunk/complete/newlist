@@ -1,0 +1,21 @@
+# Mailman completion by Guillaume Rousse <rousse@ccr.jussieu.fr>
+
+
+comp_include _get_cword _mailman_lists
+
+
+_newlist()
+{
+	local cur
+
+	COMPREPLY=()
+	cur=`_get_cword`
+
+	if [[ "$cur" == -* ]]; then
+		COMPREPLY=( $( compgen -W '-l --language -q --quiet -h --help' -- $cur ) )
+	else
+		_mailman_lists
+	fi
+} # _newlist()
+
+

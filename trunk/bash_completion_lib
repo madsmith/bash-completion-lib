@@ -53,7 +53,7 @@ if declare -p COMP_LIB 2> /dev/null | grep -q '^declare \-a'; then
 fi
     # If COMP_PATH is unset, set COMP_PATH to default array
     # NOTE: `COMP_PATH' must be exported for the `bcl' utility to work
-[ "$COMP_PATH" ] || export COMP_PATH="$compLocal/completions:$COMP_DIR/completions"
+[ "$COMP_PATH" ] || export COMP_PATH="$compLocal:$COMP_DIR"
     # True (1) if restricted completion is enabled, False (0, default) if not
 COMP_RESTRICT_BY_EXTENSION=${COMP_RESTRICT_BY_EXTENSION:-0}
     # Version of bash-completion-lib
@@ -83,9 +83,9 @@ comp_load() {
 	# *.command, command!, command
     IFS=$'\n'; globs=( $(
 	for dir in "${aPaths[@]}"; do 
-	    echo \"$dir\"/\*/\*.$cmd
-	    echo \"$dir\"/\*/$cmd\!
-	    echo \"$dir\"/\*/$cmd
+	    echo \"$dir\"/complete\*/\*.$cmd
+	    echo \"$dir\"/complete\*/$cmd\!
+	    echo \"$dir\"/complete\*/$cmd
 	done
     ) )
     IFS=$OLDIFS
@@ -136,7 +136,7 @@ comp_dir2args() {
 } # comp_dir2args()
 
 
-    # Install completion for all files in `./completions/*'
+    # Install completion for all files in `./complete*/*'
  
 	# Use cache if set, and versions (COMP_VERSION and COMP_CACHE_VERSION) match
 [ "$COMP_CACHE" ] && [ -r "$COMP_CACHE" ] && . "$COMP_CACHE" && [ "$COMP_VERSION" = "$COMP_CACHE_VERSION" ] || {
@@ -155,7 +155,7 @@ comp_dir2args() {
             for i in complete*; do
                     # Don't install completion if 'comp_dir2args()' returns false
                 if comp_dir2args "./$i"; then
-                    cd "$i" > /dev/null && {
+                    cd "$i" 2> /dev/null && {
 			for comp in *; do
 			    #  If name ends with exclamation mark (!), only
 			    #+ strip last exclamation mark, otherwise strip
