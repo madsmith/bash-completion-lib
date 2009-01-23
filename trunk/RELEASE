@@ -5,7 +5,7 @@ $VERSION
   instead of doing a single check for "$COMP_DIR/include/file".
 - Moved functions from completionrc to separate include files:
   _available_interfaces, _expand, _filedir_xspec, _get_cword, _pgids, _pids,
-  _signals (Issue 30).
+  _signals, _uids (Issue 30).
 - Added tests for kill, killall, man, renice, rsync.
 
 
