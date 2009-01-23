@@ -7,8 +7,8 @@
 #
 
 IFS=$'\n'
-    # Search all `complete*/*' files for $1
-for file in $(grep -l "$1" complete*/*); do
+    # Search all `complete*/*' and `include/*' files for $1
+for file in $(grep -l "$1" complete*/* include/*); do
 	# Return only those files missing `comp_include ...$1'
 	# `|| true' prevents the script from exitting on error
     match=$(grep -L "comp_include .*$1" "$file" || true)

@@ -155,7 +155,7 @@ if [ $# -ne 3 ]; then
 fi
 
     # Make sure argument `3' begins with a space
-set -- "$1" "$2" "${3# }"
+set -- "$1" "$2" " ${3# }"
 generate_completion "$1" "$2" "$3"
 generate_test_completion_debian "$1" "$2" "$3"
 generate_test_completion_lib "$1" "$2" "$3"

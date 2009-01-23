@@ -3,23 +3,6 @@
 [ -n "${BASH_COMPLETION_DEBUG:-}" ] && set -v || set +v
 
 
-# This function expands tildes in pathnames
-#
-_expand()
-{
-	[ "$cur" != "${cur%\\}" ] && cur="$cur\\"
-
-	# expand ~username type directory specifications
-	if [[ "$cur" == \~*/* ]]; then
-		eval cur=$cur
-		
-	elif [[ "$cur" == \~* ]]; then
-		cur=${cur#\~}
-		COMPREPLY=( $( compgen -P '~' -u $cur ) )
-		return ${#COMPREPLY[@]}
-	fi
-}
-
 # This function completes on process IDs.
 # AIX and Solaris ps prefers X/Open syntax.
 [ $UNAME = SunOS -o $UNAME = AIX ] &&

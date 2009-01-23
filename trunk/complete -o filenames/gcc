@@ -9,7 +9,7 @@
 # --help output of the compiler.
 
 
-comp_include _filedir _get_cword
+comp_include _expand _filedir _get_cword
 
 
 _gcc()
