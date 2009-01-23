@@ -65,6 +65,18 @@ send "$cmd\r"
 expect -ex "$cmd\r\n/@"
 
 
+set test "-uid should complete uids"
+    # Complete
+set cmd "find -uid "
+send "$cmd\t"
+expect {
+    -re "$cmd\r\n\\d+.*/@$cmd$" { 
+	pass "$test" 
+    }
+    -re /@ { unresolved "$test at prompt" }
+    -re eof { unresolved "eof" }
+}; # expect
+
 
 sync_after_int
 

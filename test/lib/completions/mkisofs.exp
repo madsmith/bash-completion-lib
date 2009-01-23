@@ -23,4 +23,18 @@ expect {
 sync_after_int
 
 
+set test "-uid should complete uids"
+    # Try completion
+set cmd "mkisofs -uid "
+send "$cmd\t"
+expect {
+    -re "^$cmd\r\n\\d+.*$cmd$" { pass "$test" }
+    -re /@ { unresolved "$test at prompt" }
+    -re eof { unresolved "eof" }
+}; # expect
+
+
+sync_after_int
+
+
 teardown
