@@ -3,18 +3,6 @@
 [ -n "${BASH_COMPLETION_DEBUG:-}" ] && set -v || set +v
 
 
-# This function completes on process group IDs.
-# AIX and SunOS prefer X/Open, all else should be BSD.
-[ $UNAME = SunOS -o $UNAME = AIX ] &&
-_pgids()
-{
-	COMPREPLY=( $( compgen -W '$( command ps -efo pgid | sed 1d )' -- $cur ))
-} ||
-_pgids()
-{
-	COMPREPLY=( $( compgen -W '$( command ps axo pgid | sed 1d )' -- $cur ))
-}
-
 # This function completes on user IDs
 #
 _uids()
