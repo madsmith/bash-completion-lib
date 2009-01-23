@@ -1,12 +1,9 @@
-#!/bin/bash
+#!/bin/bash -eu
 # Generate skeleton files for completion of specified command.
 # Test skeleton files are generated as well.
 # @param $1 string  Command, e.g. 'make'
 # @param $2 string  Completion function, e.g. _command
-# @param $3 string  Completion arguments, e.g. ' -o filenames'
-
-
-set -o errexit  # Exit if simple command fails
+# @param $3 string  Completion arguments, e.g. '-o filenames'
 
 
 # Generate completion code
@@ -157,7 +154,8 @@ if [ $# -ne 3 ]; then
     exit 1
 fi
 
-
+    # Make sure argument `3' begins with a space
+set -- "$1" "$2" "${3# }"
 generate_completion "$1" "$2" "$3"
 generate_test_completion_debian "$1" "$2" "$3"
 generate_test_completion_lib "$1" "$2" "$3"

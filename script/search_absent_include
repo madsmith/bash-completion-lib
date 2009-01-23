@@ -1,0 +1,19 @@
+#!/bin/bash -eu
+# @param $1 string  Name of include file/function to search for.
+#
+# Typical use:
+#
+#    $ eval vi -- $(script/search_absent_include NAME)
+#
+
+IFS=$'\n'
+    # Search all `complete*/*' files for $1
+for file in $(grep -l "$1" complete*/*); do
+	# Return only those files missing `comp_include ...$1'
+	# `|| true' prevents the script from exitting on error
+    match=$(grep -L "comp_include .*$1" "$file" || true)
+    if [ $match ]; then
+        echo \"$match\"
+    fi
+done
+unset -v file match
