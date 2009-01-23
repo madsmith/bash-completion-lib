@@ -1,0 +1,9 @@
+# This function complete on modules
+#
+_modules()
+{
+	local modpath
+	modpath=/lib/modules/$1
+	COMPREPLY=( $( command ls -R $modpath | \
+			sed -ne 's/^\('$cur'.*\)\.k\?o\(\|.gz\)$/\1/p') )
+}
