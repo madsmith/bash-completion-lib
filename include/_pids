@@ -1,0 +1,11 @@
+# This function completes on process IDs.
+# AIX and Solaris ps prefers X/Open syntax.
+[ $UNAME = SunOS -o $UNAME = AIX ] &&
+_pids()
+{
+	COMPREPLY=( $( compgen -W '$( command ps -efo pid | sed 1d )' -- $cur ))
+} ||
+_pids()
+{
+	COMPREPLY=( $( compgen -W '$( command ps axo pid | sed 1d )' -- $cur ) )
+}
