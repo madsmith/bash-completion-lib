@@ -1,4 +1,4 @@
-comp_include _get_cword
+comp_include _get_cword _services
 
 
 _service()
@@ -29,5 +29,3 @@ _service()
 
     return 0
 }
-
-_service

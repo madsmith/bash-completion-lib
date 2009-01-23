@@ -3,22 +3,6 @@
 [ -n "${BASH_COMPLETION_DEBUG:-}" ] && set -v || set +v
 
 
-# This function completes on services
-#
-_services()
-{
-	local sysvdir famdir
-	[ -d /etc/rc.d/init.d ] && sysvdir=/etc/rc.d/init.d || sysvdir=/etc/init.d
-	famdir=/etc/xinetd.d
-	COMPREPLY=( $( builtin echo $sysvdir/!(*.rpmsave|*.rpmorig|*~|functions)) )
-
-	if [ -d $famdir ]; then
-		COMPREPLY=( ${COMPREPLY[@]} $( builtin echo $famdir/!(*.rpmsave|*.rpmorig|*~)) )
-	fi
-
-	COMPREPLY=( $( compgen -W '${COMPREPLY[@]#@($sysvdir|$famdir)/}' -- $cur ) )
-}
-
 # This function complete on modules
 #
 _modules()
