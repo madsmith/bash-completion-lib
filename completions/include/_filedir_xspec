@@ -1,0 +1,32 @@
+# Generate completions for file-exclude specifications.  Directories must be allowed.
+# @param string $1  Exclude pattern for complete/compgen
+
+
+comp_include _expand quote
+
+
+_filedir_xspec() {
+        local cur=`_get_cword` IFS=$'\t\n'
+    
+        _expand || return 0
+
+	local toks=( ) tmp
+	toks=( ${toks[@]-} $(
+		compgen -d -- "$(quote_readline "$cur")" | {
+			while read -r tmp; do
+				# see long TODO comment in _filedir() --David
+				echo $tmp
+			done
+		}
+	))
+	
+	toks=( ${toks[@]-} $(
+		eval compgen -f -X "$1" -- "\$(quote_readline "\$cur")" | {
+			while read -r tmp; do
+				[ -n $tmp ] && echo $tmp
+			done
+		}
+	))
+	
+	COMPREPLY=( "${toks[@]}" )
+} # _filedir_xspec()

@@ -1,1 +1,2 @@
-comp_filedir_xspec "'!*.@(?(la)tex|?(LA)TEX|texi|TEXI|dtx|DTX|ins|INS)'"
+comp_include _filedir_xspec
+_filedir_xspec "'!*.@(?(la)tex|?(LA)TEX|texi|TEXI|dtx|DTX|ins|INS)'"

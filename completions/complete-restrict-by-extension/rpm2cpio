@@ -1,1 +1,2 @@
-comp_filedir_xspec "'!*.rpm'"
+comp_include _filedir_xspec
+_filedir_xspec "'!*.rpm'"

@@ -1,1 +1,2 @@
-comp_filedir_xspec "'!*.@(?(e)ps|?(E)PS|pdf|PDF)'"
+comp_include _filedir_xspec
+_filedir_xspec "'!*.@(?(e)ps|?(E)PS|pdf|PDF)'"

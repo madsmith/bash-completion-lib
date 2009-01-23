@@ -62,6 +62,19 @@ expect {
 sync_after_int
 
 
+set test "Completion should use local `scp' completion definition with local include"
+set cmd "scp "
+send "$cmd\t"
+expect {
+    -re "${cmd}foo $" { pass "$test" }
+    -re "$cmd.*/@$cmd$" { fail "$test" }
+    -re /install/@ { fail "$test" }
+}; # expect
+
+
+sync_after_int
+
+
 set test "Completion of .. should use cdots"
 send "\.\. \t"
 expect {
