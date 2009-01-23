@@ -1,7 +1,7 @@
 # scp(1) completion
 
 
-comp_include _dequote _get_cword _known_hosts
+comp_include _dequote _expand _get_cword _known_hosts
 
 
 _scp()

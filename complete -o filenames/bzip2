@@ -1,4 +1,4 @@
-comp_include _get_cword
+comp_include _expand _get_cword
 
 
 _bzip2()

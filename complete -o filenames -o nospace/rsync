@@ -1,7 +1,7 @@
 # rsync(1) completion
 
 
-comp_include _filedir _get_cword _known_hosts
+comp_include _expand _filedir _get_cword _known_hosts
 
 
 _rsync()

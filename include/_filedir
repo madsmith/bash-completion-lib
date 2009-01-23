@@ -2,7 +2,11 @@
 # simply using 'compgen -f', because it honours spaces in filenames.
 # If passed -d, it completes only on directories. If passed anything else,
 # it's assumed to be a file glob to complete on.
-#
+
+
+comp_include _expand
+
+
 _filedir()
 {
 	local IFS=$'\t\n' xspec #glob
