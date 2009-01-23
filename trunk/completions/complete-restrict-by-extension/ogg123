@@ -1,1 +1,2 @@
-comp_filedir_xspec "'!*.@(ogg|OGG|m3u|flac|spx)'"
+comp_include _filedir_xspec
+_filedir_xspec "'!*.@(ogg|OGG|m3u|flac|spx)'"

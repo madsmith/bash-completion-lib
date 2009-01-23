@@ -1,0 +1,19 @@
+# This function shell-quotes the argument
+quote()
+{
+	echo \'${1//\'/\'\\\'\'}\' #'# Help vim syntax highlighting
+}
+
+# This function quotes the argument in a way so that readline dequoting 
+# results in the original argument
+quote_readline()
+{
+	local t="${1//\\/\\\\}"
+	echo \'${t//\'/\'\\\'\'}\' #'# Help vim syntax highlighting
+}
+
+# This function shell-dequotes the argument
+dequote()
+{
+	eval echo "$1"
+}

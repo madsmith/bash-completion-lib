@@ -1,1 +1,2 @@
-comp_filedir_xspec "'!*.@(?([xX]|[sS])[hH][tT][mM]?([lL]))'"
+comp_include _filedir_xspec
+_filedir_xspec "'!*.@(?([xX]|[sS])[hH][tT][mM]?([lL]))'"

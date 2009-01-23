@@ -1,1 +1,2 @@
-comp_filedir_xspec "'!*.@(sxi|sti|pps|ppt|pot|odp|otp)'"
+comp_include _filedir_xspec
+_filedir_xspec "'!*.@(sxi|sti|pps|ppt|pot|odp|otp)'"

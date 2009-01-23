@@ -1,0 +1,4 @@
+comp_include _known_hosts
+_scp() {
+    COMPREPLY=($(_known_hosts))
+} # _scp()

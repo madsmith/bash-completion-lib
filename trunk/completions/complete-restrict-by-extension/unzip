@@ -1,1 +1,2 @@
-comp_filedir_xspec "'!*.@(zip|ZIP|jar|JAR|exe|EXE|pk3|war|wsz|ear|zargo|xpi|sxw|ott)'"
+comp_include _filedir_xspec
+_filedir_xspec "'!*.@(zip|ZIP|jar|JAR|exe|EXE|pk3|war|wsz|ear|zargo|xpi|sxw|ott)'"

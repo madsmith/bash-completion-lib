@@ -3,20 +3,6 @@
 [ -n "${BASH_COMPLETION_DEBUG:-}" ] && set -v || set +v
 
 
-# Generate completions for file-exclude specifications.  Directories must be allowed.
-# @param string $1  Exclude pattern for complete/compgen
-comp_filedir_xspec() {
-    local cur=`_get_cword` IFS=$'\t\n'
-
-    _expand || return 0
-
-    COMPREPLY=( 
-        $( eval compgen -f -X "$1" -- "\"${cur#[\`\"\']}\"" 2>/dev/null ) \
-        $( compgen -d -- $cur ) 
-    )
-} # comp_filedir_xspec()
-
-
 # Get the word to complete
 # This is nicer than ${COMP_WORDS[$COMP_CWORD]}, since it handles cases
 # where the user is completing in the middle of a word.
@@ -231,7 +217,7 @@ comp_include() {
 	        # Convert colon (:) separated string `COMP_PATH' to array `aPaths'
 	    local dir OLDIFS=$IFS; IFS=:; local -a aPaths=($COMP_PATH); IFS=$OLDIFS
 	    for dir in "${aPaths[@]}"; do
-		[ -r "$dir/include/$s" ] && . "$dir/include/$s"
+		[ -r "$dir/include/$s" ] && . "$dir/include/$s" && break
 	    done
 	fi
     done
