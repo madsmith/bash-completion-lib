@@ -25,7 +25,7 @@ sync_after_int
 
 set test "Tab should show complete process group ids"
     # Try completion
-set cmd "renice -g"
+set cmd "renice -g "
 send "$cmd\t"
 expect {
     -re "$cmd$" { pass "$test" }
