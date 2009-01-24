@@ -32,7 +32,6 @@
     # Extended globbing and programmable completion have to be
     # set in order for completion to work
 shopt -s extglob progcomp
-compPwd="$PWD"
 compLocal="$HOME/.bash_completion_lib.d"
 
 # If COMP_CACHE is unset upon the first run of `bash_completion_lib',
@@ -43,14 +42,6 @@ compLocal="$HOME/.bash_completion_lib.d"
     #
     # Store current directory of this script
 COMP_DIR=$(cd "$(dirname "$(which "${BASH_SOURCE-$0}" 2> /dev/null)")" && /bin/pwd)
-    # If COMP_LIB is an array (bash_completion_lib <= 1.2.5)
-if declare -p COMP_LIB 2> /dev/null | grep -q '^declare \-a'; then
-    # Yes, COMP_LIB is array;
-	# Turn array into a colon (:) separated string: COMP_PATH
-    OLDIFS=$IFS; IFS=:;
-    unset COMP_LIB; export COMP_PATH="$(echo "${COMP_LIB[*]}")";
-    IFS=$OLDIFS
-fi
     # If COMP_PATH is unset, set COMP_PATH to default array
     # NOTE: `COMP_PATH' must be exported for the `bcl' utility to work
 [ "$COMP_PATH" ] || export COMP_PATH="$compLocal:$COMP_DIR"
@@ -63,10 +54,6 @@ COMP_VERSION=bash_completion_lib-1.2.dev.228M
 # Load completion commands.
 # The appropriate script from a `COMP_PATH' directory will be loaded.
 comp_load() {
-	# Always load `comploadrc'
-    . $COMP_DIR/comploadrc
-	# Load `completionrc' once
-    declare -F comp_install &> /dev/null || . $COMP_DIR/completionrc
 	# Find completion script
 	# NOTE: A search is performed for both `command' and `*.command'.
 	#	Syntax `*.command' is a kind of symlink notation.  E.g.
@@ -76,7 +63,7 @@ comp_load() {
 	#	Variables: script = path/comp, comp = target | target.link
 	# NOTE: Use 'head -1' to get the first match in case 'find' returns more than one match
 
-    local cmd=${COMP_WORDS[0]} globs OLDIFS=$IFS
+    local cmd=${COMP_WORDS[0]} dir globs OLDIFS=$IFS
 	# Convert colon (:) separated string `COMP_PATH' to array `aPaths'
     IFS=:; local -a aPaths=($COMP_PATH)
 	# Create globbing search strings by appending `aPaths' with:
@@ -95,9 +82,9 @@ comp_load() {
 	    [ -r "$dir/include/comp_include" ] && . "$dir/include/comp_include" && break
 	done
     fi 
-	# Now we can use comp_include() to load comp_dir2args() and comp_install()
-    comp_include comp_dir2args comp_install
-
+	# Now we can use `comp_include' to include more files
+    comp_include comp_load_init
+    comp_load_init
     local script="$(eval find "${globs[@]}" 2> /dev/null | head -1)"
     local link comp=${script##*/}  # Remove path
 	# Remove possible .link only if exclamation mark (!) isn't last character
@@ -116,37 +103,35 @@ comp_load() {
 	    # Generate completions for first invocation
 	_$comp $link
 
-	# Unset `comploadrc' variables
-    unset -v bashdefault default dirnames filenames nospace plusdirs UNAME
+    comp_load_deinit
 } # comp_load()
 
 
-    # Install completion for all files in `./complete*/*'
- 
-	# Use cache if set, and versions (COMP_VERSION and COMP_CACHE_VERSION) match
-[ "$COMP_CACHE" ] && [ -r "$COMP_CACHE" ] && . "$COMP_CACHE" && [ "$COMP_VERSION" = "$COMP_CACHE_VERSION" ] || {
-    # No, cache isn't set or isn't available; load completions
-    compEnvShoptOptions=$(shopt -p dotglob failglob nullglob)
+# Setup completion for all files in `./complete*/*'
+comp_setup() {
+    local comp compPwd="$PWD" dir i k
+    local compEnvShoptOptions=$(shopt -p dotglob failglob nullglob)
     shopt -s nullglob
     shopt -u dotglob failglob
-    . $COMP_DIR/comploadrc
-        # use GNU sed if we have it, since its extensions are still used in our code
-    [ $UNAME != Linux ] && [ $UNAME != Cygwin ] && which gsed > /dev/null && alias sed=gsed
         # Convert string `COMP_LIB' to array `aPaths'
-    OLDIFS=$IFS; IFS=:; declare -a aPaths=($COMP_PATH); IFS=$OLDIFS
+    local OLDIFS=$IFS; IFS=:; local -a aPaths=($COMP_PATH); IFS=$OLDIFS
 	# If comp_include() not defined, include it from $COMP_PATH
     if ! declare -F comp_include &> /dev/null; then
 	for dir in "${aPaths[@]}"; do
 	    [ -r "$dir/include/comp_include" ] && . "$dir/include/comp_include" && break
 	done
     fi 
-	# Now we can use `comp_include' to load `comp_dir2args'
-    comp_include comp_dir2args
-        # Loop through directories, starting from last so that first overwrites last and first has precedence
+	# Include additional files
+    comp_include comp_dir2args comp_setup_init
+    comp_setup_init 
+        # use GNU sed if we have it, since its extensions are still used in our code
+    [ $UNAME != Linux ] && [ $UNAME != Cygwin ] && which gsed > /dev/null && alias sed=gsed
+	# Loop through directories, starting from last so that first overwrites
+	# last, and first has precedence
     for ((k = ${#aPaths[@]} - 1; k >= 0; k--)); do
         if cd "${aPaths[$k]}" 2> /dev/null; then
             for i in complete*; do
-                    # Don't install completion if 'comp_dir2args()' returns false
+                    # Don't setup completion if 'comp_dir2args()' returns false
                 if comp_dir2args "./$i"; then
                     cd "$i" 2> /dev/null && {
 			for comp in *; do
@@ -162,11 +147,18 @@ comp_load() {
             done
 
             eval "$compEnvShoptOptions" 2> /dev/null  # Restore `shopt' options
-            # Unset `comploadrc' variables
-            unset -v bashdefault default dirnames filenames nospace plusdirs UNAME
             cd $compPwd > /dev/null
         fi
     done
+    comp_setup_deinit
+} # comp_setup()
+
+ 
+    # Use cache if set, and versions (COMP_VERSION and COMP_CACHE_VERSION) match
+[ "$COMP_CACHE" ] && [ -r "$COMP_CACHE" ] && . "$COMP_CACHE" && [ "$COMP_VERSION" = "$COMP_CACHE_VERSION" ] || {
+    # No, cache isn't set or isn't available;
+	# Setup completions for all files in $COMP_PATH/complete*/*
+    comp_setup
     
     # *  If COMP_CACHE is unset, set COMP_CACHE to ~/.bash_completion_lib.d/cache~	
     # *  If COMP_CACHE is not empty:
@@ -176,4 +168,5 @@ comp_load() {
     { [ -d "$compLocal" ] || mkdir "$compLocal"; } && 
     { echo COMP_CACHE_VERSION=$COMP_VERSION; complete -p; } > "$COMP_CACHE"
 }
-unset -v aPaths args comp COMP_ARGS COMP_CACHE_VERSION compEnvShoptOptions compLocal compPwd i j k OLDIFS
+unset -v COMP_ARGS compLocal
+unset -f comp_setup

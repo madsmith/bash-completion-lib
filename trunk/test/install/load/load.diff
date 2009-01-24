@@ -1,17 +1,2 @@
 declare -f _alias
-declare -f _available_interfaces
-declare -f _comp_install
-declare -f _count_args
-declare -f _expand
 declare -f _get_cword
-declare -f _gids
-declare -f _modules
-declare -f _pgids
-declare -f _pids
-declare -f _services
-declare -f _signals
-declare -f _uids
-declare -f _usergroup
-declare -f comp_filedir_xspec
-declare -f comp_include
-declare -f comp_install

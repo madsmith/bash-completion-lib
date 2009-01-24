@@ -88,7 +88,7 @@ sync_after_int
 
 
     # Reload bash_completion_lib with new `COMP_PATH' settings
-set cmd "COMP_PATH=\"\$PWD/.bash_completion_lib 2.d/completions\""
+set cmd "COMP_PATH=\"\$PWD/.bash_completion_lib 2.d:\$COMP_DIR\""
 send "$cmd\r"
 expect -ex "$cmd\r\n"
 expect -ex "/install/compLib/@"

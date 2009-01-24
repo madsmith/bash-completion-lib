@@ -11,7 +11,7 @@ setup
 
 set test "Tab should show completions"
     # Try completion
-set cmd "renice "
+set cmd "renice 1"
 send "$cmd\t"
 expect {
     -re "$cmd\r\n.*$cmd$" { pass "$test" }
