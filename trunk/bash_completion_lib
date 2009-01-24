@@ -89,6 +89,15 @@ comp_load() {
 	done
     ) )
     IFS=$OLDIFS
+	# If comp_include() not defined, include it from $COMP_PATH
+    if ! declare -F comp_include &> /dev/null; then
+	for dir in "${aPaths[@]}"; do
+	    [ -r "$dir/include/comp_include" ] && . "$dir/include/comp_include" && break
+	done
+    fi 
+	# Now we can use `comp_include()' to load `comp_install()'
+    comp_include comp_install
+
     local script="$(eval find "${globs[@]}" 2> /dev/null | head -1)"
     local link comp=${script##*/}  # Remove path
 	# Remove possible .link only if exclamation mark (!) isn't last character
@@ -98,7 +107,7 @@ comp_load() {
     [[ ${comp: -1:1} == ! ]] || { link=${comp#*.}; comp=${comp%.$link}; }
     local path=${script%/*}   # Remove comp
 	# Source completion of command to complete
-	# If sourcing returns true, automatically call `comp_install' and '_$comp'
+	# If sourcing returns true, automatically call `_comp_install' and '_$comp'
     [ "$script" -a -r "$path/$comp" ] && . "$path/$comp" && \
 	    # Is function '_$comp" available?
 	declare -F _$comp &> /dev/null && \
