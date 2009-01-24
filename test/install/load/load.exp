@@ -37,6 +37,8 @@ set cmd "alias "
 send "$cmd\t"
 expect -ex "$cmd"
 
+    # Wait for `comp_load_deinit()' to finish
+sleep .1
 sync_after_int
 
     # Echo environment to load_post.txt
@@ -52,7 +54,7 @@ expect -ex "$cmd\r\n"
 expect -ex "/install/load/@"
 
 
-set test "Bash environment should not be polluted after comp_load"
+set test "Bash environment should not be polluted after 'comp_load alias'"
     # Compare expected diff with load pre/post diff
 set cmd "diff load.diff load.diff~"
 send "$cmd\r"
