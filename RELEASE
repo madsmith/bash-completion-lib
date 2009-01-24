@@ -8,6 +8,8 @@ $VERSION
   _available_interfaces, _count_args, _expand, _filedir_xspec, _get_cword,
   _gids, _modules, _pgids, _pids, _services, _signals, _uids, _usergroup,
   comp_include (Issue 30).
+- Moved functions from bash_completion_lib to separate include files:
+  comp_dir2args, comp_install.
 - Added tests for chkconfig, insmod, kill, killall, man, renice, rsync,
   service.
 - Replaced _longopt completion for cpio with _cpio
