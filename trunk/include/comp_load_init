@@ -1,0 +1,45 @@
+# (De)initialize completion load.
+# A completion is 'loaded' when <TAB> or <TAB><TAB> is pressed the first time
+# for a command and `comp_load()' is installed as the completion handler.
+
+
+comp_load_deinit() {
+	# Unset variables
+	# NOTE: The following variables are used in completion scripts, so may
+	#       not be unset: bash205, bash205b, bash3 
+    unset -v bashdefault default dirnames filenames nospace plusdirs UNAME
+	# Unset functions
+    unset -f _comp_install comp_dir2args comp_include comp_install comp_load_deinit comp_load_init
+} # comp_load_deinit()
+
+
+comp_load_init() {
+    comp_include comp_dir2args comp_install
+
+    # Set a couple of useful vars
+
+    UNAME=$( uname -s )
+    # strip OS type and version under Cygwin (e.g. CYGWIN_NT-5.1 => Cygwin)
+    UNAME=${UNAME/CYGWIN_*/Cygwin}
+
+    # features supported by bash 2.05 and higher
+    if [ ${BASH_VERSINFO[0]} -eq 2 ] && [[ ${BASH_VERSINFO[1]} > 04 ]] ||
+       [ ${BASH_VERSINFO[0]} -gt 2 ]; then
+	    bash205=$BASH_VERSION 2>/dev/null || :
+	    default="-o default"
+	    dirnames="-o dirnames"
+	    filenames="-o filenames"
+    fi
+    # features supported by bash 2.05b and higher
+    if [ ${BASH_VERSINFO[0]} -eq 2 ] && [[ ${BASH_VERSINFO[1]} = "05b" ]] ||
+       [ ${BASH_VERSINFO[0]} -gt 2 ]; then
+	    bash205b=$BASH_VERSION 2>/dev/null || :
+	    nospace="-o nospace"
+    fi
+    # features supported by bash 3.0 and higher
+    if [ ${BASH_VERSINFO[0]} -gt 2 ]; then
+	    bash3=$BASH_VERSION 2>/dev/null || :
+	    bashdefault="-o bashdefault"
+	    plusdirs="-o plusdirs"
+    fi
+} # comp_load_init()

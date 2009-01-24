@@ -1,0 +1,14 @@
+# Initialize completion setup
+
+
+comp_setup_deinit() {
+    comp_load_deinit
+	# Unset functions
+    unset -f comp_dir2args comp_include comp_setup_deinit comp_setup_init
+} # comp_setup_deinit()
+
+
+comp_setup_init() {
+    comp_include comp_load_init
+    comp_load_init    
+} # comp_setup_init()
