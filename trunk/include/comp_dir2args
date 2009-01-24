@@ -1,0 +1,24 @@
+# Convert directory to completion arguments.  If a directory starts with
+# 'complete-', the file .complete will be included.  This file is supposed
+# to set the global variable 'COMP_ARGS'.
+# @param $1  Directory.  Must include at least one slash and start with "complete", e.g.:
+#	     ./complete -o nospace
+#	     /home/joe/completions/complete -o filenames
+# @result exit	True (0) if completion must be installed, False (> 0) if
+#     not.  Global 'COMP_ARGS' contains the arguments to pass to 'complete'
+#     NOTE: Global 'COMP_ARGS' is used instead of echo-ing the string
+#	    to stdout, because this saves us invoking a subshell, thus
+#	    gains us speed.
+comp_dir2args() {
+    COMP_ARGS=
+    case "${1##*/}" in	# `${1##*/}' means: strip up to including last slash
+	complete-*)
+	    [ -r "$1/.complete" ] && . "$1/.complete"
+	    ;;
+	complete*)
+	    COMP_ARGS="${1##*/complete}"
+	    ;;
+    esac
+} # comp_dir2args()
+
+
