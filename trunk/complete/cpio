@@ -1,6 +1,6 @@
 # cpio(1) completion
 
-comp_include _filedir _get_cword
+comp_include _filedir _get_cword _usergroup
 
 _cpio_format()
 {

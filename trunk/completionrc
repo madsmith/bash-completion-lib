@@ -3,22 +3,6 @@
 [ -n "${BASH_COMPLETION_DEBUG:-}" ] && set -v || set +v
 
 
-# this function complete on user:group format
-#
-_usergroup()
-{
-	local IFS=$'\n'
-	cur=${cur//\\\\ / }
-	if [[ $cur = *@(\\:|.)* ]] && [ -n "$bash205" ]; then
-		user=${cur%%*([^:.])}
-		COMPREPLY=( $(compgen -P ${user/\\\\} -g -- ${cur##*[.:]}) )
-	elif [[ $cur = *:* ]] && [ -n "$bash205" ]; then
-		COMPREPLY=( $( compgen -g -- ${cur##*[.:]} ) )
-	else
-		COMPREPLY=( $( compgen -S : -u -- $cur ) )
-	fi
-}
-
 # this function count the number of mandatory args
 #
 _count_args()
