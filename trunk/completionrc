@@ -3,19 +3,6 @@
 [ -n "${BASH_COMPLETION_DEBUG:-}" ] && set -v || set +v
 
 
-# this function count the number of mandatory args
-#
-_count_args()
-{
-	args=1
-	for (( i=1; i < COMP_CWORD; i++ )); do
-		if [[ "${COMP_WORDS[i]}" != -* ]]; then
-			args=$(($args+1))
-		fi
-	done
-}
-
-
 # Include completion files - if not already loaded.  Each directory in $COMP_PATH is
 # examined for "./include/file"
 # NOTE: Each file must have at least one function with the same name as the
