@@ -110,7 +110,9 @@ comp_load() {
 # Setup completion for all files in `./complete*/*'
 comp_setup() {
     local comp compPwd="$PWD" dir i k
-    local compEnvShoptOptions=$(shopt -p dotglob failglob nullglob)
+    local oldShoptOptions=$(shopt -p dotglob failglob nullglob)
+	# Make sure CDPATH is empty
+    [ "$CDPATH" ] && { local oldCdpath="$CDPATH"; CDPATH=; }
     shopt -s nullglob
     shopt -u dotglob failglob
         # Convert string `COMP_LIB' to array `aPaths'
@@ -145,11 +147,11 @@ comp_setup() {
                     }
                 fi
             done
-
-            eval "$compEnvShoptOptions" 2> /dev/null  # Restore `shopt' options
-            cd $compPwd > /dev/null
         fi
     done
+    eval "$oldShoptOptions" 2> /dev/null  # Restore `shopt' options
+    [ "$oldCdpath" ] && CDPATH="$oldCdpath"  # Restore `CDPATH'
+    cd $compPwd   # Restore current directory
     comp_setup_deinit
 } # comp_setup()
 

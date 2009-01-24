@@ -1,5 +1,9 @@
 $VERSION
 
+- Moved setup code to function `comp_setup()'
+- Replaced file `comploadrc' with `comp_setup_init'
+- Replaced file `completionrc' with `comp_load_init'
+- All `comp_xxx' functions are now unset as soon as possible
 - Removed `completions' subdir: Moved completions from
   ./completions/complete*/* to ./complete*/*
 - comp_include() now checks each directory of $COMP_PATH for "./include/file"
@@ -12,7 +16,8 @@ $VERSION
   comp_dir2args, comp_install.
 - Added tests for chkconfig, insmod, kill, killall, man, renice, rsync,
   service.
-- Replaced _longopt completion for cpio with _cpio
+- Replaced _longopt completion for cpio with _cpio completion
+- Backup and unset CDPATH during setup
 
 
 
