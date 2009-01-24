@@ -2,7 +2,7 @@ set test "Completion via comp_load() should be installed"
 set cmd "complete -p cpio"
 send "$cmd\r"
 expect {
-    -re "^$cmd\r\ncomplete -o filenames -F comp_load cpio\r\n/@$" { pass "$test" }
+    -re "^$cmd\r\ncomplete -F comp_load cpio\r\n/@$" { pass "$test" }
     -re /@ { fail "$test at prompt" }
 }; # expect
 
@@ -10,11 +10,11 @@ expect {
 source "lib/completions/cpio.exp"
 
 
-set test "Completion via _longopt() should be installed"
+set test "Completion via _cpio() should be installed"
 set cmd "complete -p cpio"
 send "$cmd\r"
 expect {
-    -re "^$cmd\r\ncomplete -o filenames -F _longopt cpio\r\n/@$" { pass "$test" }
+    -re "^$cmd\r\ncomplete -F _cpio cpio\r\n/@$" { pass "$test" }
     -re /@ { fail "$test at prompt" }
 }; # expect
 
