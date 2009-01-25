@@ -1,4 +1,4 @@
-$VERSION
+bash_completion_lib-1.3.0, 25-Jan-2009
 
 - Moved setup code to function `comp_setup()'
 - Replaced file `comploadrc' with `comp_setup_init'
@@ -18,6 +18,9 @@ $VERSION
   service.
 - Replaced _longopt completion for cpio with _cpio completion
 - Backup and unset CDPATH during setup
+- Added handling of COMP_INSTALL=0 environment variable.  If set, `comp_load()'
+  will not be replaced with the actual completion definiton after a first
+  completion.
 
 
 

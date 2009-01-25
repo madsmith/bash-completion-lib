@@ -48,7 +48,7 @@ COMP_DIR=$(cd "$(dirname "$(which "${BASH_SOURCE-$0}" 2> /dev/null)")" && /bin/p
     # True (1) if restricted completion is enabled, False (0, default) if not
 COMP_RESTRICT_BY_EXTENSION=${COMP_RESTRICT_BY_EXTENSION:-0}
     # Version of bash-completion-lib
-COMP_VERSION=bash_completion_lib-1.2.dev.228M
+COMP_VERSION=bash_completion_lib-1.3.0
 
 
 # Load completion commands.
@@ -63,7 +63,7 @@ comp_load() {
 	#	Variables: script = path/comp, comp = target | target.link
 	# NOTE: Use 'head -1' to get the first match in case 'find' returns more than one match
 
-    local cmd=${COMP_WORDS[0]} dir globs OLDIFS=$IFS
+    local cmd=${COMP_WORDS[0]} dir OLDIFS=$IFS
 	# Convert colon (:) separated string `COMP_PATH' to array `aPaths'
     IFS=:; local -a aPaths=($COMP_PATH)
 	# Create globbing search strings by appending `aPaths' with:
@@ -98,8 +98,9 @@ comp_load() {
     [ "$script" -a -r "$path/$comp" ] && . "$path/$comp" && \
 	    # Is function '_$comp" available?
 	declare -F _$comp &> /dev/null && \
-	    # Make completion persistent for subsequent invocations
-	_comp_install $comp "$path" && \
+	    # Install (make completion persistent) for subsequent invocations
+	    # NOTE: Do not install when COMP_INSTALL equals 0
+	{ [ ${COMP_INSTALL:-1} -eq 0 ] || _comp_install $comp "$path"; } && \
 	    # Generate completions for first invocation
 	_$comp $link
 

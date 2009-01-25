@@ -2,10 +2,13 @@
 # See also: _comp_install()
 # @param $* string  (optional) Arguments to use for completion.  Default is "-F _${BASH_ARGV[0]}"
 comp_install() {
-    local comp=${BASH_ARGV[0]##*/}  # ${..##*/}: strip up to and including last slash
-    local dir="${BASH_ARGV[0]%/$comp}"  # Extract dir from completion
+    # Do not install when COMP_INSTALL equals 0
+    if [ "${COMP_INSTALL:-1}" -ne 0 ]; then
+	local comp=${BASH_ARGV[0]##*/}  # ${..##*/}: strip up to and including last slash
+	local dir="${BASH_ARGV[0]%/$comp}"  # Extract dir from completion
 
-    _comp_install $comp "$dir" "$*"
+	_comp_install $comp "$dir" "$*"
+    fi
 } # comp_install()
 
 
