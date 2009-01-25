@@ -63,7 +63,7 @@ comp_load() {
 	#	Variables: script = path/comp, comp = target | target.link
 	# NOTE: Use 'head -1' to get the first match in case 'find' returns more than one match
 
-    local cmd=${COMP_WORDS[0]} dir OLDIFS=$IFS
+    local cmd=${COMP_WORDS[0]} dir globs OLDIFS=$IFS
 	# Convert colon (:) separated string `COMP_PATH' to array `aPaths'
     IFS=:; local -a aPaths=($COMP_PATH)
 	# Create globbing search strings by appending `aPaths' with:
