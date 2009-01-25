@@ -1,0 +1,28 @@
+proc sync_after_int {} {
+	set test "Sync after INT"
+	sleep .1
+	send \031\003;  # QUIT/INT
+	expect /@
+}; # sync_after_int()
+
+
+proc sync_after_tab {} {
+        # NOTE: Wait in case completion returns nothing - because `units' isn't
+        #       installed, so that "^$cdm.*$" doesn't match too early - before
+        #       comp_install has finished
+    sleep .4
+}; # sync_after_tab()
+
+
+# TODO
+# If a command is not available, fail the test with status UNSUPPORTED
+proc is_available {$command} {
+    #set status 0 
+    #   # $results contains error messages
+    #if {[catch [exec false] results]} { 
+    #    if {[lindex $::errorCode 0] eq "CHILDSTATUS"} { 
+    #        set status [lindex $::errorCode 2] 
+    #    }   
+    #}
+    # type command > /dev/null 2>&1
+}

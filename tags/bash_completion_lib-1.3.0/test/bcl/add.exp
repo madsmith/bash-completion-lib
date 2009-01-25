@@ -1,0 +1,95 @@
+proc setup {} {
+}; # setup()
+
+
+proc teardown {} {
+}; # teardown()
+
+
+set timeout 1 
+setup
+
+
+set test env
+    # Start bash
+exp_spawn bash --rcfile config/bashrc
+expect -ex "/@"
+
+    # Change bash directory to `bcl'
+set cmd "cd bcl"
+send "$cmd\r"
+expect -ex "$cmd\r\n"
+expect -ex "/bcl/@"
+
+    # Set COMP_PATH to current dir
+set cmd "export COMP_PATH=\$PWD/completions"
+send "$cmd\r"
+expect -ex "$cmd\r\n"
+expect -ex "/bcl/@"
+
+
+set test "'bcl add foo dir/foo' should copy foo to dir"
+set file [pwd]/bcl/completions/complete/foo
+    # Make sure file is deleted
+if { [file exists $file] } { file delete $file }
+    # Copy file
+set cmd "../../bcl add foo [pwd]/bcl/completions/complete/foo"
+send "$cmd\r"
+expect {
+    -re "$cmd\r\n/bcl/@" { pass $test }
+    default { fail "$test" }
+    timeout { fail "$test (timeout)" }
+}
+if { [file exists $file] } { pass $test } { fail "$test ($file)" }
+
+
+set test "'bcl add foo --lib dir' should copy foo to dir"
+set file [pwd]/bcl/completions/complete/foo
+    # Make sure file is deleted
+if { [file exists $file] } { file delete $file }
+    # Copy file
+set cmd "../../bcl add foo --lib [pwd]/bcl/completions"
+send "$cmd\r"
+expect {
+    -re "$cmd\r\n/bcl/@" { pass $test }
+    default { fail "$test" }
+    timeout { fail "$test (timeout)" }
+}
+if { [file exists $file] } { pass $test } { fail "$test ($file)" }
+
+
+set test "'bcl add foo --alias bar' should install foo.bar"
+set file [pwd]/bcl/completions/complete/foo.bar
+    # Make sure file is deleted
+if { [file exists $file] } { file delete $file }
+    # Make sure file is delete
+if { [file exists $file] } { file delete $file }
+    # Copy file
+set cmd "../../bcl add foo --alias bar"
+send "$cmd\r"
+expect {
+    -re "$cmd\r\n/bcl/@" { pass $test }
+    default { fail "$test" }
+    timeout { fail "$test (timeout)" }
+}
+if { [file exists $file] } { pass $test } { fail "$test ($file)" }
+
+
+set test "'bcl add -o 'filenames default' foo' should install foo"
+set file "[pwd]/bcl/completions/complete -o filenames default/foo"
+    # Make sure file is deleted
+if { [file exists $file] } { file delete $file }
+    # Make sure file is delete
+if { [file exists $file] } { file delete $file }
+    # Copy file
+set cmd "../../bcl add -o 'filenames default' foo"
+send "$cmd\r"
+expect {
+    -re "$cmd\r\n/bcl/@" { pass $test }
+    default { fail "$test" }
+    timeout { fail "$test (timeout)" }
+}
+if { [file exists $file] } { pass $test } { fail "$test ($file)" }
+
+
+teardown

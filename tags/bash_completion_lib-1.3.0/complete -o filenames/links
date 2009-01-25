@@ -1,0 +1,37 @@
+comp_include _filedir _get_cword
+
+
+_links()
+{
+    local cur
+  
+    COMPREPLY=()
+    cur=`_get_cword`
+  
+    case "$cur" in
+        --*)
+        COMPREPLY=( $( compgen -W '--help' -- $cur ) )
+        ;;
+        -*)
+        COMPREPLY=( $( compgen -W '-async-dns -max-connections \
+                -max-connections-to-host -retries \
+                -receive-timeout -unrestartable-receive-timeout\
+                -format-cache-size -memory-cache-size \
+                -http-proxy -ftp-proxy -download-dir \
+                -assume-codepage -anonymous -dump -no-connect \
+                -source -version -help' -- $cur ) )
+        ;;
+        *)
+        if [ -r ~/.links/links.his ]; then
+            COMPREPLY=( $( compgen -W '$( < ~/.links/links.his )' \
+                   -- $cur ) )
+        fi
+                _filedir '@(htm|html)'
+                return 0
+        ;;
+    esac
+  
+    return 0
+} # _links()
+
+

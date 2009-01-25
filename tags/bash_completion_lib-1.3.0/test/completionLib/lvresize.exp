@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p lvresize"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load lvresize\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/lvresize.exp"
+
+
+set test "Completion via _lvresize() should be installed"
+set cmd "complete -p lvresize"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _lvresize lvresize\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/lvresize.exp"

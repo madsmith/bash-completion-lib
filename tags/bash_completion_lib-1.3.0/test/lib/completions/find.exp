@@ -1,0 +1,100 @@
+proc setup {} {
+}; # setup()
+
+
+proc teardown {} {
+}; # teardown()
+
+
+setup
+
+
+set test "Tab should show completions"
+    # Try completion
+set cmd "find "
+send "$cmd\t"
+expect {
+    -re "$cmd\r\n.*$cmd$" { pass "$test" }
+    -re /@ { unresolved "$test at prompt" }
+    -re eof { unresolved "eof" }
+}; # expect
+
+
+sync_after_int
+
+
+set test "- should complete options"
+    # Try completion
+set cmd "find -"
+send "$cmd\t"
+expect {
+    -re "$cmd\r\n-amin\\s+-anewer\\s+-atime\\s+-cmin\\s+-cnewer\\s+-ctime\\s+-daystart\\s+-depth\\s+-empty\\s+-exec\\s+-false\\s+-fls\\s+-follow\\s+-fprint\\s+-fprint0\\s+-fprintf\\s+-fstype\\s+-gid\\s+-group\\s+-help\\s+-ilname\\s+-iname\\s+-inum\\s+-ipath\\s+-iregex\\s+-links\\s+-lname\\s+-ls\\s+-maxdepth\\s+-mindepth\\s+-mmin\\s+-mount\\s+-mtime\\s+-name\\s+-newer\\s+-nogroup\\s+-noleaf\\s+-nouser\\s+-ok\\s+-perm\\s+-print\\s+-print0\\s+-printf\\s+-prune\\s+-regex\\s+-size\\s+-true\\s+-type\\s+-uid\\s+-used\\s+-user\\s+-version\\s+-wholename\\s+-xdev\\s+-xtype\\s*\r\n/@$cmd$" { 
+	pass "$test" 
+    }
+    -re /@ { unresolved "$test at prompt" }
+    -re eof { unresolved "eof" }
+}; # expect
+
+
+sync_after_int
+
+
+set test "-wholename should complete files/dirs"
+    # Change directory
+set cmd "cd fixture1"
+send "$cmd\r"
+expect -ex "$cmd\r\n/fixture1/@"
+    # Complete
+set cmd "find -wholename "
+send "$cmd\t"
+expect {
+    -re "$cmd\r\n(\.svn/ +|)bar +bar bar.d/ +foo +foo.d/ *(\.svn/ *|)\r\n/fixture1/@$cmd$" { 
+	pass "$test" 
+    }
+    -re /@ { unresolved "$test at prompt" }
+    -re eof { unresolved "eof" }
+}; # expect
+
+
+sync_after_int
+
+
+    # Restore directory
+set cmd "cd .."
+send "$cmd\r"
+expect -ex "$cmd\r\n/@"
+
+
+set test "-uid should complete uids"
+    # Complete
+set cmd "find -uid "
+send "$cmd\t"
+expect {
+    -re "$cmd\r\n\\d+.*/@$cmd$" { 
+	pass "$test" 
+    }
+    -re /@ { unresolved "$test at prompt" }
+    -re eof { unresolved "eof" }
+}; # expect
+
+
+sync_after_int
+
+
+set test "-gid should complete gids"
+    # Complete
+set cmd "find -gid "
+send "$cmd\t"
+expect {
+    -re "$cmd\r\n\\d+.*/@$cmd$" { 
+	pass "$test" 
+    }
+    -re /@ { unresolved "$test at prompt" }
+    -re eof { unresolved "eof" }
+}; # expect
+
+
+sync_after_int
+
+
+teardown

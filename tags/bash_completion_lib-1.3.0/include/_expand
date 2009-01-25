@@ -1,0 +1,16 @@
+# This function expands tildes in pathnames
+#
+_expand()
+{
+	[ "$cur" != "${cur%\\}" ] && cur="$cur\\"
+
+	# expand ~username type directory specifications
+	if [[ "$cur" == \~*/* ]]; then
+		eval cur=$cur
+		
+	elif [[ "$cur" == \~* ]]; then
+		cur=${cur#\~}
+		COMPREPLY=( $( compgen -P '~' -u $cur ) )
+		return ${#COMPREPLY[@]}
+	fi
+}

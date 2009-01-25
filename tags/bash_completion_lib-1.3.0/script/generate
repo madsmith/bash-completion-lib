@@ -1,0 +1,163 @@
+#!/bin/bash -eu
+# Generate skeleton files for completion of specified command.
+# Test skeleton files are generated as well.
+# @param $1 string  Command, e.g. 'make'
+# @param $2 string  Completion function, e.g. _command
+# @param $3 string  Completion arguments, e.g. '-o filenames'
+
+
+# Generate completion code
+# @param $1 string  Command, e.g. 'make'
+# @param $2 string  Completion function, e.g. _command
+# @param $3 string  Completion arguments, e.g. ' -o filenames'
+generate_completion() {
+    local path="complete$3/$1"
+        # If `command' contains dot (.), trail filename with dot (.)
+    [ $1 = ${1/./} ] || path=$path. 
+    echo "$path"
+        # Does file already exist?
+    if [ ! -f "$path" ]; then
+        # No, file doesn't exist; generate file
+    cat <<BASH > "$path"
+$2()
+{
+} # $2()
+BASH
+	    # If `function' doesn't equal `_command', additional code is required
+	    # to install completions
+	if [ "_$1" != "$2" ]; then
+	    cat <<BASH >> "$path"
+
+comp_install -F $2  # Make completion persistent for subsequent invocations
+
+$2  # Generate completions for first invocation
+BASH
+	fi
+    fi
+} # generate_completion()
+
+
+# Generate test code
+# @param $1 string  Command, e.g. 'make'
+# @param $2 string  Completion function, e.g. _command
+# @param $3 string  Completion arguments, e.g. ' -o filenames'
+generate_test_completion_debian() {
+	local path="test/completionDebian/$1.exp"
+		# Does file already exist?
+	if [ ! -f "$path" ]; then
+		# No, file doesn't exist; generate file
+	cat <<EXPECT > "$path"
+source "lib/completions/$1.exp"
+EXPECT
+fi
+} # generate_test_completion_debian()
+
+
+# Generate test code
+# @param $1 string  Command, e.g. 'make'
+# @param $2 string  Completion function, e.g. _command
+# @param $3 string  Completion arguments, e.g. ' -o filenames'
+generate_test_completion_lib() {
+	local path="test/completionLib/$1.exp"
+		# Does file already exist?
+	if [ ! -f "$path" ]; then
+		# No, file doesn't exist; generate file
+	cat <<EXPECT > "$path"
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p $1"
+send "\$cmd\\r"
+expect {
+    -re "^\$cmd\\r\\ncomplete$3 -F comp_load $1\\r\\n/@\$" { pass "\$test" }
+    -re /@ { fail "\$test at prompt" }
+}; # expect
+
+
+source "lib/completions/$1.exp"
+
+
+set test "Completion via $2() should be installed"
+set cmd "complete -p $1"
+send "\$cmd\\r"
+expect {
+    -re "^\$cmd\\r\\ncomplete$3 -F $2 $1\\r\\n/@\$" { pass "\$test" }
+    -re /@ { fail "\$test at prompt" }
+}; # expect
+
+
+source "lib/completions/$1.exp"
+EXPECT
+fi
+} # generate_test_completion_lib()
+
+
+# Generate test code
+# @param $1 string  Command, e.g. 'make'
+# @param $2 string  Completion function, e.g. _command
+# @param $3 string  Completion arguments, e.g. ' -o filenames'
+generate_test_completion_orig() {
+	local path="test/completionOrig/$1.exp"
+		# Does file already exist?
+	if [ ! -f "$path" ]; then
+		# No, file doesn't exist; generate file
+	cat <<EXPECT > "$path"
+source "lib/completions/$1.exp"
+EXPECT
+fi
+} # generate_test_completion_orig()
+
+
+# Generate test code
+# @param $1 string  Command, e.g. 'make'
+# @param $2 string  Completion function, e.g. _command
+# @param $3 string  Completion arguments, e.g. ' -o filenames'
+generate_test_lib_completions() {
+	local path="test/lib/completions/$1.exp"
+		# Does file already exist?
+	if [ ! -f "$path" ]; then
+		# No, file doesn't exist; generate file
+	cat <<EXPECT > "$path"
+proc setup {} {
+}; # setup()
+
+
+proc teardown {} {
+}; # teardown()
+
+
+setup
+
+
+set test "Tab should show completions"
+    # Try completion
+set cmd "$1 "
+send "\$cmd\\t"
+expect {
+    -re "\$cmd\r\n.*\$cmd\$" { pass "\$test" }
+    -re /@ { unresolved "\$test at prompt" }
+    -re eof { unresolved "eof" }
+}; # expect
+
+
+sync_after_int
+
+
+teardown
+EXPECT
+fi
+} # generate_test_lib_completions()
+
+
+	# If argument count is wrong, show help
+if [ $# -ne 3 ]; then
+    echo "Usage: $0 command function complete-options"
+    echo "Example: $0 make _make ' -o filenames'"
+    exit 1
+fi
+
+    # Make sure argument `3' begins with a space
+[ "$3" ] && set -- "$1" "$2" " ${3# }"
+generate_completion "$1" "$2" "$3"
+generate_test_completion_debian "$1" "$2" "$3"
+generate_test_completion_lib "$1" "$2" "$3"
+generate_test_completion_orig "$1" "$2" "$3"
+generate_test_lib_completions "$1" "$2" "$3"

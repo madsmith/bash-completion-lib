@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p sync_members"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load sync_members\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/sync_members.exp"
+
+
+set test "Completion via _sync_members() should be installed"
+set cmd "complete -p sync_members"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _sync_members sync_members\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/sync_members.exp"

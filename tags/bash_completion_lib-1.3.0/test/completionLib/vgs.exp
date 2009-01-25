@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p vgs"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load vgs\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/vgs.exp"
+
+
+set test "Completion via _vgs() should be installed"
+set cmd "complete -p vgs"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _vgs vgs\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/vgs.exp"

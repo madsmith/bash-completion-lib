@@ -1,0 +1,6 @@
+# This function checks whether a given readline variable is `on'.
+#
+_rl_enabled() 
+{
+	[[ "$( bind -v )" = *$1+([[:space:]])on* ]]
+}

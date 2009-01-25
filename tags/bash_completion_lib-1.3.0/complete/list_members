@@ -1,0 +1,40 @@
+# Mailman completion by Guillaume Rousse <rousse@ccr.jussieu.fr>
+
+
+comp_include _filedir _get_cword _mailman_lists
+
+
+_list_members()
+{
+	local cur prev
+
+	COMPREPLY=()
+	cur=`_get_cword`
+	prev=${COMP_WORDS[COMP_CWORD-1]}
+
+	case "$prev" in
+		-@(o|-output))
+			_filedir
+			return 0
+			;;
+		-@(d|-digest=))
+			COMPREPLY=( $( compgen -W 'mime plain' -- $cur) )
+			return 0
+			;;
+		-@(n|-nomail=))
+			COMPREPLY=( $( compgen -W 'byadmin byuser bybounce unknown' -- $cur) )
+			return 0
+			;;
+	esac
+
+
+	if [[ "$cur" == -* ]]; then
+		COMPREPLY=( $( compgen -W '--output -o --regular -r \
+			--digest= -d --nomail= -n --fullnames -f \
+			--preserve -p -h --help' -- $cur ) )
+	else
+		_mailman_lists
+	fi
+} # _list_members()
+
+

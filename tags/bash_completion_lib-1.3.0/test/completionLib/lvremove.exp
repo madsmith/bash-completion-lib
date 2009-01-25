@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p lvremove"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load lvremove\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/lvremove.exp"
+
+
+set test "Completion via _lvremove() should be installed"
+set cmd "complete -p lvremove"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _lvremove lvremove\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/lvremove.exp"

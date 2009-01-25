@@ -1,0 +1,2 @@
+declare -f _alias
+declare -f _get_cword

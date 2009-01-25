@@ -1,0 +1,6 @@
+    UserKnownHostsFile "fixtures/ssh/spaced  known_hosts"
+
+    # Unindented
+Host gee
+	# Indented
+    Host hus  # With comment

@@ -1,0 +1,175 @@
+#-- bash_completion_lib -----------------------------------------------
+# Programmable completion functions for bash 3.x.
+#
+# Copyright (C) Freddy Vulto <fvulto@gmail.com>
+#
+# Versions
+# - 2009: This release.  Completions are split into separate files
+# - 2006: Unsplit version written by Ian Macdonald <ian@caliban.org>
+#	  See: http://caliban.org/bash/
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software 
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, 
+# MA  02110-1301, USA
+#
+# The latest version of this software can be obtained here:
+# http://fvue.nl/wiki/Bash_completion_lib
+
+    # If `bash_completion_lib' already loaded, return
+[ "$COMP_VERSION" ] && return
+
+    # Extended globbing and programmable completion have to be
+    # set in order for completion to work
+shopt -s extglob progcomp
+compLocal="$HOME/.bash_completion_lib.d"
+
+# If COMP_CACHE is unset upon the first run of `bash_completion_lib',
+# COMP_CACHE is automatically set to: ~/.bash_completion_lib.d/cache~ and
+# completion definitions will be stored in this file.  The next time
+# `bash_completion_lib' runs, completion definitions will be read from this
+# file.
+    #
+    # Store current directory of this script
+COMP_DIR=$(cd "$(dirname "$(which "${BASH_SOURCE-$0}" 2> /dev/null)")" && /bin/pwd)
+    # If COMP_PATH is unset, set COMP_PATH to default array
+    # NOTE: `COMP_PATH' must be exported for the `bcl' utility to work
+[ "$COMP_PATH" ] || export COMP_PATH="$compLocal:$COMP_DIR"
+    # True (1) if restricted completion is enabled, False (0, default) if not
+COMP_RESTRICT_BY_EXTENSION=${COMP_RESTRICT_BY_EXTENSION:-0}
+    # Version of bash-completion-lib
+COMP_VERSION=bash_completion_lib-1.3.0
+
+
+# Load completion commands.
+# The appropriate script from a `COMP_PATH' directory will be loaded.
+comp_load() {
+	# Find completion script
+	# NOTE: A search is performed for both `command' and `*.command'.
+	#	Syntax `*.command' is a kind of symlink notation.  E.g.
+	#	`make.gnumake' lets `make' handle the completion of `gnumake'.
+	#	Symlinks are not used, because they're not available on every system.
+	#	If a command ends with an exclamation mark (!), symlink notation is disabled.
+	#	Variables: script = path/comp, comp = target | target.link
+	# NOTE: Use 'head -1' to get the first match in case 'find' returns more than one match
+
+    local cmd=${COMP_WORDS[0]} dir globs OLDIFS=$IFS
+	# Convert colon (:) separated string `COMP_PATH' to array `aPaths'
+    IFS=:; local -a aPaths=($COMP_PATH)
+	# Create globbing search strings by appending `aPaths' with:
+	# *.command, command!, command
+    IFS=$'\n'; globs=( $(
+	for dir in "${aPaths[@]}"; do 
+	    echo \"$dir\"/complete\*/\*.$cmd
+	    echo \"$dir\"/complete\*/$cmd\!
+	    echo \"$dir\"/complete\*/$cmd
+	done
+    ) )
+    IFS=$OLDIFS
+	# If comp_include() not defined, include it from $COMP_PATH
+    if ! declare -F comp_include &> /dev/null; then
+	for dir in "${aPaths[@]}"; do
+	    [ -r "$dir/include/comp_include" ] && . "$dir/include/comp_include" && break
+	done
+    fi 
+	# Now we can use `comp_include' to include more files
+    comp_include comp_load_init
+    comp_load_init
+    local script="$(eval find "${globs[@]}" 2> /dev/null | head -1)"
+    local link comp=${script##*/}  # Remove path
+	# Remove possible .link only if exclamation mark (!) isn't last character
+	# 1:  Strip up to and including first dot (*.)
+	# 2:  Strip possible leftmost dot (.) plus link
+	#			       +---1----+	+-----2------+
+    [[ ${comp: -1:1} == ! ]] || { link=${comp#*.}; comp=${comp%.$link}; }
+    local path=${script%/*}   # Remove comp
+	# Source completion of command to complete
+	# If sourcing returns true, automatically call `_comp_install' and '_$comp'
+    [ "$script" -a -r "$path/$comp" ] && . "$path/$comp" && \
+	    # Is function '_$comp" available?
+	declare -F _$comp &> /dev/null && \
+	    # Install (make completion persistent) for subsequent invocations
+	    # NOTE: Do not install when COMP_INSTALL equals 0
+	{ [ ${COMP_INSTALL:-1} -eq 0 ] || _comp_install $comp "$path"; } && \
+	    # Generate completions for first invocation
+	_$comp $link
+
+    comp_load_deinit
+} # comp_load()
+
+
+# Setup completion for all files in `./complete*/*'
+comp_setup() {
+    local comp compPwd="$PWD" dir i k
+    local oldShoptOptions=$(shopt -p dotglob failglob nullglob)
+	# Make sure CDPATH is empty
+    [ "$CDPATH" ] && { local oldCdpath="$CDPATH"; CDPATH=; }
+    shopt -s nullglob
+    shopt -u dotglob failglob
+        # Convert string `COMP_LIB' to array `aPaths'
+    local OLDIFS=$IFS; IFS=:; local -a aPaths=($COMP_PATH); IFS=$OLDIFS
+	# If comp_include() not defined, include it from $COMP_PATH
+    if ! declare -F comp_include &> /dev/null; then
+	for dir in "${aPaths[@]}"; do
+	    [ -r "$dir/include/comp_include" ] && . "$dir/include/comp_include" && break
+	done
+    fi 
+	# Include additional files
+    comp_include comp_dir2args comp_setup_init
+    comp_setup_init 
+        # use GNU sed if we have it, since its extensions are still used in our code
+    [ $UNAME != Linux ] && [ $UNAME != Cygwin ] && which gsed > /dev/null && alias sed=gsed
+	# Loop through directories, starting from last so that first overwrites
+	# last, and first has precedence
+    for ((k = ${#aPaths[@]} - 1; k >= 0; k--)); do
+        if cd "${aPaths[$k]}" 2> /dev/null; then
+            for i in complete*; do
+                    # Don't setup completion if 'comp_dir2args()' returns false
+                if comp_dir2args "./$i"; then
+                    cd "$i" 2> /dev/null && {
+			for comp in *; do
+			    #  If name ends with exclamation mark (!), only
+			    #+ strip last exclamation mark, otherwise strip
+			    #+ up to and including first dot (*.)
+			    [[ ${comp: -1:1} == ! ]] && comp=${comp%!} || comp=${comp#*.}
+			    complete -F comp_load $COMP_ARGS $comp
+			done
+			cd ..
+                    }
+                fi
+            done
+        fi
+    done
+    eval "$oldShoptOptions" 2> /dev/null  # Restore `shopt' options
+    [ "$oldCdpath" ] && CDPATH="$oldCdpath"  # Restore `CDPATH'
+    cd $compPwd   # Restore current directory
+    comp_setup_deinit
+} # comp_setup()
+
+ 
+    # Use cache if set, and versions (COMP_VERSION and COMP_CACHE_VERSION) match
+[ "$COMP_CACHE" ] && [ -r "$COMP_CACHE" ] && . "$COMP_CACHE" && [ "$COMP_VERSION" = "$COMP_CACHE_VERSION" ] || {
+    # No, cache isn't set or isn't available;
+	# Setup completions for all files in $COMP_PATH/complete*/*
+    comp_setup
+    
+    # *  If COMP_CACHE is unset, set COMP_CACHE to ~/.bash_completion_lib.d/cache~	
+    # *  If COMP_CACHE is not empty:
+    #    -	create directory `$compLocal' if necessary
+    #    -	generate cache file
+    [ "${COMP_CACHE=$compLocal/cache~}" ] && 
+    { [ -d "$compLocal" ] || mkdir "$compLocal"; } && 
+    { echo COMP_CACHE_VERSION=$COMP_VERSION; complete -p; } > "$COMP_CACHE"
+}
+unset -v COMP_ARGS compLocal
+unset -f comp_setup

@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p vgextend"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load vgextend\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/vgextend.exp"
+
+
+set test "Completion via _vgextend() should be installed"
+set cmd "complete -p vgextend"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _vgextend vgextend\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/vgextend.exp"

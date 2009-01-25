@@ -1,0 +1,20 @@
+# FreeBSD kernel module commands
+
+
+comp_include _get_cword
+
+
+_kldload()
+{
+    local cur moddir
+
+    moddir=/modules/
+    [ -d $moddir ] || moddir=/boot/kernel/
+    cur=`_get_cword`
+
+    COMPREPLY=( $( compgen -f $moddir$cur ) )
+    COMPREPLY=( ${COMPREPLY[@]#$moddir} )
+    COMPREPLY=( ${COMPREPLY[@]%.ko} )
+
+    return 0
+} # _kldload()

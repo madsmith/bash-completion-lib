@@ -1,0 +1,19 @@
+# Mailman completion by Guillaume Rousse <rousse@ccr.jussieu.fr>
+
+
+comp_include _filedir _get_cword
+
+
+_dumpdb()
+{
+	local cur
+
+	COMPREPLY=()
+	cur=`_get_cword`
+
+	if [[ "$cur" == -* ]]; then
+		COMPREPLY=( $( compgen -W '--marshal -m --pickle -p --noprint -n -h --help' -- $cur ) )
+	else
+		_filedir
+	fi
+} # _dumpdb()

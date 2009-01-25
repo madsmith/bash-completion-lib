@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p grub"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames -F comp_load grub\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/grub.exp"
+
+
+set test "Completion via _longopt() should be installed"
+set cmd "complete -p grub"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames -F _longopt grub\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/grub.exp"

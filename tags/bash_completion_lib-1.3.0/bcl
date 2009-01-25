@@ -1,0 +1,325 @@
+#!/bin/bash
+#--- bcl.sh ------------------------------------------------------------
+# Bash-completion-library command-line client
+# Project prefix is 'bcl'.
+
+
+
+set -o nounset  # Trigger error when expanding unset variables
+set -o errtrace  # Let shell functions inherit ERR trap
+trap 'wrapexit $?' 1 2 3 15 ERR
+
+
+    # @global string
+    # Name of file containing completion script to add
+    # Valid only if subcommand equals `add'
+bclArgAddFile=
+
+
+    # @global string
+    # Name to install additional completion for
+    # Valid only if subcommand equals `add'
+bclArgAddName=
+
+
+    # @global string
+    # Command (add, delete, help)
+bclArgCmd=
+
+
+    # @global boolean
+    # 1 if debug, 0 if not
+bclDoDebug=0
+
+
+    # @global string
+    # Aliases to install additional completion for.
+    # Valid only if subcommand equals `add'.  Multiple aliases may be
+    # specified, separated by whitespace.
+bclOptAddAliases=
+
+
+    # @global string
+    # Options to pass to `complete'
+bclOptComplete=
+
+
+    # @global string
+    # 1 if `--help' option or `help' argument is specified
+bclOptHelp=
+
+
+    # @global string
+    # Library directory (typically ending with 'completions') to use for operations.
+    # If not specified, first directory of COMP_PATH will be used.
+bclOptLib=
+
+
+    # @global string
+    # Script path
+bclScriptPath="$(dirname "$(which "$0")")"
+
+
+    # @global string
+    # Version
+bclVersion=1.3.0
+
+
+# Add completion to `bclOptLib'
+do_add() {
+    local name="${bclArgAddName##*/}"  # Remove path
+    local dir="${bclArgAddName%$name}"  # Extract path (including trailing slash)
+    [ "$dir" ] || dir="$bclOptLib/complete$bclOptComplete/"
+	# Make sure `dir' exists
+    [ -d "$dir" ] || mkdir -p "$dir"
+
+    cp $bclArgAddFile "$dir$name"
+	# Add aliases
+    for alias in $bclOptAddAliases; do
+	touch "$dir$name.$alias"
+    done
+} # do_add()
+
+
+# Initialize globals
+init_globals() {
+    foo=bar
+} # init_globals()
+
+
+# Main routine
+main() {
+	# Process arguments
+    process_arguments "$@"
+        # Initialize globals
+    init_globals
+    case $bclArgCmd in
+	add)
+	    do_add
+	    ;;
+	*)
+	    out_error "Unknown command: $bclArgCmd"
+	    exit 1
+	    ;;
+    esac
+} # main()
+
+
+# Show error
+# @param $1 string  Error message
+out_error() {
+    echo $(basename $0): $1 1>&2
+} # out_error()
+
+
+# Process command line arguments
+# @param $*  Command line arguments
+# @return integer  0 if successful, 1 if not
+function process_arguments {
+    local parsedArgs
+
+	# Parse arguments
+        # @NOTE: Output of `getopt' is not passed directly to `set',
+        #        because this would circumvent the error trap (errexit)
+    parsedArgs=$(getopt -n $0 -u -l 'alias:,help,lib:,version' 'hl:o:v' "$@")
+    set -- $parsedArgs
+
+    process_options "$@"
+        # Skip processed options
+    until [ "$1" = "--" ]; do
+        shift
+    done
+    shift  # Skip argument separator '--'
+
+    bclArgCmd="${1-}"
+
+    case $bclArgCmd in
+        add)
+	    shift  # Skip 'add' argument
+	    [ "${1-}" ] || { out_error "error: missing \`file' argument"; exit 1; }
+	    bclArgAddFile=$1
+
+	    shift
+	    bclArgAddName=${1-$(basename $bclArgAddFile)}
+
+		# Make sure no more arguments are given
+		# NOTE: the result of the line must be true because of `set -e'
+	    [ "${2-}" = "" ] || { out_error "error: too many arguments: $@"; exit 1; }
+            ;;
+        delete)
+            ;;
+        help)
+	    shift
+	    if [ ${1-} ]; then
+		case "$1" in
+		    add) show_usage 'add'; exit 0 ;;
+		esac
+	    fi
+	    show_usage 'verbose'; exit 0
+            ;;
+	'')
+	    if (( $bclOptHelp )); then
+		show_usage 'verbose'
+		exit 0
+	    else
+		out_error "empty command"
+		show_usage 'hint' 1>&2
+		exit 1
+	    fi
+	    ;;
+        *)
+	    out_error "invalid command"
+            show_usage 'hint' 1>&2
+	    exit 1
+            ;;
+    esac
+
+	# If `bclOptLib' not specified, use first dir of COMP_PATH
+    if [ ! "$bclOptLib" ]; then
+	[ "${COMP_PATH-}" ] || { out_error "Error: COMP_PATH not set"; exit 1; }
+	    # 1: Trim COMP_PATH, starting from first colon (:)
+	    #      +------1------+
+	bclOptLib="${COMP_PATH%%:*}"
+    fi
+	# Remove possible trailing slash
+    bclOptLib="${bclOptLib%/}"
+} # process_arguments()
+
+
+# Process command line options.
+# NOTE: option arguments are already checked by `getopt'
+# @param $*  Command line options
+# @modifies $bcl_show_usage_level
+# @modifies $bcl_do_exec_main_cmd 
+# @return integer  0 if successful, 1 if not.
+function process_options() {
+	while true; do
+	    case "$1" in
+		-a | --alias)
+		    while true; do
+			shift
+			bclOptAddAliases="$bclOptAddAliases $1"
+			[ "${2:0:1}" = - ] && break;
+		    done
+		    ;;
+		-o)
+		    while true; do
+			shift
+			bclOptComplete="$bclOptComplete $1"
+			[ "${2:0:1}" = - ] && break;
+		    done
+		    [ "$bclOptComplete" ] && bclOptComplete=" -o$bclOptComplete"
+		    ;;
+		-h | --help) 
+		    bclOptHelp=1
+		    ;;
+		-l | --lib)
+		    shift
+		    bclOptLib="$1"
+		    ;;
+		-v | --version)
+		    show_usage version
+		    exit 0
+		    ;;
+		--)
+		    break
+		    ;;
+	    esac
+	    shift
+	done
+} # process_options()
+
+
+# Show usage
+# @param $1  Level: - NULL: no usage must be shown
+#                   - 'add': show usage for `add' subcommand
+#                   - 'delete': show usage for `delete' subcommand
+#                   - 'usage': show basic information
+#                   - 'verbose': show verbose information
+#                   - 'hint': show hint to --help
+show_usage() {
+    if [ $1 ]; then
+        case "$1" in
+	    add)
+		cat <<EOS
+Usage: $(basename $0) add [options] file [name]
+
+Add \`file' to bash-completion-library in order to complete \`name' and optional
+\`aliases'.  If \`name' is not specified, basename of \`file' will be taken.
+
+Valid options:
+-o comp-option     : options to pass to \`complete'.  May occur more than once.
+                     Valid options are: bashdefault, default, dirnames
+		     filenames, nospace and plusdirs.  Type \`info bash' and 
+		     search for \`compgen' for more information.
+-a, --alias        : alias to install \`name' completion for.  May occur more than once
+-l, --lib LIB      : use directory LIB for operations.  Valid only if \`name' contains
+                     no path specification.  If \`-l' not specified, first
+                     directory of COMP_PATH will be used.
+EOS
+		;;
+	    delete)
+		cat <<EOS
+Usage: $(basename $0) delete name|alias [...]
+
+Remove 'name' or 'alias' from bash-completion-library.
+EOS
+		;;
+            hint)
+                echo "Try \`$(basename $0) --help' for more information."
+                ;;
+            usage)
+		cat <<EOS
+Usage: $(basename $0) <subcommand> [options] [args]
+
+Available subcommands:
+   add
+   delete (del, remove, rm)
+   help (?, h)
+
+Valid options:
+   -h, --help      display this help and exit
+   -v, --version   show version
+
+Type \`bcl help <subcommand>' for more information.
+EOS
+                ;;
+            verbose) 
+                cat <<EOS
+Usage: $(basename $0) <subcommand> [options] [args]
+Bash-completion-library command-line client, version $bclVersion
+
+Type '$(basename $0) help <subcommand>' for help on a specific subcommand.
+
+Available subcommands:
+   add
+   delete (del, remove, rm)
+   help (?, h)
+
+Valid options:
+   -h, --help      display this help and exit
+   -v, --version   show version
+EOS
+                ;;
+            version)
+                echo $(basename $0) $bclVersion
+                ;;
+            *)
+                echo "show_usage(): Invalid parameter '$1'"
+                ;;
+        esac
+    fi
+} # show_usage()
+
+
+# Routine called by `trap'
+wrapexit() {
+	local exit_status=$?
+	exit $exit_status
+} # wrapexit
+	
+
+    # Call main routine
+main "$@"
+    # Exit cleanly
+wrapexit

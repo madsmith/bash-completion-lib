@@ -1,0 +1,45 @@
+comp_include _filedir _get_cword _perlmodules
+
+
+_perl()
+{
+    local cur optPrefix optSuffix prev prefix temp
+
+    COMPREPLY=()
+    cur=`_get_cword`
+    prev=${COMP_WORDS[COMP_CWORD-1]}
+    prefix=""
+
+    # If option not followed by whitespace, reassign prev and cur
+    if [[ "$cur" == -?* ]]; then
+	temp=$cur
+	prev=${temp:0:2}
+	cur=${temp:2}
+	optPrefix=-P$prev
+	optSuffix=-S/
+	prefix=$prev
+    fi
+
+    case "$prev" in
+    -I|-x)
+	local IFS=$'\t\n' 
+        COMPREPLY=( $( compgen -d $optPrefix $optSuffix -- "$cur" ) )
+        return 0
+        ;;
+    -m|-M)
+        _perlmodules
+        return 0
+        ;;
+    esac
+
+    # handle case where first parameter is not a dash option
+    if [[ "`_get_cword`" != -* ]]; then
+	_filedir
+	return 0
+    fi
+
+    # complete using basic options
+    COMPREPLY=( $( compgen -W '-C -s -T -u -U -W -X -h -v -V -c -w -d -D -p \
+            -n -a -F -l -0 -I -m -M -P -S -x -i -e ' -- $cur ) )
+    return 0
+} # _perl()

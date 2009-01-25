@@ -1,0 +1,17 @@
+comp_include _get_cword _lvm
+
+
+_lvmdiskscan()
+{
+    local cur
+
+    COMPREPLY=()
+    cur=`_get_cword`
+
+    if [[ "$cur" == -* ]]; then
+        COMPREPLY=( $( compgen -W '-d --debug -h -? --help -l \
+            --lvmpartition -v --verbose --version' -- $cur ) )
+    fi
+} # _lvmdiskscan()
+
+

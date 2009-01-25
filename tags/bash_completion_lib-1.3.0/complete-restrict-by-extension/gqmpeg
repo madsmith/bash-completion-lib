@@ -1,0 +1,2 @@
+comp_include _filedir_xspec
+_filedir_xspec "'!*.@(mp3|MP3|ogg|OGG|pls|m3u)'"

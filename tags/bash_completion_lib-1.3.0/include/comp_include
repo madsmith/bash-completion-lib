@@ -1,0 +1,20 @@
+# Include completion files - if not already loaded.  Each directory in $COMP_PATH is
+# examined for "./include/file"
+# @param $* string  Files to include
+# NOTE: Each file must have at least one function with the same name as the
+#       filename.  This way `comp_include' can detect if a file already has been
+#       included.  For example, file `cd' must have a function `cd()'.
+comp_include() {
+    local s
+    for s; do
+        if ! declare -F "$s" &> /dev/null; then 
+	        # Convert colon (:) separated string `COMP_PATH' to array `aPaths'
+	    local dir OLDIFS=$IFS; IFS=:; local -a aPaths=($COMP_PATH); IFS=$OLDIFS
+	    for dir in "${aPaths[@]}"; do
+		[ -r "$dir/include/$s" ] && . "$dir/include/$s" && break
+	    done
+	fi
+    done
+} # comp_include()
+
+

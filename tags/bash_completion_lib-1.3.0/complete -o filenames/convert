@@ -1,0 +1,49 @@
+comp_include _filedir _get_cword _ImageMagick
+
+
+_convert()
+{
+    local cur
+
+    COMPREPLY=()
+    cur=`_get_cword`
+
+    _ImageMagick
+
+    if [[ "$cur" == -* ]]; then
+        COMPREPLY=( $( compgen -W '-adjoin -affine -antialias -append \
+            -authenticate -average -background -black-threshold \
+            -blue-primary -blur -border -bordercolor -channel \
+            -charcoal -chop -clip -coalesce -colorize -colors \
+            -colorspace -comment -compress -contrast -convolve \
+            -crop -cycle -debug -deconstruct -delay -density \
+            -depth -despeckle -display -dispose -dither -draw \
+            -edge -emboss -encoding -endian -enhance -equalize \
+            -extract -fill -filter -flatten -flip -flop -font \
+            -frame -fuzz -gamma -gaussian -geometry \
+            -green-primary -gravity -help -implode -intent \
+            -interlace -label -lat -level -limit -list -log -loop \
+            -map -mask -matte -median -modulate -monochrome \
+            -morph -mosaic -negate -noop -noise -normalize \
+            -opaque -ordered-dither -page -paint -ping -pointsize \
+            -preview -profile -quality -raise -random-threshold \
+            -region -raise -red-primary -render -resize -resample \
+            -roll -rotate -sample -sampling-factor -scale -scene \
+            -seed -segment -shade -sharpen -shave -shear -size \
+            -solarize -spread -stroke -strokewidth -swirl \
+            -texture -threshold -thumbnail -tile -transform \
+            -transparent -treedepth -trim -type -undercolor \
+            -units -unsharp -verbose -version -view \
+            -virtual-pixel -wave -white-point -white-threshold \
+            -write' -- $cur ) )
+    elif [[ "$cur" == +* ]]; then
+        COMPREPLY=( $( compgen -W '+adjoin +append +compress \
+            +contrast +debug +dither +endian +gamma +label +map \
+            +mask +matte +negate +noise +page +raise +render \
+            +write' -- $cur ) ) 
+    else
+        _filedir
+    fi
+} # _convert()
+
+

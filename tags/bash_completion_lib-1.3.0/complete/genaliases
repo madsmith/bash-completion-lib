@@ -1,0 +1,17 @@
+# Mailman completion by Guillaume Rousse <rousse@ccr.jussieu.fr>
+
+
+comp_include _get_cword
+
+
+_genaliases()
+{
+	local cur
+
+	COMPREPLY=()
+	cur=`_get_cword`
+
+	if [[ "$cur" == -* ]]; then
+		COMPREPLY=( $( compgen -W '-q --quiet -h --help' -- $cur ) )
+	fi
+} # _genaliases()

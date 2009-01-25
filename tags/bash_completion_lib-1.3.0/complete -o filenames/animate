@@ -1,0 +1,27 @@
+comp_include _filedir _get_cword _ImageMagick
+
+_animate()
+{
+    local cur
+
+    COMPREPLY=()
+    cur=`_get_cword`
+
+    _ImageMagick
+
+    if [[ "$cur" == -* ]]; then
+        COMPREPLY=( $( compgen -W '-authenticate -backdrop -colormap \
+            -colors -colorspace -crop -debug -delay -density \
+            -depth -display -dither -extract -gamma -geometry \
+            -help -interlace -limit -log -matte -map -monochrome \
+            -noop -pause -remote -rotate -sampling-factor -scene \
+            -size -treedepth -trim -verbose -version -visual \
+            -virtual-pixel -window' -- $cur ) )
+    elif [[ "$cur" == +* ]]; then
+        COMPREPLY=( $( compgen -W '+debug +dither +gamma +map +matte' -- $cur ) ) 
+    else
+        _filedir
+    fi
+} # _animate()
+
+

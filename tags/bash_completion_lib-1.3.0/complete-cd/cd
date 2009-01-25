@@ -1,0 +1,50 @@
+# This meta-cd function observes the CDPATH variable, so that cd additionally
+# completes on directories under those specified in CDPATH.
+
+
+comp_include _filedir _get_cword _rl_enabled
+
+
+_cd()
+{
+    local IFS=$'\t\n' cur=`_get_cword` i j k
+
+    # try to allow variable completion
+    if [[ "$cur" == ?(\\)\$* ]]; then
+        COMPREPLY=( $( compgen -v -P '$' -- "${cur#?(\\)$}" ) )
+        return 0
+    fi
+
+    # Use standard dir completion if no CDPATH or parameter starts with /,
+    # ./ or ../
+    if [ -z "${CDPATH:-}" ] || [[ "$cur" == ?(.)?(.)/* ]]; then
+        _filedir -d
+        return 0
+    fi
+
+    local -r mark_dirs=$(_rl_enabled mark-directories && echo y)
+    local -r mark_symdirs=$(_rl_enabled mark-symlinked-directories && echo y)
+
+    # we have a CDPATH, so loop on its contents
+    for i in ${CDPATH//:/$'\t'}; do
+        # create an array of matched subdirs
+        k=${#COMPREPLY[@]}
+        for j in $( compgen -d $i/$cur ); do
+            if [[ ( $mark_symdirs && -h $j || $mark_dirs && ! -h $j ) && ! -d ${j#$i/} ]]; then
+                j="${j}/"
+            fi
+            COMPREPLY[k++]=${j#$i/}
+        done
+    done
+
+    _filedir -d
+
+    if [[ ${#COMPREPLY[@]} -eq 1 ]]; then
+        i=${COMPREPLY[0]}
+        if [ "$i" == "$cur" ] && [[ $i != "*/" ]]; then
+        COMPREPLY[0]="${i}/"
+        fi
+    fi
+        
+    return 0
+}

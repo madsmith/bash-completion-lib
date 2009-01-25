@@ -1,0 +1,26 @@
+comp_include _count_args _filedir _get_cword _usergroup
+
+
+_chown()
+{
+    local cur
+    cur=`_get_cword`
+
+    # options completion
+    if [[ "$cur" == -* ]]; then
+        COMPREPLY=( $( compgen -W '-c -h -f -R -v --changes \
+        --dereference --no-dereference --from= --silent --quiet \
+        --reference= --recursive --verbose --help --version' -- $cur ) )
+    else
+        _count_args
+
+        case $args in
+            1)
+                _usergroup
+                ;;
+            *)
+                _filedir
+                ;;
+        esac
+    fi
+}

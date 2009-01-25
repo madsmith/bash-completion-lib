@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p apt-build"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames -F comp_load apt-build\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/apt-build.exp"
+
+
+set test "Completion via _apt_build() should be installed"
+set cmd "complete -p apt-build"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames -F _apt_build apt-build\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/apt-build.exp"

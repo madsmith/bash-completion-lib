@@ -1,0 +1,2 @@
+comp_include _filedir_xspec
+_filedir_xspec "'!*.@(sxc|stc|xls|xlw|xlt|csv|ods|ots)'"

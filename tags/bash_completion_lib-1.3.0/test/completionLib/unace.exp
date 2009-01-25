@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p unace"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames -F comp_load unace\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/unace.exp"
+
+
+set test "Completion via _unace() should be installed"
+set cmd "complete -p unace"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -o filenames -F _unace unace\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/unace.exp"

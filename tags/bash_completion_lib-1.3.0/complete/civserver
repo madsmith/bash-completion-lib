@@ -1,0 +1,28 @@
+# civserver completion by Guillaume Rousse <rousse@ccr.jussieu.fr>
+#
+comp_include _filedir _get_cword
+
+_civserver()
+{
+	local cur
+
+	COMPREPLY=()
+	cur=`_get_cword`
+	prev=${COMP_WORDS[COMP_CWORD-1]}
+
+	case "$prev" in
+		-@(f|g|l|r|-file|-log|-gamelog|-read))
+			_filedir
+			return 0
+			;;
+	esac
+
+	if [[ "$cur" == -* ]]; then
+		COMPREPLY=( $( compgen -W '-d -f -g -h -i -l -m -M -p -q -r -v\
+			--debug --file --gamelog --help --info --log --meta \
+			--Metaserver --port --quitidle --read --version' \
+			-- $cur ) )
+	fi
+} # _civserver()
+
+

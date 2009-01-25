@@ -1,0 +1,6 @@
+# This function shell-dequotes the argument
+_dequote()
+{
+	eval echo "$1"
+}
+

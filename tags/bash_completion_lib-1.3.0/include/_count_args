@@ -1,0 +1,11 @@
+# this function count the number of mandatory args
+#
+_count_args()
+{
+	args=1
+	for (( i=1; i < COMP_CWORD; i++ )); do
+		if [[ "${COMP_WORDS[i]}" != -* ]]; then
+			args=$(($args+1))
+		fi
+	done
+}

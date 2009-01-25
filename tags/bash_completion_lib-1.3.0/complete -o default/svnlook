@@ -1,0 +1,70 @@
+comp_include _filedir _get_cword
+
+
+_svnlook()
+{
+	local cur prev commands options mode
+
+	COMPREPLY=()
+	cur=`_get_cword`
+
+	commands='author cat changed date diff dirs-changed help ? h history \
+		info lock log propget pget pg proplist plist pl tree uuid \
+		youngest'
+
+	if [[ $COMP_CWORD -eq 1 ]] ; then
+		if [[ "$cur" == -* ]]; then
+			COMPREPLY=( $( compgen -W '--version' -- $cur ) )
+		else
+			COMPREPLY=( $( compgen -W "$commands" -- $cur ) )
+		fi
+	else
+		command=${COMP_WORDS[1]}
+
+		if [[ "$cur" == -* ]]; then
+			# possible options for the command
+			case $command in
+				@(author|cat|date|dirs-changed|info|log))
+					options='-r --revision -t \
+						--transaction'
+					;;
+				changed)
+					options='-r --revision -t \
+						--transaction --copy-info'
+					;;
+				diff)
+					options='-r --revision -t \
+						--transaction \
+						--no-diff-deleted \
+						--no-diff-added \
+						--diff-copy-from'
+					;;
+				history)
+					options='-r --revision --show-ids'
+					;;
+				prop@(get|list))
+					options='-r --revision -t \
+						--transaction --revprop'
+					;;
+				tree)
+					options='-r --revision -t \
+						--transaction --show-ids \
+						--full-paths'
+					;;
+			esac
+
+			options="$options --help -h"
+			COMPREPLY=( $( compgen -W "$options" -- $cur ) )
+		else
+			if [[ "$command" == @(help|h|\?) ]]; then
+				COMPREPLY=( $( compgen -W "$commands" -- $cur ) )
+			else
+				_filedir
+			fi
+		fi
+	fi
+
+	return 0
+} # _svnlook()
+
+

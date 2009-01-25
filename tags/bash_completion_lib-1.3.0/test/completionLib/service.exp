@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p service"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load service\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/service.exp"
+
+
+set test "Completion via _service() should be installed"
+set cmd "complete -p service"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _service service\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/service.exp"

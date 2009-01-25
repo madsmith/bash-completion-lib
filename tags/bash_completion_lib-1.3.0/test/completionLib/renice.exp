@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p renice"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load renice\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/renice.exp"
+
+
+set test "Completion via _renice() should be installed"
+set cmd "complete -p renice"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _renice renice\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/renice.exp"
