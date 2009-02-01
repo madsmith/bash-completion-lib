@@ -2,7 +2,10 @@ comp_include _command
 
 _root_command()
 {
+    COMP_LOAD_DEINIT=0
     PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin _command $1 $2 $3
+    unset -v COMP_LOAD_DEINIT
+
 } # _root_command()
 
 comp_install -F _root_command  # Make completion persistent for subsequent invocations

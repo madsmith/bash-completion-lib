@@ -4,12 +4,17 @@
 
 
 comp_load_deinit() {
-	# Unset variables
-	# NOTE: The following variables are used in completion scripts, so may
-	#       not be unset: bash205, bash205b, bash3 
-    unset -v bashdefault default dirnames filenames nospace plusdirs UNAME
-	# Unset functions
-    unset -f _comp_install comp_dir2args comp_include comp_install comp_load_deinit comp_load_init
+    # Do not deinitialize when COMP_LOAD_DEINIT equals 0
+    if [ "${COMP_LOAD_DEINIT:-1}" -ne 0 ]; then
+	    # Unset variables
+	    # NOTE: The following variables are used in completion scripts, so may
+	    #       not be unset: bash205, bash205b, bash3 
+	unset -v bashdefault default dirnames filenames nospace plusdirs UNAME
+	    # Unset functions
+	    # NOTE: Do not unset `comp_load_deinit' and `comp_load_init' because the 
+	    #       `_command()' completion function uses them recursive.
+	unset -f _comp_install comp_dir2args comp_include comp_install comp_load_deinit comp_load_init
+    fi
 } # comp_load_deinit()
 
 

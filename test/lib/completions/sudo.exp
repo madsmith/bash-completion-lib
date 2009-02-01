@@ -11,11 +11,10 @@ setup
 
 set test "Tab should complete"
     # Try completion
-set cmd "sudo ls"
+set cmd "sudo cd fixture1/fo"
 send "$cmd\t"
 expect {
-    -re "^$cmd\r\n.*$cmd$" { pass "$test" }
-    -re "^$cmd\r\n.*$cmd$" { pass "$test" }
+    -re "^sudo cd fixture1/foo.d/$" { pass "$test" }
     -re /@ { unresolved "$test at prompt" }
     -re eof { unresolved "eof" }
 }; # expect

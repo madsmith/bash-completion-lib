@@ -50,7 +50,7 @@ bclOptHelp=
 
 
     # @global string
-    # Library directory (typically ending with 'completions') to use for operations.
+    # Library directory to use for operations.
     # If not specified, first directory of COMP_PATH will be used.
 bclOptLib=
 
@@ -62,7 +62,7 @@ bclScriptPath="$(dirname "$(which "$0")")"
 
     # @global string
     # Version
-bclVersion=1.3.0
+bclVersion=1.3.1
 
 
 # Add completion to `bclOptLib'
