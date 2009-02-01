@@ -173,10 +173,22 @@ COMP_CACHE_VERSION
 COMP_DIR
     Directory of `bash_completion_lib'.  This variable is automatically set.
 
+COMP_INSTALL
+    True (1, default) if real completion must be installed after a first
+    completion.  If set to False (0), the default completion handler
+    `comp_load' will not be replaced with the actual completion handler after
+    the first completion.
+    
 COMP_LIB
     Array version of `COMP_PATH'.
     Not used anymore because an array cannot be exported to a bash subshell.
     Use `COMP_PATH' instead.  Deprecated as of bash_completion_lib >= 1.2.6.
+
+COMP_LOAD_DEINIT
+    True (1, default) if `comp_load' must deinitialize itself after having
+    installed the actual completion handler.  Deinitializing means removing
+    variables and functions which are only useful to `comp_load'. 
+    If set to False (0), the variables and functions remain defined.
 
 COMP_PATH
     String variable containing directories to search for completions, separated
