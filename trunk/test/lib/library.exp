@@ -16,13 +16,66 @@ proc sync_after_tab {} {
 
 # TODO
 # If a command is not available, fail the test with status UNSUPPORTED
-proc is_available {$command} {
-    #set status 0 
-    #   # $results contains error messages
-    #if {[catch [exec false] results]} { 
-    #    if {[lindex $::errorCode 0] eq "CHILDSTATUS"} { 
-    #        set status [lindex $::errorCode 2] 
-    #    }   
-    #}
-    # type command > /dev/null 2>&1
-}
+proc test_command {command test stdout} {
+    upvar $stdout results
+    set status [catch {eval exec $command} results]
+    if {$status == 0} {
+	set result true
+    } else {
+	set result false
+	    # Command not found (POSIX/NOENT = no such file or directory)?
+	if {[lindex $::errorCode 0] == "POSIX" && [lindex $::errorCode 1] == "ENOENT"} {
+	    # Yes, command not found;
+		# Indicate test is unsupported
+	    unsupported "$test"
+	} else {
+	    unresolved "$test"
+	}; # if
+    }; # if
+    return $result
+}; # test_command()
+
+
+# Expect items.
+# Break items into chunks because `expect' seems to have a limited buffer size
+# @param list $items
+# @param integer $size  Chunk size
+# @result boolean  True if successful, False if not
+proc match_items {items test {size 20}} {
+    set result false
+    for {set i 0} {$i < [llength $items]} {set i [expr {$i + $size}]} {
+	set expected ""
+	for {set j 0} {$j < $size && $i + $j < [llength $items]} {incr j} {
+	    set item "[lindex $items [expr {$i + $j}]]"
+		# Escape special regexp characters
+	    regsub -all {([\[\]\(\)\.\\\+])} $item {\\\1} item
+	    set expected "${expected}$item\\s+"
+	}; # for
+	expect {
+	    -re "$expected" { set result true }
+	    default { set result false; break }
+	    timeout { set result false; break }
+	}; # expect
+    }; # for
+    return $result
+}; # match_items()
+
+
+# Expect items.
+# Break items into chunks because `expect' seems to have a limited buffer size
+# @param list $items
+# @param integer $size  Chunk size
+# @result boolean  True if successful, False if not
+proc expect_completions {items test cmd {prompt /@} {size 20}} {
+    expect -ex "$cmd\r\n"
+    if {[match_items $items $test]} {
+	expect {
+	    -re "$prompt$cmd$" { pass "$test" }
+	    -re $prompt { unresolved "$test at prompt" }
+	    -re eof { unresolved "eof" }
+	}
+    } else {
+	fail "$test"
+    }; # if
+}; # expect_completions()
+

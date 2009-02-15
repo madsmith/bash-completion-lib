@@ -1,3 +1,15 @@
+$VERSION
+
+- Added test for `dpkg -L'.
+- Added functions `test_command' and `test_list' to test/lib/library.exp
+- Improved completion/tests for `vncviewer':
+    - added support for case-insensitive options
+    - added support for double-dash
+    - replaced options with options from vncviewer-4.1.1 (Ubuntu-8.10)
+
+
+
+
 bash_completion_lib-1.3.1, 1-Feb-2009
 
 - Fixed error "_get_cword: command not found" when completing `sudo'
