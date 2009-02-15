@@ -14,10 +14,25 @@ set test "Tab should complete"
 set cmd "dpkg --c"
 send "$cmd\t"
 expect {
-    -re "^$cmd\r\n.*$cmd$" { pass "$test" }
+    -re "^$cmd\r\n.*/@$cmd$" { pass "$test" }
     -re /@ { unresolved "$test at prompt" }
     -re eof { unresolved "eof" }
 }; # expect
+
+
+sync_after_int
+
+
+set test "-L should complete with installed packages"
+    # Build list of installed packages
+    # NOTE: If an argument is passed to `--get-selections', add `| grep
+    #       install$' to pipeline before 'cut'
+if {[test_command {dpkg --get-selections | cut -f1 | sort} $test packages]} {
+	# Try completion
+    set cmd "dpkg -L "
+    send "$cmd\t"
+    expect_completions $packages $test $cmd
+}; # if
 
 
 sync_after_int

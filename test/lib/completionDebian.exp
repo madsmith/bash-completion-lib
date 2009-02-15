@@ -16,12 +16,12 @@ proc completionDebian_start {} {
     expect -ex "/@"
         # Load completions
     #set cmd "BASH_COMPLETION=../bash_completion-20060301.debian.4/bash-completion-20060301/bash_completion; source \$BASH_COMPLETION"
-    set cmd "BASH_COMPLETION_DIR=\$(cd ../bash_completion-debian.bzr; pwd)/contrib"
+    set cmd "BASH_COMPLETION_DIR=\$(cd ../bash-completion-devel; pwd)/contrib"
     send "$cmd\r"
     expect -ex "$cmd\r\n"
     expect -ex "/@"
     
-    set cmd "BASH_COMPLETION=\$(cd ../bash_completion-debian.bzr; pwd)/bash_completion"
+    set cmd "BASH_COMPLETION=\$(cd ../bash-completion-devel; pwd)/bash_completion"
     send "$cmd\r"
     expect -ex "$cmd\r\n"
     expect -ex "/@"
@@ -34,5 +34,5 @@ proc completionDebian_start {} {
 
 
 proc completionDebian_version {} {
-    puts "bash_completion-debian.bzr"
+    puts "bash-completion-devel"
 }; # completionDebian_version()
