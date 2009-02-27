@@ -1,1 +1,3 @@
-source "lib/completions/lvremove.exp"
+if {[test_bash_type lvremove]} {
+    source "lib/completions/lvremove.exp"
+}; # if

@@ -7,16 +7,21 @@ expect {
 }; # expect
 
 
-source "lib/completions/xmms.exp"
+set test "xmms should be available"
+if {[test_command {xmms --help} $test]} {
 
 
-set test "Completion via _xmms() should be installed"
-set cmd "complete -p xmms"
-send "$cmd\r"
-expect {
-    -re "^$cmd\r\ncomplete -o filenames -F _xmms xmms\r\n/@$" { pass "$test" }
-    -re /@ { fail "$test at prompt" }
-}; # expect
+    source "lib/completions/xmms.exp"
 
 
-source "lib/completions/xmms.exp"
+    set test "Completion via _xmms() should be installed"
+    set cmd "complete -p xmms"
+    send "$cmd\r"
+    expect {
+	-re "^$cmd\r\ncomplete -o filenames -F _xmms xmms\r\n/@$" { pass "$test" }
+	-re /@ { fail "$test at prompt" }
+    }; # expect
+
+
+    source "lib/completions/xmms.exp"
+}; # if

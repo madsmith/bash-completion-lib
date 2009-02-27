@@ -6,21 +6,30 @@ proc teardown {} {
 }; # teardown()
 
 
-setup
+set test "Ant should be available"
+if {[test_command {ant --help} $test result]} {
 
 
-set test "Tab should complete"
-    # Try completion
-set cmd "ant -"
-send "$cmd\t"
-expect {
-    -re "^$cmd\r\n.*\r\n/@$cmd$" { pass "$test" }
-    -re /@ { unresolved "$test at prompt" }
-    -re eof { unresolved "eof" }
-}; # expect
+    setup
 
 
-sync_after_int
+    set test "Tab should complete"
+	# Try completion
+    set cmd "ant -"
+    send "$cmd\t"
+    expect {
+	-re "^$cmd\r\n.*\r\n/@$cmd$" { pass "$test" }
+	-re /@ { unresolved "$test at prompt" }
+	-re eof { unresolved "eof" }
+    }; # expect
 
 
-teardown
+    sync_after_int
+
+
+    teardown
+
+
+}; # if
+
+

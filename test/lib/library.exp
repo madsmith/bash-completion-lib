@@ -1,39 +1,20 @@
-proc sync_after_int {} {
-	set test "Sync after INT"
-	sleep .1
-	send \031\003;  # QUIT/INT
-	expect /@
-}; # sync_after_int()
-
-
-proc sync_after_tab {} {
-        # NOTE: Wait in case completion returns nothing - because `units' isn't
-        #       installed, so that "^$cdm.*$" doesn't match too early - before
-        #       comp_install has finished
-    sleep .4
-}; # sync_after_tab()
-
-
-# TODO
-# If a command is not available, fail the test with status UNSUPPORTED
-proc test_command {command test stdout} {
-    upvar $stdout results
-    set status [catch {eval exec $command} results]
-    if {$status == 0} {
-	set result true
+# Expect items.
+# Break items into chunks because `expect' seems to have a limited buffer size
+# @param list $items
+# @param integer $size  Chunk size
+# @result boolean  True if successful, False if not
+proc expect_completions {items test cmd {prompt /@} {size 20}} {
+    expect -ex "$cmd\r\n"
+    if {[match_items $items $test]} {
+	expect {
+	    -re "$prompt$cmd$" { pass "$test" }
+	    -re $prompt { unresolved "$test at prompt" }
+	    -re eof { unresolved "eof" }
+	}
     } else {
-	set result false
-	    # Command not found (POSIX/NOENT = no such file or directory)?
-	if {[lindex $::errorCode 0] == "POSIX" && [lindex $::errorCode 1] == "ENOENT"} {
-	    # Yes, command not found;
-		# Indicate test is unsupported
-	    unsupported "$test"
-	} else {
-	    unresolved "$test"
-	}; # if
+	fail "$test"
     }; # if
-    return $result
-}; # test_command()
+}; # expect_completions()
 
 
 # Expect items.
@@ -61,21 +42,60 @@ proc match_items {items test {size 20}} {
 }; # match_items()
 
 
-# Expect items.
-# Break items into chunks because `expect' seems to have a limited buffer size
-# @param list $items
-# @param integer $size  Chunk size
-# @result boolean  True if successful, False if not
-proc expect_completions {items test cmd {prompt /@} {size 20}} {
-    expect -ex "$cmd\r\n"
-    if {[match_items $items $test]} {
-	expect {
-	    -re "$prompt$cmd$" { pass "$test" }
-	    -re $prompt { unresolved "$test at prompt" }
-	    -re eof { unresolved "eof" }
-	}
-    } else {
-	fail "$test"
-    }; # if
-}; # expect_completions()
+# Interrupt completion and sync with prompt.
+# Send signals QUIT & INT.
+proc sync_after_int {} {
+	set test "Sync after INT"
+	sleep .1
+	send \031\003;  # QUIT/INT
+	expect /@
+}; # sync_after_int()
 
+
+proc sync_after_tab {} {
+        # NOTE: Wait in case completion returns nothing - because `units' isn't
+        #       installed, so that "^$cdm.*$" doesn't match too early - before
+        #       comp_install has finished
+    sleep .4
+}; # sync_after_tab()
+
+
+# Test `type ...' in bash
+# Indicate "unsupported" if `type' exits with error status.
+# @param string $command  Command to locate
+proc test_bash_type {command} {
+    set test "$command should be available in bash"
+    set cmd "type $command &> /dev/null && echo -n 0 || echo -n 1"  
+    send "$cmd\r"
+    expect "$cmd\r\n"
+    expect {
+	-ex 0 { set result true }
+	-ex 1 { set result false; unsupported "$test" }
+    }; # expect
+    expect "/@"
+    return $result
+}; # test_bash_type()
+
+
+# If a command is not available, fail the test with status UNSUPPORTED
+# @param string $command
+# @param string $test
+# @param string $stdout  (optional) Reference to variable to hold stdout.
+proc test_command {command test {stdout ''}} {
+    upvar $stdout results
+    set status [catch {eval exec $command} results]
+    if {$status == 0} {
+	set result true
+    } else {
+	set result false
+	    # Command not found (POSIX/NOENT = no such file or directory)?
+	if {[lindex $::errorCode 0] == "POSIX" && [lindex $::errorCode 1] == "ENOENT"} {
+	    # Yes, command not found;
+		# Indicate test is unsupported
+	    unsupported "$test"
+	} else {
+	    unresolved "$test"
+	}; # if
+    }; # if
+    return $result
+}; # test_command()

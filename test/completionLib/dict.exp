@@ -7,16 +7,23 @@ expect {
 }; # expect
 
 
-source "lib/completions/dict.exp"
+set test "dict should be available"
+if {[test_command {dict --help} $test result]} {
 
 
-set test "Completion via _dict() should be installed"
-set cmd "complete -p dict"
-send "$cmd\r"
-expect {
-    -re "^$cmd\r\ncomplete -o default -F _dict dict\r\n/@$" { pass "$test" }
-    -re /@ { fail "$test at prompt" }
-}; # expect
+    source "lib/completions/dict.exp"
 
 
-source "lib/completions/dict.exp"
+    set test "Completion via _dict() should be installed"
+    set cmd "complete -p dict"
+    send "$cmd\r"
+    expect {
+	-re "^$cmd\r\ncomplete -o default -F _dict dict\r\n/@$" { pass "$test" }
+	-re /@ { fail "$test at prompt" }
+    }; # expect
+
+
+    source "lib/completions/dict.exp"
+
+
+}; # if

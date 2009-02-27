@@ -1,1 +1,3 @@
-source "lib/completions/lvscan.exp"
+if {[test_bash_type lvscan]} {
+    source "lib/completions/lvscan.exp"
+}; # if
