@@ -1,1 +1,3 @@
-source "lib/completions/lvreduce.exp"
+if {[test_bash_type lvreduce]} {
+    source "lib/completions/lvreduce.exp"
+}; # if

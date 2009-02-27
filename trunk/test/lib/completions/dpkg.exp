@@ -25,8 +25,9 @@ sync_after_int
 
 set test "-L should complete with installed packages"
     # Build list of installed packages
-    # NOTE: If an argument is passed to `--get-selections', add `| grep
-    #       install$' to pipeline before 'cut'
+    # NOTE: If an argument is passed to `--get-selections', `dpkg' also returns
+    #       packages with status "purged".  Be sure to add `| grep install$' to
+    #       pipeline before 'cut' in that case. -- FVu, Sun Feb 22 10:08:34 CET 2009
 if {[test_command {dpkg --get-selections | cut -f1 | sort} $test packages]} {
 	# Try completion
     set cmd "dpkg -L "

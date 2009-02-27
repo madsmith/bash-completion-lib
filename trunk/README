@@ -3,6 +3,9 @@
     2.1.  Local
     2.2.  System
 3.  Unit testing
+    3.1.  Library functions
+	3.1.1.  expect_completions()
+	3.1.2.  test_command()
 4.  Questions
 5.  Environment variables
 6.  Cache
@@ -94,6 +97,34 @@ The following test suites are available:
 
    runInstall            Install `bash_completion_lib'
    
+
+3.1.  Library functions
+
+3.1.1.  expect_completions()
+
+Example:
+
+    set test "-L should complete with installed packages"
+    if {[test_command {dpkg --get-selections | cut -f1 | sort} $test packages]} {
+	    # Try completion
+	set cmd "dpkg -L "
+	send "$cmd\t"
+	expect_completions $packages $test $cmd
+    }; # if
+
+3.1.2.  test_command()
+
+Example:
+
+    set test "ant should be available"
+    if {[test_command {ant --help} $test result]} {
+
+	source "lib/completions/ant.exp"
+
+    }; # if
+
+
+
 
 
 

@@ -1,1 +1,3 @@
-source "lib/completions/lvresize.exp"
+if {[test_bash_type lvresize]} {
+    source "lib/completions/lvresize.exp"
+}; # if

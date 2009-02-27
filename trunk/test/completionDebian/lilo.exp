@@ -1,1 +1,3 @@
-source "lib/completions/lilo.exp"
+if {[test_command {lilo --help} $test]} {
+    source "lib/completions/lilo.exp"
+}; # if

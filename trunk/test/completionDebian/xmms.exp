@@ -1,1 +1,4 @@
-source "lib/completions/xmms.exp"
+set test "xmms should be available"
+if {[test_command {xmms --help} $test]} {
+    source "lib/completions/xmms.exp"
+}; # if

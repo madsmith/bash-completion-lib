@@ -1,1 +1,3 @@
-source "lib/completions/lvcreate.exp"
+if {[test_bash_type lvcreate]} {
+    source "lib/completions/lvcreate.exp"
+}; # if

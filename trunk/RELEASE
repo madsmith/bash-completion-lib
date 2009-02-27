@@ -6,6 +6,11 @@ $VERSION
     - added support for case-insensitive options
     - added support for double-dash
     - replaced options with options from vncviewer-4.1.1 (Ubuntu-8.10)
+- Added test library function `test_bash_type()'
+- Improved _isql completion:
+    - fix _isql completion waiting for grep input if $ODBCINI not set
+    - handle whitespace in $ODBCINI.
+
 
 
 
