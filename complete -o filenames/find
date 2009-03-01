@@ -83,7 +83,7 @@ _find()
 			-mindepth -mount -noleaf -version -xdev -amin -anewer \
 			-atime -cmin -cnewer -ctime -empty -false -fstype \
 			-gid -group -ilname -iname -inum -ipath -iregex \
-			-wholename \
+			-iwholename -wholename \
 			-links -lname -mmin -mtime -name -newer -nouser \
 			-nogroup -perm -regex -size -true -type -uid -used \
 			-user -xtype -exec -fls -fprint -fprint0 -fprintf -ok \

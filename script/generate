@@ -47,7 +47,9 @@ generate_test_completion_debian() {
 	if [ ! -f "$path" ]; then
 		# No, file doesn't exist; generate file
 	cat <<EXPECT > "$path"
-source "lib/completions/$1.exp"
+if {[test_bash_type {$1}]} {
+    source "lib/completions/$1.exp"
+}; # if
 EXPECT
 fi
 } # generate_test_completion_debian()
