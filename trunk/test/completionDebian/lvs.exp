@@ -1,3 +1,3 @@
-if {[test_bash_type lvs]} {
+if {[assert_bash_type lvs]} {
     source "lib/completions/lvs.exp"
 }; # if

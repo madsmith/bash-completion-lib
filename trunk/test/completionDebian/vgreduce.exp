@@ -1,1 +1,3 @@
-source "lib/completions/vgreduce.exp"
+if {[assert_bash_type vgreduce]} {
+    source "lib/completions/vgreduce.exp"
+}; # if

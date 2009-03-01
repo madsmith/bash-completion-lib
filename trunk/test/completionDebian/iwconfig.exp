@@ -1,1 +1,3 @@
-source "lib/completions/iwconfig.exp"
+if {[assert_bash_type iwconfig]} {
+    source "lib/completions/iwconfig.exp"
+}; # if

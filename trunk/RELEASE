@@ -10,6 +10,8 @@ $VERSION
 - Improved _isql completion:
     - fix _isql completion waiting for grep input if $ODBCINI not set
     - handle whitespace in $ODBCINI.
+- Removed generating `='-suffix from `alias' completion
+- Add find -iwholename completion
 
 
 

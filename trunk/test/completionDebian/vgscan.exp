@@ -1,1 +1,3 @@
-source "lib/completions/vgscan.exp"
+if {[assert_bash_type vgscan]} {
+    source "lib/completions/vgscan.exp"
+}; # if

@@ -23,17 +23,12 @@ expect {
 sync_after_int
 
 
-set test "- should complete options"
-    # Try completion
-set cmd "find -"
-send "$cmd\t"
-expect {
-    -re "$cmd\r\n-amin\\s+-anewer\\s+-atime\\s+-cmin\\s+-cnewer\\s+-ctime\\s+-daystart\\s+-depth\\s+-empty\\s+-exec\\s+-false\\s+-fls\\s+-follow\\s+-fprint\\s+-fprint0\\s+-fprintf\\s+-fstype\\s+-gid\\s+-group\\s+-help\\s+-ilname\\s+-iname\\s+-inum\\s+-ipath\\s+-iregex\\s+-links\\s+-lname\\s+-ls\\s+-maxdepth\\s+-mindepth\\s+-mmin\\s+-mount\\s+-mtime\\s+-name\\s+-newer\\s+-nogroup\\s+-noleaf\\s+-nouser\\s+-ok\\s+-perm\\s+-print\\s+-print0\\s+-printf\\s+-prune\\s+-regex\\s+-size\\s+-true\\s+-type\\s+-uid\\s+-used\\s+-user\\s+-version\\s+-wholename\\s+-xdev\\s+-xtype\\s*\r\n/@$cmd$" { 
-	pass "$test" 
-    }
-    -re /@ { unresolved "$test at prompt" }
-    -re eof { unresolved "eof" }
-}; # expect
+set options [list -amin -anewer -atime -cmin -cnewer -ctime -daystart -depth -empty -exec \
+    -false -fls -follow -fprint -fprint0 -fprintf -fstype -gid -group -help -ilname -iname \
+    -inum -ipath -iregex -iwholename -links -lname -ls -maxdepth -mindepth -mmin -mount \
+    -mtime -name -newer -nogroup -noleaf -nouser -ok -perm -print -print0 -printf -prune \
+    -regex -size -true -type -uid -used -user -version -wholename -xdev -xtype]
+assert_complete $options {find -}
 
 
 sync_after_int

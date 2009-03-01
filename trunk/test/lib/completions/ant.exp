@@ -6,8 +6,7 @@ proc teardown {} {
 }; # teardown()
 
 
-set test "Ant should be available"
-if {[test_command {ant --help} $test result]} {
+if {[assert_bash_type ant]} {
 
 
     setup

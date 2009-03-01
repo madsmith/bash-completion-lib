@@ -1,11 +1,33 @@
-# Expect items.
+# Test `type ...' in bash
+# Indicate "unsupported" if `type' exits with error status.
+# @param string $command  Command to locate
+proc assert_bash_type {command} {
+    set test "$command should be available in bash"
+    set cmd "type $command &> /dev/null && echo -n 0 || echo -n 1"  
+    send "$cmd\r"
+    expect "$cmd\r\n"
+    expect {
+	-ex 0 { set result true }
+	-ex 1 { set result false; unsupported "$test" }
+    }; # expect
+    expect "/@"
+    return $result
+}; # assert_bash_type()
+
+
+# Make sure the expected items are also returned by TAB-completing the
+# specified command.
 # Break items into chunks because `expect' seems to have a limited buffer size
-# @param list $items
-# @param integer $size  Chunk size
+# @param list $expected
+# @param string $cmd  Command given to generate items
+# @param string $test  (optional) Test titel.  Default is "$cmd<TAB> should show completions"
+# @param integer $size  (optional) Chunk size.  Default is 20.
 # @result boolean  True if successful, False if not
-proc expect_completions {items test cmd {prompt /@} {size 20}} {
+proc assert_complete {expected cmd {test ""} {prompt /@} {size 20}} {
+    if {$test == ""} {set test "$cmd should show completions"}
+    send "$cmd\t"
     expect -ex "$cmd\r\n"
-    if {[match_items $items $test]} {
+    if {[match_items $expected $test]} {
 	expect {
 	    -re "$prompt$cmd$" { pass "$test" }
 	    -re $prompt { unresolved "$test at prompt" }
@@ -14,7 +36,37 @@ proc expect_completions {items test cmd {prompt /@} {size 20}} {
     } else {
 	fail "$test"
     }; # if
-}; # expect_completions()
+}; # assert_complete()
+
+
+# Make sure the specified command can be executed from within Tcl/Expect.
+# Fail the test with status UNSUPPORTED if Tcl fails with error "POSIX/ENOENT
+# (No such file or directory)", or UNRESOLVED if other error occurs.  
+# NOTE: Further tests are assumed if executing the command is successful.  The
+#       test isn't immediately declared to have PASSED if the command is
+#       executed successful.
+# @param string $command
+# @param string $stdout  (optional) Reference to variable to hold stdout.
+# @param string $test (optional)  Test titel
+proc assert_exec {cmd {stdout ''} {test ''}} {
+    if {$test == ""} {set test "$cmd should execute successful"}
+    upvar $stdout results
+    set status [catch {eval exec $cmd} results]
+    if {$status == 0} {
+	set result true
+    } else {
+	set result false
+	    # Command not found (POSIX/ENOENT = no such file or directory)?
+	if {[lindex $::errorCode 0] == "POSIX" && [lindex $::errorCode 1] == "ENOENT"} {
+	    # Yes, command not found;
+		# Indicate test is unsupported
+	    unsupported "$test"
+	} else {
+	    unresolved "$test"
+	}; # if
+    }; # if
+    return $result
+}; # assert_exec()
 
 
 # Expect items.
@@ -58,44 +110,3 @@ proc sync_after_tab {} {
         #       comp_install has finished
     sleep .4
 }; # sync_after_tab()
-
-
-# Test `type ...' in bash
-# Indicate "unsupported" if `type' exits with error status.
-# @param string $command  Command to locate
-proc test_bash_type {command} {
-    set test "$command should be available in bash"
-    set cmd "type $command &> /dev/null && echo -n 0 || echo -n 1"  
-    send "$cmd\r"
-    expect "$cmd\r\n"
-    expect {
-	-ex 0 { set result true }
-	-ex 1 { set result false; unsupported "$test" }
-    }; # expect
-    expect "/@"
-    return $result
-}; # test_bash_type()
-
-
-# If a command is not available, fail the test with status UNSUPPORTED
-# @param string $command
-# @param string $test
-# @param string $stdout  (optional) Reference to variable to hold stdout.
-proc test_command {command test {stdout ''}} {
-    upvar $stdout results
-    set status [catch {eval exec $command} results]
-    if {$status == 0} {
-	set result true
-    } else {
-	set result false
-	    # Command not found (POSIX/NOENT = no such file or directory)?
-	if {[lindex $::errorCode 0] == "POSIX" && [lindex $::errorCode 1] == "ENOENT"} {
-	    # Yes, command not found;
-		# Indicate test is unsupported
-	    unsupported "$test"
-	} else {
-	    unresolved "$test"
-	}; # if
-    }; # if
-    return $result
-}; # test_command()

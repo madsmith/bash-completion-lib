@@ -1,4 +1,3 @@
-set test "xmms should be available"
-if {[test_command {xmms --help} $test]} {
+if {[assert_bash_type xmms]} {
     source "lib/completions/xmms.exp"
 }; # if
