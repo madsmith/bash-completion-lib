@@ -1,12 +1,9 @@
 $VERSION
 
+- Improved vncviewer completion to handle both xvnc4viewer and tightvncviewer.
 - Added test for `dpkg -L'.
-- Added functions `test_command' and `test_list' to test/lib/library.exp
-- Improved completion/tests for `vncviewer':
-    - added support for case-insensitive options
-    - added support for double-dash
-    - replaced options with options from vncviewer-4.1.1 (Ubuntu-8.10)
-- Added test library function `test_bash_type()'
+- Added functions `assert_exec' and `assert_complete' to test/lib/library.exp
+- Added test library function `assert_bash_type()'
 - Improved _isql completion:
     - fix _isql completion waiting for grep input if $ODBCINI not set
     - handle whitespace in $ODBCINI.

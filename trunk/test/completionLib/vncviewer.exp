@@ -7,16 +7,26 @@ expect {
 }; # expect
 
 
-source "lib/completions/vncviewer.exp"
+switch -glob [realcommand vncviewer] {
+    ""              {set fname ""}
+    *xvnc4viewer    {set fname xvnc4viewer}
+    *tightvncviewer -
+    default         {set fname tightvncviewer}
+}; # switch
 
 
-set test "Completion via _vncviewer() should be installed"
-set cmd "complete -p vncviewer"
-send "$cmd\r"
-expect {
-    -re "^$cmd\r\ncomplete -F _vncviewer vncviewer\r\n/@$" { pass "$test" }
-    -re /@ { fail "$test at prompt" }
-}; # expect
+if [string length $fname] {
+    source "lib/completions/$fname.exp"
 
 
-source "lib/completions/vncviewer.exp"
+    set test "Completion via other function than comp_load() should be installed"
+    set cmd "complete -p vncviewer"
+    send "$cmd\r"
+    expect {
+	-re "^$cmd\r\ncomplete -F _$fname vncviewer\r\n/@$" { pass "$test" }
+	-re /@ { fail "$test at prompt" }
+    }; # expect
+
+
+    source "lib/completions/$fname.exp"
+}; # if

@@ -152,7 +152,7 @@ fi
 	# If argument count is wrong, show help
 if [ $# -ne 3 ]; then
     echo "Usage: $0 command function complete-options"
-    echo "Example: $0 make _make ' -o filenames'"
+    echo "Example: $0 make _make '-o filenames'"
     exit 1
 fi
 

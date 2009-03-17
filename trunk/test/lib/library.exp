@@ -39,7 +39,7 @@ proc assert_complete {expected cmd {test ""} {prompt /@} {size 20}} {
 }; # assert_complete()
 
 
-# Make sure the specified command can be executed from within Tcl/Expect.
+# Make sure the specified command executed from within Tcl/Expect.
 # Fail the test with status UNSUPPORTED if Tcl fails with error "POSIX/ENOENT
 # (No such file or directory)", or UNRESOLVED if other error occurs.  
 # NOTE: Further tests are assumed if executing the command is successful.  The
@@ -92,6 +92,26 @@ proc match_items {items test {size 20}} {
     }; # for
     return $result
 }; # match_items()
+
+
+
+# Get real command.
+# - arg: $1  Command
+# - stdout:  Filename of command in PATH with possible symbolic links resolved.
+# - return:  Command found, empty string if not found
+proc realcommand {cmd} {
+    set result ""
+    if [string length [set path [auto_execok $cmd]]] {
+	if {[string length [auto_execok realpath]]} {
+	    set result [exec realpath $path]
+	} elseif {[string length [auto_execok readlink]]} {
+	    set result [exec readlink -f $path]
+	} else {
+	    set result $path
+	}; # if
+    }; # if
+    return $result
+}; # realcommand()
 
 
 # Interrupt completion and sync with prompt.
