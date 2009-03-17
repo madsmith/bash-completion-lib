@@ -1,14 +1,50 @@
 # -*- mode: shell-script; sh-basic-offset: 8; indent-tabs-mode: t -*-
 # ex: ts=8 sw=8 noet filetype=sh
-#
-# bash completion for vncviewer (4.1.1)
 
-comp_include _get_cword _known_hosts
+
+comp_include _filedir _get_cword _known_hosts _realcommand
+
+
+_tightvncviewer()
+{
+	local cur prev
+
+	COMPREPLY=()
+	cur=`_get_cword`
+	prev=${COMP_WORDS[COMP_CWORD-1]}
+
+	case $prev in
+		-passwd)
+			_filedir
+			return 0
+			;;
+		-encodings)
+			COMPREPLY=( $( compgen -W 'copyrect tight hextile zlib \
+				corre rre raw' -- $cur ) )
+			return 0
+			;;
+		-via)
+			_known_hosts
+			return 0
+			;;
+	esac
+
+
+	if [[ "$cur" == -* ]]; then
+		COMPREPLY=( $( compgen -W '-help -listen -via -shared -noshared\
+			-viewonly -fullscreen -noraiseonbeep -passwd -encodings\
+			-bgr233 -owncmap -truecolour -truecolor -depth \
+			-compresslevel -quality -nojpeg -nocursorshape \
+			-x11cursor' -- $cur ) )
+	else
+		_known_hosts
+	fi
+} # _tightvncviewer()
 
 
 # NOTE: - VNC Viewer options are case-insensivite.  Preferred case is taken from -help.
 #       - Both single dash (-) and double dash (--) are allowed as option prefix
-_vncviewer()
+_xvnc4viewer()
 {
 	local cur prev
 
@@ -48,7 +84,7 @@ _vncviewer()
 			ZlibLevel \
 		)
 		[[ "$cur" == --* ]] && dash=-- || dash=-
-		# Is a `nocasematch' variable available (bash >= v3.1)?
+		# Is a `nocasematch' variable available (bash > v3.1)?
 		if shopt nocasematch 2> /dev/null | grep -q ^nocasematch; then
 			# Variable `nocasematch' is available
 			# Use vncviewer camelcase options
@@ -59,7 +95,7 @@ _vncviewer()
 			done ) )
 			eval "$oldNoCaseMatch" 2> /dev/null
 		else
-			# Variable 'nocasematch' isn't available (bash < v3.1);
+			# Variable 'nocasematch' isn't available;
 			# Convert completions to lowercase
 			COMPREPLY=( $( compgen -W "$(
 			    echo ${options[@]/#/$dash} | tr [:upper:] [:lower:]	
@@ -68,4 +104,28 @@ _vncviewer()
 	else
 		_known_hosts
 	fi
-} # _vncviewer()
+} # _xvnc4viewer()
+
+
+_vncviewer_bootstrap() {
+	local fname
+	if [[ "${COMP_WORDS[0]}" == vncviewer ]]; then
+		case "$(_realcommand vncviewer)" in
+			'') # `vncviewer' not installed?
+				_filedir `_get_cword` ;;  # Default file-dir completion
+			*xvnc4viewer)      fname=_xvnc4viewer    ;;
+			*tightvncviewer|*) fname=_tightvncviewer ;;
+		esac
+	else
+		fname=_${COMP_WORDS[0]}
+	fi
+	if [ $fname ]; then
+		comp_install -F $fname  # Handle future completions
+		$fname  # Generate completions once for now
+	fi
+	unset -f _vncviewer_bootstrap  # Delete this function
+	return 1  # Prohibit `comp_load()' from running `comp_install()'
+}; # _vncviewer_bootstrap()
+
+
+_vncviewer_bootstrap

@@ -11,7 +11,7 @@ setup
 
 set test "Tab should show completions"
     # Try completion
-set cmd "xvnc4viewer "
+set cmd "tightvncviewer "
 send "$cmd\t"
 expect {
     -re "$cmd\r\n.*$cmd$" { pass "$test" }

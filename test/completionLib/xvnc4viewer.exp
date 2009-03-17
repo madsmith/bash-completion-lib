@@ -1,0 +1,22 @@
+set test "Completion via comp_load() should be installed"
+set cmd "complete -p xvnc4viewer"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F comp_load xvnc4viewer\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/xvnc4viewer.exp"
+
+
+set test "Completion via _xvnc4viewer() should be installed"
+set cmd "complete -p xvnc4viewer"
+send "$cmd\r"
+expect {
+    -re "^$cmd\r\ncomplete -F _xvnc4viewer xvnc4viewer\r\n/@$" { pass "$test" }
+    -re /@ { fail "$test at prompt" }
+}; # expect
+
+
+source "lib/completions/xvnc4viewer.exp"
